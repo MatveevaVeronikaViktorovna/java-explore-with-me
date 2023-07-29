@@ -3,6 +3,7 @@ package ru.practicum.stats.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.Hit;
 import ru.practicum.stats.HitRepository;
 import ru.practicum.statsDto.HitResponseDto;
@@ -17,12 +18,14 @@ public class HitServiceImpl implements HitService {
 
     private final HitRepository hitRepository;
 
+    @Transactional
     @Override
     public void create(Hit hit) {
         Hit newHit = hitRepository.save(hit);
         log.info("Добавлен hit: {}", newHit);
     }
 
+    @Transactional
     @Override
     public List<HitResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
