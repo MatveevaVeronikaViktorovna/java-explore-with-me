@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class HitRequestDto {
@@ -19,6 +21,6 @@ public class HitRequestDto {
     @NotBlank
     String ip;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     LocalDateTime timestamp;
 }
