@@ -25,7 +25,7 @@ public class HitServiceImpl implements HitService {
         log.info("Добавлен hit: {}", newHit);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<HitResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
