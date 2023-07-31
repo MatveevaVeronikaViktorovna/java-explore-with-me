@@ -27,7 +27,7 @@ public class ErrorHandler {
         message.append(e.getFieldError().getRejectedValue());
         String asString = message.toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-          return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", asString, LocalDateTime.now().format(formatter));
+        return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", asString, LocalDateTime.now().format(formatter));
     }
 
 }
