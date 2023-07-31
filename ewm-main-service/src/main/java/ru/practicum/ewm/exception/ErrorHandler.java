@@ -26,7 +26,6 @@ public class ErrorHandler {
         message.append(". Value: ");
         message.append(e.getFieldError().getRejectedValue());
         String asString = message.toString();
-        //   "message": "Field: name. Error: must not be blank. Value: null",
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
           return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", asString, LocalDateTime.now().format(formatter));
     }
