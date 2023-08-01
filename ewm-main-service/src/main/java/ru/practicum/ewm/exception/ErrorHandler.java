@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -22,7 +21,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+    public ApiError handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         StringBuilder message = new StringBuilder();
         message.append("Field: ");
         message.append(Objects.requireNonNull(e.getFieldError()).getField());
@@ -31,30 +30,29 @@ public class ErrorHandler {
         message.append(". Value: ");
         message.append(e.getFieldError().getRejectedValue());
         String asString = message.toString();
-        return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", asString,
+        return new ApiError("BAD_REQUEST", "Incorrectly made request.", asString,
                 LocalDateTime.now().format(formatter));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
-        return new ErrorResponse("CONFLICT", "Integrity constraint has been violated.", e.getMessage(),
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+        return new ApiError("CONFLICT", "Integrity constraint has been violated.", e.getMessage(),
                 LocalDateTime.now().format(formatter));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
-        return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", e.getMessage(),
+    public ApiError handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
+        return new ApiError("BAD_REQUEST", "Incorrectly made request.", e.getMessage(),
                 LocalDateTime.now().format(formatter));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleEntityNotFoundException(final EntityNotFoundException e) {
-        return new ErrorResponse("NOT_FOUND", "The required object was not found.", e.getMessage(),
+    public ApiError handleEntityNotFoundException(final EntityNotFoundException e) {
+        return new ApiError("NOT_FOUND", "The required object was not found.", e.getMessage(),
                 LocalDateTime.now().format(formatter));
     }
-
-
+    
 }
