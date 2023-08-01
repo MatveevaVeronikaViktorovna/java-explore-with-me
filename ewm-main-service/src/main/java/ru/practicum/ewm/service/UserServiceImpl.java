@@ -3,12 +3,14 @@ package ru.practicum.ewm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.UserDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.util.List;
@@ -44,8 +46,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDto> getAll() {
-        return userRepository.findAll()
+    public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
+        // сначала проверяем ids если не null то делаем запрос к БД findAllByIds
+        Pageable page = CustomPageRequest.of(from, size);
+        List<User> users;
+        if (ids != null) {
+            users = userRepository.findAllByIdIn(ids);
+        } else {
+            users = userRepository.findAll(page).getContent();
+        }
+        return users
                 .stream()
                 .map(mapper::userToDto)
                 .collect(Collectors.toList());

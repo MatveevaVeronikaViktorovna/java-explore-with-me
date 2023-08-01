@@ -1,10 +1,12 @@
 package ru.practicum.ewm.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -34,12 +36,17 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return new ErrorResponse("CONFLICT", "Integrity constraint has been violated.", e.getMessage(),
                 LocalDateTime.now().format(formatter));
-        //TODO Проверить этот обработчик, когда добавлю метод с параметром
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
+        return new ErrorResponse("BAD_REQUEST", "Incorrectly made request.", e.getMessage(),
+                LocalDateTime.now().format(formatter));
     }
 
     @ExceptionHandler

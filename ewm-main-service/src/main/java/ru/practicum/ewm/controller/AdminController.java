@@ -34,9 +34,12 @@ public class AdminController {
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers() {
-        log.info("Поступил запрос на получение всех пользователей");
-        return userService.getAll();
+    public List<UserDto> getAllUsers(@RequestParam (required = false) List<Long>ids,
+                                      @RequestParam(defaultValue = "0") Integer from,
+                                      @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
+                ids, from, size);
+        return userService.getAll(ids, from, size);
     }
 
 
