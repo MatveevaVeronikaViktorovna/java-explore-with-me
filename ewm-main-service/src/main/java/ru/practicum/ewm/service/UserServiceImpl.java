@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
-        // сначала проверяем ids если не null то делаем запрос к БД findAllByIds
         Pageable page = CustomPageRequest.of(from, size);
         List<User> users;
         if (ids != null) {

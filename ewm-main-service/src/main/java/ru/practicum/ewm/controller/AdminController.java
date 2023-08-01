@@ -37,9 +37,9 @@ public class AdminController {
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers(@RequestParam (required = false) List<Long>ids,
-                                      @RequestParam(defaultValue = "0") Integer from,
-                                      @RequestParam(defaultValue = "10") Integer size) {
+    public List<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
+                                     @RequestParam(defaultValue = "0") Integer from,
+                                     @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
                 ids, from, size);
         return userService.getAll(ids, from, size);
@@ -47,26 +47,24 @@ public class AdminController {
 
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createCategory(@Valid @RequestBody UserDto userDto) {
-        log.info("Поступил запрос на создание пользователя {}", userDto);
-        return userService.create(userDto);
+    public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+        log.info("Поступил запрос на создание категории {}", categoryDto);
+        return categoryService.create(categoryDto);
     }
 
     @DeleteMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long userId) {
-        log.info("Поступил запрос на удаление пользователя с id={}", userId);
-        userService.delete(userId);
+    public void deleteCategory(@PathVariable Long catId) {
+        log.info("Поступил запрос на удаление категории с id={}", catId);
+        categoryService.delete(catId);
     }
 
     @PatchMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto update(@PathVariable Long id,
-                              @RequestBody CategoryDto categoryDto) {
-        log.info("Поступил запрос на обновление вещи с id={} от пользователя с id={} на {}", id, userId, itemDto);
-        return itemService.update(userId, id, itemDto);
+    public CategoryDto updateCategory(@PathVariable Long catId,
+                                      @Valid @RequestBody CategoryDto categoryDto) {
+        log.info("Поступил запрос на обновление категории с id={} на {}", catId, categoryDto);
+        return categoryService.update(catId, categoryDto);
     }
-
-
 
 }
