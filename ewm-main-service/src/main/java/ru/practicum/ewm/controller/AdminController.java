@@ -25,18 +25,20 @@ public class AdminController {
         return userService.create(userDto);
     }
 
-    @GetMapping
+    @DeleteMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long userId) {
+        log.info("Поступил запрос на удаление пользователя с id={}", userId);
+        userService.delete(userId);
+    }
+
+    @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getAllUsers() {
         log.info("Поступил запрос на получение всех пользователей");
         return userService.getAll();
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable Long id) {
-        log.info("Поступил запрос на удаление пользователя с id={}", id);
-        userService.delete(id);
-    }
+
 
 }

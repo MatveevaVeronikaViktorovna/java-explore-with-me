@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.UserRepository;
@@ -30,6 +31,17 @@ public class UserServiceImpl implements UserService {
         return mapper.userToDto(newUser);
     }
 
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            log.warn("Пользователь с id {} не найден", id);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", id));
+        }
+        userRepository.deleteById(id);
+        log.info("Удален пользователь с id {}", id);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getAll() {
@@ -37,13 +49,6 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(mapper::userToDto)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Override
-    public void delete(Long id) {
-        userRepository.deleteById(id);
-        log.info("Удален пользователь с id {}", id);
     }
 
 }
