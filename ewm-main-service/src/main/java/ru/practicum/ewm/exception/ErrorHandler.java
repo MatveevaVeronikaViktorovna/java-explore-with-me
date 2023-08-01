@@ -54,5 +54,5 @@ public class ErrorHandler {
         return new ApiError("NOT_FOUND", "The required object was not found.", e.getMessage(),
                 LocalDateTime.now().format(formatter));
     }
-    
+
 }
