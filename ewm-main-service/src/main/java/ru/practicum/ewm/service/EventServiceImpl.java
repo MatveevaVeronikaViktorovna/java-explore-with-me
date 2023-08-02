@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.dto.EventDto;
+import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.model.Category;
@@ -30,11 +30,11 @@ public class EventServiceImpl implements EventService {
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
 
     @Override
-    public EventDto create(Long userId, EventDto eventDto) {
-        Event event = eventDtoMapper.dtoToEvent(eventDto);
+    public NewEventDto create(Long userId, NewEventDto newEventDto) {
+        Event event = eventDtoMapper.dtoToEvent(newEventDto);
         locationRepository.save(event.getLocation());
 
-        Long catId = eventDto.getCategory();
+        Long catId = newEventDto.getCategory();
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {
             log.warn("Категория с id {} не найдена", catId);
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", catId));

@@ -2,7 +2,7 @@ package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.ewm.dto.EventDto;
+import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
 
@@ -10,9 +10,9 @@ import ru.practicum.ewm.model.Event;
 public interface EventDtoMapper {
 
     @Mapping(target = "category", ignore = true)
-    Event dtoToEvent(EventDto eventDto);
+    Event dtoToEvent(NewEventDto newEventDto);
 
-    EventDto eventToDto(Event event);
+    NewEventDto eventToDto(Event event);
 
     default Long mapCategoryToCategoryId(Category category) {
         return category.getId();

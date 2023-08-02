@@ -1,9 +1,9 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.dto.EventDto;
+import ru.practicum.ewm.dto.NewEventDto;
 
 public interface EventService {
 
-    EventDto create(Long userId, EventDto eventDto);
+    NewEventDto create(Long userId, NewEventDto newEventDto);
 
 }

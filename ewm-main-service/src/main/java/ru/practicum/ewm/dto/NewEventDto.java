@@ -15,7 +15,7 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-public class EventDto {
+public class NewEventDto {
 
     Long id;
 
