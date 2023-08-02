@@ -5,19 +5,23 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "locations")
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "name", unique = true)
-    @NotBlank
-    String name;
+    @Column(name = "lat")
+    @NotNull
+    Float lat;
+
+    @Column(name = "lon")
+    @NotNull
+    Float lon;
 
 }
