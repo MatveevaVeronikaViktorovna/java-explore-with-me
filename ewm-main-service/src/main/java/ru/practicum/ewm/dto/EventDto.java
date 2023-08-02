@@ -6,9 +6,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.valid.StartTwoHoursAfterNowDateValid;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,8 +17,6 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 @Data
 public class EventDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @NotBlank(message = "must not be blank")
