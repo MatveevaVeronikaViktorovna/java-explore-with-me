@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class LocationDto {
-    Long id;
 
     @NotNull(message = "must not be null")
     Float lat;
 
     @NotNull(message = "must not be null")
     Float lon;
+
 }

@@ -13,6 +13,7 @@ import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.repository.LocationRepository;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
+    private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
@@ -30,6 +32,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto create(Long userId, EventDto eventDto) {
         Event event = eventDtoMapper.dtoToEvent(eventDto);
+        locationRepository.save(event.getLocation());
 
         Long catId = eventDto.getCategory();
         Category category = categoryRepository.findById(catId).orElseThrow(() -> {
@@ -47,13 +50,9 @@ public class EventServiceImpl implements EventService {
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
 
-
-
-        //TODO установить недостающие поля
-
-        //       User newUser = userRepository.save(user);
-        //       log.info("Добавлен пользователь: {}", newUser);
-        //       return mapper.userToDto(newUser);
-        return null;
+        Event newEvent = eventRepository.save(event);
+        log.info("Добавлено событие: {}", newEvent);
+        return eventDtoMapper.eventToDto(newEvent);
     }
+
 }
