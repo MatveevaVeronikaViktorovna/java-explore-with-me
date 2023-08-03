@@ -69,8 +69,8 @@ public class Event {
     @NotNull
     EventState state;
 
-    //   @Column(name = "published_on")
-    //   LocalDateTime publishedOn;
+    @Column(name = "published_on")
+    LocalDateTime publishedOn;
 
     @PrePersist
     public void prePersist() {
