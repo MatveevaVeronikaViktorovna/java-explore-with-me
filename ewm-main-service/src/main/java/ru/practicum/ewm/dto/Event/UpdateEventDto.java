@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.Event.valid.StartTwoHoursAfterNow;
 import ru.practicum.ewm.dto.LocationDto;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -35,8 +34,9 @@ public class UpdateEventDto {
     Integer participantLimit;
     Boolean requestModeration;
 
+    @NotNull(message = "must not be null")
     StateAction stateAction;
-    
+
     @Size(min = 3, max = 120)
     String title;
 }

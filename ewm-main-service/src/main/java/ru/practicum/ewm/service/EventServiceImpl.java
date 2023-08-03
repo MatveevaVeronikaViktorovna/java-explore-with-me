@@ -6,13 +6,14 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
+import ru.practicum.ewm.dto.Event.StateAction;
 import ru.practicum.ewm.dto.Event.UpdateEventDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
+import ru.practicum.ewm.mapper.LocationDtoMapper;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
@@ -37,6 +38,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
+    private final LocationDtoMapper locationDtoMapper = Mappers.getMapper(LocationDtoMapper.class);
 
     @Transactional(readOnly = true)
     @Override
@@ -98,10 +100,48 @@ public class EventServiceImpl implements EventService {
             throw new ConditionsNotMetException("Only pending or canceled events can be changed");
         }
 
-        category.setName(categoryDto.getName());
-        Category updatedCategory = categoryRepository.save(category);
-        log.info("Обновлена категория c id {} на {}", id, updatedCategory);
-        return mapper.categoryToDto(updatedCategory);
+        if (updateEventDto.getAnnotation() != null) {
+            event.setAnnotation(updateEventDto.getAnnotation());
+        }
+        if (updateEventDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventDto.getCategory());
+                throw new EntityNotFoundException(String.format("Category with id=%d was not found",
+                        updateEventDto.getCategory()));
+            });
+            event.setCategory(category);
+        }
+        if (updateEventDto.getDescription() != null) {
+            event.setDescription(updateEventDto.getDescription());
+        }
+        if (updateEventDto.getEventDate() != null) {
+            event.setEventDate(updateEventDto.getEventDate());
+        }
+        if (updateEventDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
+        }
+        if (updateEventDto.getPaid() != null) {
+            event.setPaid(updateEventDto.getPaid());
+        }
+        if (updateEventDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventDto.getParticipantLimit());
+        }
+        if (updateEventDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventDto.getRequestModeration());
+        }
+        if (updateEventDto.getTitle() != null) {
+            event.setTitle(updateEventDto.getTitle());
+        }
+
+        if (updateEventDto.getStateAction().equals(StateAction.SEND_TO_REVIEW)) {
+            event.setState(EventState.PENDING);
+        } else {
+            event.setState(EventState.CANCELED);
+        }
+
+        Event updatedEvent = eventRepository.save(event);
+        log.info("Обновлено событие c id {} на {}", eventId, updatedEvent);
+        return eventDtoMapper.eventToDto(updatedEvent);
     }
 
 }
