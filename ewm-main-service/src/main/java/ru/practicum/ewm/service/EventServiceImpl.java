@@ -3,7 +3,9 @@ package ru.practicum.ewm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
@@ -12,12 +14,15 @@ import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.LocationRepository;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,17 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventFullDto> getAllByInitiator(Long userId, Integer from, Integer size) {
+        Pageable page = CustomPageRequest.of(from, size);
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, page);
+        return events
+                .stream()
+                .map(eventDtoMapper::eventToDto)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public EventFullDto create(Long userId, NewEventDto newEventDto) {

@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.NewEventDto;
+import ru.practicum.ewm.dto.UserDto;
 import ru.practicum.ewm.service.EventService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +19,16 @@ import javax.validation.Valid;
 public class PrivateController {
 
     private final EventService eventService;
+
+    @GetMapping("/{userId}/events")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventFullDto> getAllEventsByInitiator(@PathVariable Long userId,
+                                     @RequestParam(defaultValue = "0") Integer from,
+                                     @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил запрос на получение всех событий, добавленных пользователем с id={}. " +
+                        "Параметры: from={}, size={}", userId, from, size);
+        return eventService.getAllByInitiator(userId, from, size);
+    }
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
