@@ -42,17 +42,14 @@ public class Event {
     Location location;
 
     @Column(name = "paid")
-    @NotNull
     Boolean paid;
     //default: false
 
     @Column(name = "participant_limit")
-    @NotNull
     Integer participantLimit;
     //default: 0
 
     @Column(name = "requestModeration")
-    @NotNull
     Boolean requestModeration;
     //default: true
 
@@ -75,9 +72,20 @@ public class Event {
     @NotNull
     EventState state;
 
- //   @Column(name = "published_on")
- //   LocalDateTime publishedOn;
+    //   @Column(name = "published_on")
+    //   LocalDateTime publishedOn;
 
-
+    @PrePersist
+    public void prePersist() {
+        if (paid == null) {
+            paid = false;
+        }
+        if (participantLimit == null) {
+            participantLimit = 0;
+        }
+        if (requestModeration == null) {
+            requestModeration = true;
+        }
+    }
 
 }
