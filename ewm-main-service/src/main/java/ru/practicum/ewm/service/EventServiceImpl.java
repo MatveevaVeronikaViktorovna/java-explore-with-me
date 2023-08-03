@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
@@ -30,7 +31,7 @@ public class EventServiceImpl implements EventService {
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
 
     @Override
-    public NewEventDto create(Long userId, NewEventDto newEventDto) {
+    public EventFullDto create(Long userId, NewEventDto newEventDto) {
         Event event = eventDtoMapper.dtoToEvent(newEventDto);
         locationRepository.save(event.getLocation());
 

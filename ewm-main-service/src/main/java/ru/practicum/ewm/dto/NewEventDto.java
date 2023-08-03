@@ -17,8 +17,6 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 @Data
 public class NewEventDto {
 
-    Long id;
-
     @NotBlank(message = "must not be blank")
     @Size(min = 20, max = 2000)
     String annotation;
