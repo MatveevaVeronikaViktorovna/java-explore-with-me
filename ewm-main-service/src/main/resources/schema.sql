@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS events (
 	created_on TIMESTAMP NOT NULL,
 	initiator_id BIGINT NOT NULL REFERENCES users (id),
 	state varchar(9) NOT NULL,
-	publishedOn TIMESTAMP
+	published_on TIMESTAMP
 )
 
 
