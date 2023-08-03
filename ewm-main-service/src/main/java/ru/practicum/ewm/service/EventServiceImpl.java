@@ -94,8 +94,6 @@ public class EventServiceImpl implements EventService {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
-        // TODO разобраться с locationRepository.save(event.getLocation());
-
         if (event.getState().equals(EventState.PUBLISHED)) {
             log.warn("изменить можно только отмененные события или события в состоянии ожидания модерации");
             throw new ConditionsNotMetException("Only pending or canceled events can be changed");
@@ -119,6 +117,7 @@ public class EventServiceImpl implements EventService {
             event.setEventDate(updateEventDto.getEventDate());
         }
         if (updateEventDto.getLocation() != null) {
+            locationRepository.save(event.getLocation());
             event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
         }
         if (updateEventDto.getPaid() != null) {
