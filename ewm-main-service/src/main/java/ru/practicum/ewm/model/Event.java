@@ -43,15 +43,12 @@ public class Event {
 
     @Column(name = "paid")
     Boolean paid;
-    //default: false
 
     @Column(name = "participant_limit")
     Integer participantLimit;
-    //default: 0
 
     @Column(name = "requestModeration")
     Boolean requestModeration;
-    //default: true
 
     @Column(name = "title")
     @NotBlank
