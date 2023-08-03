@@ -9,11 +9,11 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target(ElementType.TYPE_USE)
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = CheckDateValidator.class)
-public @interface StartTwoHoursAfterNowDateValid {
+@Constraint(validatedBy = EventDateValidator.class)
+public @interface StartTwoHoursAfterNow {
     String message() default "Дата и время, на которые намечено событие не может быть раньше, чем через два часа " +
             "от текущего момента";
 

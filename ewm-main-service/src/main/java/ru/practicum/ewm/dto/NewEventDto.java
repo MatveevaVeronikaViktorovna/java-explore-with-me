@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.ewm.dto.valid.StartTwoHoursAfterNowDateValid;
+import ru.practicum.ewm.dto.valid.StartTwoHoursAfterNow;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,6 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-@StartTwoHoursAfterNowDateValid
 public class NewEventDto {
 
     @NotBlank(message = "must not be blank")
@@ -31,6 +30,7 @@ public class NewEventDto {
 
     @NotNull(message = "must not be null")
     @JsonFormat(pattern = DATE_TIME_FORMAT)
+    @StartTwoHoursAfterNow
     LocalDateTime eventDate;
 
     @NotNull(message = "must not be null")
