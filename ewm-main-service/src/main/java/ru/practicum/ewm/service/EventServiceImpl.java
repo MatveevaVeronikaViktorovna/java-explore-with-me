@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
@@ -70,6 +71,16 @@ public class EventServiceImpl implements EventService {
         Event newEvent = eventRepository.save(event);
         log.info("Добавлено событие: {}", newEvent);
         return eventDtoMapper.eventToDto(newEvent);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public EventFullDto getByIdByInitiator(Long userId, Long eventId) {
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено", eventId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+        return eventDtoMapper.eventToDto(event);
     }
 
 }

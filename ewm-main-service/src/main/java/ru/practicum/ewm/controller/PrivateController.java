@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.EventFullDto;
 import ru.practicum.ewm.dto.NewEventDto;
 import ru.practicum.ewm.dto.UserDto;
@@ -36,6 +37,13 @@ public class PrivateController {
                                     @Valid @RequestBody NewEventDto newEventDto) {
         log.info("Поступил запрос от пользователя с id {} на создание события {} ", userId, newEventDto);
         return eventService.create(userId, newEventDto);
+    }
+
+    @GetMapping("/{userId}/events/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDto getEventByIdByInitiator(@PathVariable Long userId, @PathVariable Long eventId) {
+        log.info("Поступил запрос от инициатора с id={} на получение события с id={} ", userId, eventId);
+        return eventService.getByIdByInitiator(userId, eventId);
     }
 
 
