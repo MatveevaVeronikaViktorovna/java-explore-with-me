@@ -15,6 +15,7 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
+@StartTwoHoursAfterNowDateValid
 public class NewEventDto {
 
     @NotBlank(message = "must not be blank")
@@ -30,7 +31,6 @@ public class NewEventDto {
 
     @NotNull(message = "must not be null")
     @JsonFormat(pattern = DATE_TIME_FORMAT)
-    @StartTwoHoursAfterNowDateValid
     LocalDateTime eventDate;
 
     @NotNull(message = "must not be null")

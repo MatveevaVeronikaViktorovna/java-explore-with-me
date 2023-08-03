@@ -2,6 +2,7 @@ package ru.practicum.ewm.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -10,7 +11,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
@@ -22,15 +22,23 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        StringBuilder message = new StringBuilder();
-        message.append("Field: ");
-        message.append(Objects.requireNonNull(e.getFieldError()).getField());
-        message.append(". Error: ");
-        message.append(e.getFieldError().getDefaultMessage());
-        message.append(". Value: ");
-        message.append(e.getFieldError().getRejectedValue());
-        String asString = message.toString();
-        return new ApiError("BAD_REQUEST", "Incorrectly made request.", asString,
+        String message;
+        if (e.hasFieldErrors()) {
+            StringBuilder builder = new StringBuilder();
+            for (FieldError fieldError : e.getFieldErrors()) {
+                builder.append("Field: ");
+                builder.append(fieldError.getField());
+                builder.append(". Error: ");
+                builder.append(fieldError.getDefaultMessage());
+                builder.append(". Value: ");
+                builder.append(fieldError.getRejectedValue());
+                builder.append(". ");
+            }
+            message = builder.toString();
+        } else {
+            message = e.getMessage();
+        }
+        return new ApiError("BAD_REQUEST", "Incorrectly made request.", message,
                 LocalDateTime.now().format(formatter));
     }
 
