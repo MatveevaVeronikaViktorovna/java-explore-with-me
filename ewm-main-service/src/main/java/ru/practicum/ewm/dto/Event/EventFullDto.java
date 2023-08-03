@@ -1,9 +1,12 @@
-package ru.practicum.ewm.dto;
+package ru.practicum.ewm.dto.Event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.dto.CategoryDto;
+import ru.practicum.ewm.dto.LocationDto;
+import ru.practicum.ewm.dto.UserShortDto;
 import ru.practicum.ewm.model.EventState;
 
 import java.time.LocalDateTime;

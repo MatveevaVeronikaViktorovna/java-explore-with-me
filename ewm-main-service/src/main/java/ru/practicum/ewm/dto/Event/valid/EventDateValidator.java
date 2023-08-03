@@ -1,4 +1,4 @@
-package ru.practicum.ewm.dto.valid;
+package ru.practicum.ewm.dto.Event.valid;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

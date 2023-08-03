@@ -63,4 +63,11 @@ public class ErrorHandler {
                 LocalDateTime.now().format(formatter));
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleConditionsNotMetException(final ConditionsNotMetException e) {
+        return new ApiError("FORBIDDEN", "For the requested operation the conditions are not met.", e.getMessage(),
+                LocalDateTime.now().format(formatter));
+    }
+
 }

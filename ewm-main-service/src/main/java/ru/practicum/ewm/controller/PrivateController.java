@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
-import ru.practicum.ewm.dto.EventFullDto;
-import ru.practicum.ewm.dto.NewEventDto;
-import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.dto.Event.EventFullDto;
+import ru.practicum.ewm.dto.Event.NewEventDto;
+import ru.practicum.ewm.dto.Event.UpdateEventDto;
 import ru.practicum.ewm.service.EventService;
 
 import javax.validation.Valid;
@@ -24,10 +24,10 @@ public class PrivateController {
     @GetMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByInitiator(@PathVariable Long userId,
-                                     @RequestParam(defaultValue = "0") Integer from,
-                                     @RequestParam(defaultValue = "10") Integer size) {
+                                                      @RequestParam(defaultValue = "0") Integer from,
+                                                      @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил запрос на получение всех событий, добавленных пользователем с id={}. " +
-                        "Параметры: from={}, size={}", userId, from, size);
+                "Параметры: from={}, size={}", userId, from, size);
         return eventService.getAllByInitiator(userId, from, size);
     }
 
@@ -41,11 +41,20 @@ public class PrivateController {
 
     @GetMapping("/{userId}/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventByIdByInitiator(@PathVariable Long userId, @PathVariable Long eventId) {
+    public EventFullDto getEventByIdByInitiator(@PathVariable Long userId,
+                                                @PathVariable Long eventId) {
         log.info("Поступил запрос от инициатора с id={} на получение события с id={} ", userId, eventId);
         return eventService.getByIdByInitiator(userId, eventId);
     }
 
-
+    @PatchMapping("/{userId}/events/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDto updateEventByInitiator(@PathVariable Long userId,
+                                              @PathVariable Long eventId,
+                                      @Valid @RequestBody UpdateEventDto updateEventDto) {
+        log.info("Поступил запрос на обновление события с id={} от инициатора с id={} на {}",
+                eventId, userId, updateEventDto);
+        return eventService.updateByInitiator(userId, eventId, updateEventDto);
+    }
 
 }

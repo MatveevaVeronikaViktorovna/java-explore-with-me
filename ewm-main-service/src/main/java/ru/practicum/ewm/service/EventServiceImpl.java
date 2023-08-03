@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.CategoryDto;
-import ru.practicum.ewm.dto.EventFullDto;
-import ru.practicum.ewm.dto.NewEventDto;
+import ru.practicum.ewm.dto.Event.EventFullDto;
+import ru.practicum.ewm.dto.Event.NewEventDto;
+import ru.practicum.ewm.dto.Event.UpdateEventDto;
+import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.model.Category;
@@ -81,6 +83,25 @@ public class EventServiceImpl implements EventService {
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
         return eventDtoMapper.eventToDto(event);
+    }
+
+    @Transactional
+    @Override
+    public EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventDto updateEventDto) {
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено", eventId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+
+        if (event.getState().equals(EventState.PUBLISHED)) {
+            log.warn("изменить можно только отмененные события или события в состоянии ожидания модерации");
+            throw new ConditionsNotMetException("Only pending or canceled events can be changed");
+        }
+
+        category.setName(categoryDto.getName());
+        Category updatedCategory = categoryRepository.save(category);
+        log.info("Обновлена категория c id {} на {}", id, updatedCategory);
+        return mapper.categoryToDto(updatedCategory);
     }
 
 }
