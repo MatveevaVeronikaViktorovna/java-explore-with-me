@@ -16,7 +16,7 @@ public class EventFullDto {
 
     String annotation;
     CategoryDto category;
-    // TODO добавить confirmedRequests
+    Integer confirmedRequests;
     @JsonFormat(pattern = DATE_TIME_FORMAT)
     LocalDateTime createdOn;
     String description;
@@ -31,6 +31,6 @@ public class EventFullDto {
     Boolean requestModeration;
     EventState state;
     String title;
-    // TODO views
+    Long views;
 
 }

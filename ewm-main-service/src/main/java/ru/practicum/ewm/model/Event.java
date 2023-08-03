@@ -54,7 +54,6 @@ public class Event {
     @NotBlank
     String title;
 
-
     @Column(name = "created_on")
     @NotNull
     LocalDateTime createdOn;
