@@ -94,6 +94,7 @@ public class EventServiceImpl implements EventService {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
+        // TODO разобраться с locationRepository.save(event.getLocation());
 
         if (event.getState().equals(EventState.PUBLISHED)) {
             log.warn("изменить можно только отмененные события или события в состоянии ожидания модерации");
