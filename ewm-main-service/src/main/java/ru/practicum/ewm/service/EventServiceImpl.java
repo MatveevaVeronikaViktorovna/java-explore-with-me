@@ -188,14 +188,14 @@ public class EventServiceImpl implements EventService {
             if (updateEventAdminRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT)) {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно публиковать, только если оно в состоянии ожидания публикации.");
-                    throw new ConditionsNotMetException("An event can be published only if its state: PENDING.");
+                    throw new ConditionsNotMetException("Cannot publish the event because it's not in the right state: " + event.getState());
                 }
                 event.setState(EventState.PUBLISHED);
                 event.setPublishedOn(LocalDateTime.now());
             } else {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно отклонить, только если оно еще не опубликовано.");
-                    throw new ConditionsNotMetException("An event can be rejected only if its state: PENDING.");
+                    throw new ConditionsNotMetException(("Cannot reject the event because it's not in the right state: " + event.getState());
                 }
                 event.setState(EventState.CANCELED);
             }
