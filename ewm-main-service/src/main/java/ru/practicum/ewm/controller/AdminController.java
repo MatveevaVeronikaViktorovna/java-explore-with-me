@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
+import ru.practicum.ewm.dto.Event.UpdateEventAdminRequestDto;
 import ru.practicum.ewm.dto.UserDto;
 import ru.practicum.ewm.service.CategoryService;
 import ru.practicum.ewm.service.EventService;
@@ -74,9 +75,9 @@ public class AdminController {
     @PatchMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByAdmin(@PathVariable Long eventId,
-                                           @Valid @RequestBody NewEventDto newEventDto) {
-        log.info("Поступил запрос от администратора на обновление события с id={} на {}", eventId, newEventDto);
-        return eventService.updateByAdmin(eventId, newEventDto);
+                                           @Valid @RequestBody UpdateEventAdminRequestDto eventDto) {
+        log.info("Поступил запрос от администратора на обновление события с id={} на {}", eventId, eventDto);
+        return eventService.updateByAdmin(eventId, eventDto);
     }
 
 }

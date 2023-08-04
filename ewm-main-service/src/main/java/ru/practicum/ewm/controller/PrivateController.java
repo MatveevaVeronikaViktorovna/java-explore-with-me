@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
-import ru.practicum.ewm.dto.Event.UpdateEventDto;
+import ru.practicum.ewm.dto.Event.UpdateEventInitiatorRequestDto;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.ParticipationRequestService;
@@ -53,10 +53,10 @@ public class PrivateController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByInitiator(@PathVariable Long userId,
                                                @PathVariable Long eventId,
-                                               @Valid @RequestBody UpdateEventDto updateEventDto) {
+                                               @Valid @RequestBody UpdateEventInitiatorRequestDto eventDto) {
         log.info("Поступил запрос на обновление события с id={} от инициатора с id={} на {}",
-                eventId, userId, updateEventDto);
-        return eventService.updateByInitiator(userId, eventId, updateEventDto);
+                eventId, userId, eventDto);
+        return eventService.updateByInitiator(userId, eventId, eventDto);
     }
 
     @PostMapping("/{userId}/requests")

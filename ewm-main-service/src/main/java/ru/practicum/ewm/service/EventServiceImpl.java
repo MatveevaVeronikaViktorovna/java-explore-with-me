@@ -6,10 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.Event.EventFullDto;
-import ru.practicum.ewm.dto.Event.NewEventDto;
-import ru.practicum.ewm.dto.Event.StateAction;
-import ru.practicum.ewm.dto.Event.UpdateEventDto;
+import ru.practicum.ewm.dto.Event.*;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
@@ -90,9 +87,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventDto updateEventDto) {
+    public EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
-            log.warn("Событие с id {} не найдено", eventId);
+            log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
         if (event.getState().equals(EventState.PUBLISHED)) {
@@ -100,47 +97,116 @@ public class EventServiceImpl implements EventService {
             throw new ConditionsNotMetException("Only pending or canceled events can be changed");
         }
 
-        if (updateEventDto.getAnnotation() != null) {
-            event.setAnnotation(updateEventDto.getAnnotation());
+        if (updateEventInitiatorRequestDto.getAnnotation() != null) {
+            event.setAnnotation(updateEventInitiatorRequestDto.getAnnotation());
         }
-        if (updateEventDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventDto.getCategory()).orElseThrow(() -> {
-                log.warn("Категория с id {} не найдена", updateEventDto.getCategory());
+        if (updateEventInitiatorRequestDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventInitiatorRequestDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventInitiatorRequestDto.getCategory());
                 throw new EntityNotFoundException(String.format("Category with id=%d was not found",
-                        updateEventDto.getCategory()));
+                        updateEventInitiatorRequestDto.getCategory()));
             });
             event.setCategory(category);
         }
-        if (updateEventDto.getDescription() != null) {
-            event.setDescription(updateEventDto.getDescription());
+        if (updateEventInitiatorRequestDto.getDescription() != null) {
+            event.setDescription(updateEventInitiatorRequestDto.getDescription());
         }
-        if (updateEventDto.getEventDate() != null) {
-            event.setEventDate(updateEventDto.getEventDate());
+        if (updateEventInitiatorRequestDto.getEventDate() != null) {
+            event.setEventDate(updateEventInitiatorRequestDto.getEventDate());
         }
-        if (updateEventDto.getLocation() != null) {
-            event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
+        if (updateEventInitiatorRequestDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventInitiatorRequestDto.getLocation()));
         }
-        if (updateEventDto.getPaid() != null) {
-            event.setPaid(updateEventDto.getPaid());
+        if (updateEventInitiatorRequestDto.getPaid() != null) {
+            event.setPaid(updateEventInitiatorRequestDto.getPaid());
         }
-        if (updateEventDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventDto.getParticipantLimit());
+        if (updateEventInitiatorRequestDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventInitiatorRequestDto.getParticipantLimit());
         }
-        if (updateEventDto.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventDto.getRequestModeration());
+        if (updateEventInitiatorRequestDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventInitiatorRequestDto.getRequestModeration());
         }
-        if (updateEventDto.getTitle() != null) {
-            event.setTitle(updateEventDto.getTitle());
+        if (updateEventInitiatorRequestDto.getTitle() != null) {
+            event.setTitle(updateEventInitiatorRequestDto.getTitle());
         }
 
-        if (updateEventDto.getStateAction().equals(StateAction.SEND_TO_REVIEW)) {
-            event.setState(EventState.PENDING);
-        } else {
-            event.setState(EventState.CANCELED);
+        if (updateEventInitiatorRequestDto.getStateAction() != null) {
+            if (updateEventInitiatorRequestDto.getStateAction().equals(InitiatorStateAction.SEND_TO_REVIEW)) {
+                event.setState(EventState.PENDING);
+            } else {
+                event.setState(EventState.CANCELED);
+            }
         }
         locationRepository.save(event.getLocation());
         Event updatedEvent = eventRepository.save(event);
-        log.info("Обновлено событие c id {} на {}", eventId, updatedEvent);
+        log.info("Инициатором обновлено событие c id {} на {}", eventId, updatedEvent);
+        return eventDtoMapper.eventToDto(updatedEvent);
+    }
+
+    @Transactional
+    @Override
+    public EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено", eventId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+
+        if (updateEventAdminRequestDto.getAnnotation() != null) {
+            event.setAnnotation(updateEventAdminRequestDto.getAnnotation());
+        }
+        if (updateEventAdminRequestDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventAdminRequestDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventAdminRequestDto.getCategory());
+                throw new EntityNotFoundException(String.format("Category with id=%d was not found",
+                        updateEventAdminRequestDto.getCategory()));
+            });
+            event.setCategory(category);
+        }
+        if (updateEventAdminRequestDto.getDescription() != null) {
+            event.setDescription(updateEventAdminRequestDto.getDescription());
+        }
+        if (updateEventAdminRequestDto.getEventDate() != null) {
+            event.setEventDate(updateEventAdminRequestDto.getEventDate());
+        }
+        if (updateEventAdminRequestDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventAdminRequestDto.getLocation()));
+        }
+        if (updateEventAdminRequestDto.getPaid() != null) {
+            event.setPaid(updateEventAdminRequestDto.getPaid());
+        }
+        if (updateEventAdminRequestDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventAdminRequestDto.getParticipantLimit());
+        }
+        if (updateEventAdminRequestDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventAdminRequestDto.getRequestModeration());
+        }
+        if (updateEventAdminRequestDto.getTitle() != null) {
+            event.setTitle(updateEventAdminRequestDto.getTitle());
+        }
+
+        if (updateEventAdminRequestDto.getStateAction() != null) {
+            if (updateEventAdminRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT)) {
+                if (!event.getState().equals(EventState.PENDING)) {
+                    log.warn("Событие можно публиковать, только если оно в состоянии ожидания публикации.");
+                    throw new ConditionsNotMetException("An event can be published only if its state: PENDING.");
+                }
+                event.setState(EventState.PUBLISHED);
+                event.setPublishedOn(LocalDateTime.now());
+            } else {
+                if (!event.getState().equals(EventState.PENDING)) {
+                    log.warn("Событие можно отклонить, только если оно еще не опубликовано.");
+                    throw new ConditionsNotMetException("An event can be rejected only if its state: PENDING.");
+                }
+                event.setState(EventState.CANCELED);
+            }
+        }
+        if (event.getPublishedOn() != null && event.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
+            log.warn("Дата начала изменяемого события должна быть не ранее чем за час от даты публикации.");
+            throw new ConditionsNotMetException("The event date must be no earlier than an hour from the date of publication.");
+        }
+        locationRepository.save(event.getLocation());
+        Event updatedEvent = eventRepository.save(event);
+        log.info("Администратором обновлено событие c id {} на {}", eventId, updatedEvent);
         return eventDtoMapper.eventToDto(updatedEvent);
     }
 
