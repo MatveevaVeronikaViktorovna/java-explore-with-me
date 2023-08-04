@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.dto.Event.EventFullDto;
+import ru.practicum.ewm.dto.Event.InitiatorStateAction;
+import ru.practicum.ewm.dto.Event.UpdateEventInitiatorRequestDto;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
@@ -77,7 +80,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional(readOnly = true)
     @Override
-    public List<ParticipationRequestDto> getAll(Long userId) {
+    public List<ParticipationRequestDto> getAllByRequester(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -90,5 +93,62 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId) {
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+        if (event.getState().equals(EventState.PUBLISHED)) {
+            log.warn("изменить можно только отмененные события или события в состоянии ожидания модерации");
+            throw new ConditionsNotMetException("Only pending or canceled events can be changed");
+        }
+
+        if (updateEventInitiatorRequestDto.getAnnotation() != null) {
+            event.setAnnotation(updateEventInitiatorRequestDto.getAnnotation());
+        }
+        if (updateEventInitiatorRequestDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventInitiatorRequestDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventInitiatorRequestDto.getCategory());
+                throw new EntityNotFoundException(String.format("Category with id=%d was not found",
+                        updateEventInitiatorRequestDto.getCategory()));
+            });
+            event.setCategory(category);
+        }
+        if (updateEventInitiatorRequestDto.getDescription() != null) {
+            event.setDescription(updateEventInitiatorRequestDto.getDescription());
+        }
+        if (updateEventInitiatorRequestDto.getEventDate() != null) {
+            event.setEventDate(updateEventInitiatorRequestDto.getEventDate());
+        }
+        if (updateEventInitiatorRequestDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventInitiatorRequestDto.getLocation()));
+        }
+        if (updateEventInitiatorRequestDto.getPaid() != null) {
+            event.setPaid(updateEventInitiatorRequestDto.getPaid());
+        }
+        if (updateEventInitiatorRequestDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventInitiatorRequestDto.getParticipantLimit());
+        }
+        if (updateEventInitiatorRequestDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventInitiatorRequestDto.getRequestModeration());
+        }
+        if (updateEventInitiatorRequestDto.getTitle() != null) {
+            event.setTitle(updateEventInitiatorRequestDto.getTitle());
+        }
+
+        if (updateEventInitiatorRequestDto.getStateAction() != null) {
+            if (updateEventInitiatorRequestDto.getStateAction().equals(InitiatorStateAction.SEND_TO_REVIEW)) {
+                event.setState(EventState.PENDING);
+            } else {
+                event.setState(EventState.CANCELED);
+            }
+        }
+        locationRepository.save(event.getLocation());
+        Event updatedEvent = eventRepository.save(event);
+        log.info("Инициатором обновлено событие c id {} на {}", eventId, updatedEvent);
+        return eventDtoMapper.eventToDto(updatedEvent);
+    }
 
 }

@@ -8,6 +8,8 @@ public interface ParticipationRequestService {
 
     ParticipationRequestDto create(Long userId, Long eventId);
 
-    List<ParticipationRequestDto> getAll(Long userId);
+    List<ParticipationRequestDto> getAllByRequester(Long userId);
+
+    ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId);
 
 }

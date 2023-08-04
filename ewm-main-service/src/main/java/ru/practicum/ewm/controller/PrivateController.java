@@ -70,9 +70,18 @@ public class PrivateController {
 
     @GetMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getAllParticipationRequests(@PathVariable Long userId) {
+    public List<ParticipationRequestDto> getAllParticipationRequestsByRequester(@PathVariable Long userId) {
         log.info("Поступил запрос от пользователя с id {} на получение всех его запросов на участие в событиях", userId);
-        return requestService.getAll(userId);
+        return requestService.getAllByRequester(userId);
+    }
+
+    @PatchMapping("/{userId}/requests/{requestId}/cancel")
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipationRequestDto updateParticipationRequestStatusByRequester(@PathVariable Long userId,
+                                                                               @PathVariable Long requestId) {
+        log.info("Поступил запрос на обновление статуса запроса на участие в событии с id={} от пользователя с id={}",
+                requestId, userId);
+        return requestService.updateStatusByRequester(userId, requestId);
     }
 
 }
