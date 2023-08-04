@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users, categories, locations, events;
+DROP TABLE IF EXISTS users, categories, locations, events, participation_requests;
 
 CREATE TABLE IF NOT EXISTS users ( 
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
@@ -32,6 +32,15 @@ CREATE TABLE IF NOT EXISTS events (
 	initiator_id BIGINT NOT NULL REFERENCES users (id),
 	state varchar(9) NOT NULL,
 	published_on TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS participation_requests (
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+	created TIMESTAMP NOT NULL,
+	event_id BIGINT NOT NULL REFERENCES events (id),
+	requester_id BIGINT NOT NULL REFERENCES users (id),
+	status varchar(9) NOT NULL
 )
+
 
 

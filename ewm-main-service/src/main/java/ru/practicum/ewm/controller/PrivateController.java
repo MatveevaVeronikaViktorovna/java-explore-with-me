@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
 import ru.practicum.ewm.dto.Event.UpdateEventDto;
+import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.service.EventService;
 
 import javax.validation.Valid;
@@ -50,11 +50,20 @@ public class PrivateController {
     @PatchMapping("/{userId}/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByInitiator(@PathVariable Long userId,
-                                              @PathVariable Long eventId,
-                                      @Valid @RequestBody UpdateEventDto updateEventDto) {
+                                               @PathVariable Long eventId,
+                                               @Valid @RequestBody UpdateEventDto updateEventDto) {
         log.info("Поступил запрос на обновление события с id={} от инициатора с id={} на {}",
                 eventId, userId, updateEventDto);
         return eventService.updateByInitiator(userId, eventId, updateEventDto);
+    }
+
+    @PostMapping("/{userId}/requests")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParticipationRequestDto createParticipationRequest(@PathVariable Long userId,
+                                                              @RequestParam Long eventId) {
+        log.info("Поступил запрос от пользователя с id {} на создание запроса на участие в событии с id {} ",
+                userId, eventId);
+        return eventService.create(userId, newEventDto);
     }
 
 }
