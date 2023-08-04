@@ -2,6 +2,7 @@ package ru.practicum.ewm.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
@@ -9,12 +10,16 @@ import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
 import ru.practicum.ewm.dto.Event.UpdateEventAdminRequestDto;
 import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.model.EventState;
 import ru.practicum.ewm.service.CategoryService;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.UserService;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,6 +75,21 @@ public class AdminController {
                                       @Valid @RequestBody CategoryDto categoryDto) {
         log.info("Поступил запрос на обновление категории с id={} на {}", catId, categoryDto);
         return categoryService.update(catId, categoryDto);
+    }
+
+    @GetMapping("/admin/events")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventFullDto> getAllEventsByAdmin(@RequestParam(required = false) List<Long> users,
+                                                  @RequestParam(required = false) List<EventState> states,
+                                                  @RequestParam(required = false) List<Long> categories,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeStart,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeEnd,
+                                                  @RequestParam(defaultValue = "0") Integer from,
+                                                  @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил запрос от администратора на получение всех событий. Параметры: users={}, states={}, " +
+                "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories, rangeStart,
+                rangeEnd, from, size);
+        return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/events/{eventId}")

@@ -210,4 +210,15 @@ public class EventServiceImpl implements EventService {
         return eventDtoMapper.eventToDto(updatedEvent);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        Pageable page = CustomPageRequest.of(from, size);
+        List<Event> events = eventRepository.findAllByInitiatorId( page);
+        return events
+                .stream()
+                .map(eventDtoMapper::eventToDto)
+                .collect(Collectors.toList());
+    }
+
 }
