@@ -55,7 +55,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         }
 
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
-        if (event.getParticipantLimit() >= confirmedRequests) {
+        if (event.getParticipantLimit() <= confirmedRequests) {
             log.warn("У события достигнут лимит запросов на участие.");
             throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
         }
