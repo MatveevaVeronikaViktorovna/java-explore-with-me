@@ -195,7 +195,7 @@ public class EventServiceImpl implements EventService {
             } else {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно отклонить, только если оно еще не опубликовано.");
-                    throw new ConditionsNotMetException(("Cannot reject the event because it's not in the right state: " + event.getState());
+                    throw new ConditionsNotMetException("Cannot reject the event because it's not in the right state: " + event.getState());
                 }
                 event.setState(EventState.CANCELED);
             }
