@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS participation_requests (
 	created TIMESTAMP NOT NULL,
 	event_id BIGINT NOT NULL REFERENCES events (id),
 	requester_id BIGINT NOT NULL REFERENCES users (id),
-	status varchar(9) NOT NULL
+	status varchar(9) NOT NULL,
+	CONSTRAINT uq_request UNIQUE(event_id, requester_id)
 )
 
 

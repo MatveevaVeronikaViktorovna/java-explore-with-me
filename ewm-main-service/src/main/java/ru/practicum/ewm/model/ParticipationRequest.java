@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Entity
-@Table(name = "participation_requests", uniqueConstraints = { @UniqueConstraint(name = "UniqueEventAndRequester",
-        columnNames = { "event_id", "requester_id" }) })
+@Table(name = "participation_requests")
 public class ParticipationRequest {
 
     @Column(name = "created")

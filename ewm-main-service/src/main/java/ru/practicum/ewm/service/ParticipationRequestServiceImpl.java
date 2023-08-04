@@ -53,6 +53,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             log.warn("Нельзя участвовать в неопубликованном событии");
             throw new ConditionsNotMetException("It is not possible to participate in an unpublished event");
         }
+
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        if (event.getParticipantLimit() >= confirmedRequests) {
+            log.warn("У события достигнут лимит запросов на участие.");
+            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
+        }
+
         if(event.getRequestModeration().equals(Boolean.FALSE)) {
             request.setStatus(ParticipationRequestStatus.CONFIRMED);
         } else {
