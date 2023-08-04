@@ -9,6 +9,7 @@ import ru.practicum.ewm.dto.Event.NewEventDto;
 import ru.practicum.ewm.dto.Event.UpdateEventDto;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
 import ru.practicum.ewm.service.EventService;
+import ru.practicum.ewm.service.ParticipationRequestService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PrivateController {
 
     private final EventService eventService;
+    private final ParticipationRequestService requestService;
 
     @GetMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.OK)
@@ -63,7 +65,7 @@ public class PrivateController {
                                                               @RequestParam Long eventId) {
         log.info("Поступил запрос от пользователя с id {} на создание запроса на участие в событии с id {} ",
                 userId, eventId);
-        return eventService.create(userId, newEventDto);
+        return requestService.create(userId, eventId);
     }
 
 }

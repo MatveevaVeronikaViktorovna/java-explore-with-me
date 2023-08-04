@@ -58,7 +58,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         } else {
             request.setStatus(ParticipationRequestStatus.PENDING);
         }
-        
+
         request.setCreated(LocalDateTime.now());
 
         ParticipationRequest newRequest = requestRepository.save(request);
