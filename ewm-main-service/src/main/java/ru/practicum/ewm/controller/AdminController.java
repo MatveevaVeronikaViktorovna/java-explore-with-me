@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
+import ru.practicum.ewm.dto.Event.EventFullDto;
+import ru.practicum.ewm.dto.Event.NewEventDto;
 import ru.practicum.ewm.dto.UserDto;
 import ru.practicum.ewm.service.CategoryService;
+import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.UserService;
 
 import javax.validation.Valid;
@@ -20,6 +23,7 @@ public class AdminController {
 
     private final UserService userService;
     private final CategoryService categoryService;
+    private final EventService eventService;
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,6 +69,14 @@ public class AdminController {
                                       @Valid @RequestBody CategoryDto categoryDto) {
         log.info("Поступил запрос на обновление категории с id={} на {}", catId, categoryDto);
         return categoryService.update(catId, categoryDto);
+    }
+
+    @PatchMapping("/events/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDto updateEventByAdmin(@PathVariable Long eventId,
+                                           @Valid @RequestBody NewEventDto newEventDto) {
+        log.info("Поступил запрос от администратора на обновление события с id={} на {}", eventId, newEventDto);
+        return eventService.updateByAdmin(eventId, newEventDto);
     }
 
 }
