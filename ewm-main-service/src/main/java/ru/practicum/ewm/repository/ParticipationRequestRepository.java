@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.model.ParticipationRequest;
 import ru.practicum.ewm.model.ParticipationRequestStatus;
-import ru.practicum.ewm.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ParticipationRequestRepository extends JpaRepository<ParticipationRequest, Long> {
@@ -14,4 +14,5 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
     Integer countAllByEventIdAndStatus(Long eventId, ParticipationRequestStatus status);
 
     List<ParticipationRequest> findAllByRequesterId(Long userId);
+    Optional<ParticipationRequest> findAllByIdAndRequesterId(Long requestId, Long userId);
 }
