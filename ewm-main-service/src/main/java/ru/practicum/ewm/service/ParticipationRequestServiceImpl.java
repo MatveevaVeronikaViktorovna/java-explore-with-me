@@ -15,6 +15,8 @@ import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +62,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
         }
 
-        if(event.getRequestModeration().equals(Boolean.FALSE)) {
+        if (event.getRequestModeration().equals(Boolean.FALSE)) {
             request.setStatus(ParticipationRequestStatus.CONFIRMED);
         } else {
             request.setStatus(ParticipationRequestStatus.PENDING);
@@ -71,6 +73,22 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         ParticipationRequest newRequest = requestRepository.save(request);
         log.info("Добавлен запрос на участие в событии: {}", newRequest);
         return requestDtoMapper.participationRequestToDto(newRequest);
-
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ParticipationRequestDto> getAll(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.warn("Пользователь с id {} не найден", userId);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
+        });
+
+        List<ParticipationRequest> requests = requestRepository.findAllByRequesterId(userId);
+        return requests
+                .stream()
+                .map(requestDtoMapper::participationRequestToDto)
+                .collect(Collectors.toList());
+    }
+
+
 }

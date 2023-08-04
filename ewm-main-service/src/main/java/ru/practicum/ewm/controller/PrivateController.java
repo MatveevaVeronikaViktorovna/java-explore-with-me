@@ -68,4 +68,11 @@ public class PrivateController {
         return requestService.create(userId, eventId);
     }
 
+    @GetMapping("/{userId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getAllParticipationRequests(@PathVariable Long userId) {
+        log.info("Поступил запрос от пользователя с id {} на получение всех его запросов на участие в событиях", userId);
+        return requestService.getAll(userId);
+    }
+
 }
