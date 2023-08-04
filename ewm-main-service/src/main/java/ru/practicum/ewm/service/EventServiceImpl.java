@@ -117,7 +117,6 @@ public class EventServiceImpl implements EventService {
             event.setEventDate(updateEventDto.getEventDate());
         }
         if (updateEventDto.getLocation() != null) {
-            locationRepository.save(event.getLocation());
             event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
         }
         if (updateEventDto.getPaid() != null) {
@@ -138,7 +137,7 @@ public class EventServiceImpl implements EventService {
         } else {
             event.setState(EventState.CANCELED);
         }
-
+        locationRepository.save(event.getLocation());
         Event updatedEvent = eventRepository.save(event);
         log.info("Обновлено событие c id {} на {}", eventId, updatedEvent);
         return eventDtoMapper.eventToDto(updatedEvent);
