@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.dto.UpdateParticipationRequestEventInitiatorRequestDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.ParticipationRequestDtoMapper;
@@ -123,4 +124,60 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .map(requestDtoMapper::participationRequestToDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    @Override
+    public List<ParticipationRequestDto> updateStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.warn("Пользователь с id {} не найден", userId);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
+        });
+
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено", eventId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        int limitForConfirmation = event.getParticipantLimit() - confirmedRequests;
+        if (limitForConfirmation <= 0) {
+            log.warn("У события достигнут лимит запросов на участие.");
+            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
+        }
+
+        List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorIdAndIdIn(eventId, userId, requestDto.getRequestIds());
+
+        if (requestDto.getStatus().equals(ParticipationRequestStatus.CONFIRMED)) {
+            for (ParticipationRequest request : requests) {
+                if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
+                    log.warn("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
+                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right status: "
+                            + request.getStatus());
+                }
+                if (limitForConfirmation > 0) {
+                    request.setStatus(ParticipationRequestStatus.CONFIRMED);
+                    limitForConfirmation--;
+                } else {
+                    request.setStatus(ParticipationRequestStatus.REJECTED);
+                }
+            }
+        } else {
+            for (ParticipationRequest request : requests) {
+                if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
+                    log.warn("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
+                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right status: "
+                            + request.getStatus());
+                }
+                request.setStatus(ParticipationRequestStatus.REJECTED);
+            }
+        }
+
+        List<ParticipationRequest> updatedRequests = requestRepository.saveAll(requests);
+        log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId, updatedRequests);
+        return requests
+                .stream()
+                .map(requestDtoMapper::participationRequestToDto)
+                .collect(Collectors.toList());
+    }
+
 }

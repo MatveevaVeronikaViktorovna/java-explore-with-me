@@ -8,6 +8,7 @@ import ru.practicum.ewm.dto.Event.EventFullDto;
 import ru.practicum.ewm.dto.Event.NewEventDto;
 import ru.practicum.ewm.dto.Event.UpdateEventInitiatorRequestDto;
 import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.dto.UpdateParticipationRequestEventInitiatorRequestDto;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.ParticipationRequestService;
 
@@ -87,12 +88,20 @@ public class PrivateController {
     @GetMapping("/{userId}/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAllParticipationRequestsByEventInitiator(@PathVariable Long userId,
-                                                                                @PathVariable Long eventId) {
+                                                                                     @PathVariable Long eventId) {
         log.info("Поступил запрос от инициатора с id {} на получение всех запросов на участие в его событии с id {}",
                 userId, eventId);
         return requestService.getAllByEventInitiator(userId, eventId);
     }
 
-
+    @PatchMapping("/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> updateParticipationRequestsStatusByRequester(@PathVariable Long userId,
+                                                                                      @PathVariable Long eventId,
+                                                                                      @Valid @RequestBody UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+        log.info("Поступил запрос на обновление статуса запросов на участие в событии с id={} от инициатора данного " +
+                "события с id={}", eventId, userId);
+        return requestService.updateStatusByEventInitiator(userId, eventId, requestDto);
+    }
 
 }
