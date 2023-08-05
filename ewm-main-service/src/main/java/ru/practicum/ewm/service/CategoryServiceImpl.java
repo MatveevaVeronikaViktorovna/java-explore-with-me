@@ -7,11 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.CategoryDto;
+import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.CategoryDtoMapper;
 import ru.practicum.ewm.model.Category;
+import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.CategoryRepository;
+import ru.practicum.ewm.repository.EventRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
     private final CategoryDtoMapper mapper = Mappers.getMapper(CategoryDtoMapper.class);
 
     @Transactional
@@ -40,6 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
             log.warn("Категория с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
         }
+
+        List<Event>categoryEvents = eventRepository.findAllByCategoryId(id);
+        if (!categoryEvents.isEmpty()) {
+            log.warn("Существуют события, связанные с категорией");
+            throw new ConditionsNotMetException("The category is not empty");
+        }
+
         categoryRepository.deleteById(id);
         log.info("Удалена категория с id {}", id);
     }
