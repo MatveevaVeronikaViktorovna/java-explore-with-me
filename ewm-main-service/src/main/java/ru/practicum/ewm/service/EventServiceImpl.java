@@ -11,15 +11,9 @@ import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.mapper.LocationDtoMapper;
-import ru.practicum.ewm.model.Category;
-import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.EventState;
-import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.pagination.CustomPageRequest;
-import ru.practicum.ewm.repository.CategoryRepository;
-import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.repository.LocationRepository;
-import ru.practicum.ewm.repository.UserRepository;
+import ru.practicum.ewm.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +28,7 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final ParticipationRequestRepository requestRepository;
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
     private final LocationDtoMapper locationDtoMapper = Mappers.getMapper(LocationDtoMapper.class);
 
@@ -82,7 +77,10 @@ public class EventServiceImpl implements EventService {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
-        return eventDtoMapper.eventToDto(event);
+        EventFullDto eventDto = eventDtoMapper.eventToDto(event);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        eventDto.setConfirmedRequests(confirmedRequests);
+        return eventDto;
     }
 
     @Transactional
@@ -137,10 +135,14 @@ public class EventServiceImpl implements EventService {
                 event.setState(EventState.CANCELED);
             }
         }
+
         locationRepository.save(event.getLocation());
         Event updatedEvent = eventRepository.save(event);
         log.info("Инициатором обновлено событие c id {} на {}", eventId, updatedEvent);
-        return eventDtoMapper.eventToDto(updatedEvent);
+        EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        eventDto.setConfirmedRequests(confirmedRequests);
+        return eventDto;
     }
 
     @Transactional
@@ -207,7 +209,10 @@ public class EventServiceImpl implements EventService {
         locationRepository.save(event.getLocation());
         Event updatedEvent = eventRepository.save(event);
         log.info("Администратором обновлено событие c id {} на {}", eventId, updatedEvent);
-        return eventDtoMapper.eventToDto(updatedEvent);
+        EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        eventDto.setConfirmedRequests(confirmedRequests);
+        return eventDto;
     }
 
     @Transactional(readOnly = true)
