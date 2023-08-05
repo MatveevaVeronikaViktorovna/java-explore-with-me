@@ -1,4 +1,4 @@
-package ru.practicum.ewm.dto.Event.valid;
+package ru.practicum.ewm.dto.event.valid;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
-import ru.practicum.ewm.dto.UpdateParticipationRequestEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.participationRequest.ParticipationRequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestResponse;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.ParticipationRequestDtoMapper;
@@ -127,7 +128,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public List<ParticipationRequestDto> updateStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+    public UpdateParticipationRequestResponse updateStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -140,7 +141,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         int limitForConfirmation = event.getParticipantLimit() - confirmedRequests;
-        if (limitForConfirmation <= 0) {
+        if (requestDto.getStatus().equals(ParticipationRequestStatus.CONFIRMED) && limitForConfirmation <= 0) {
             log.warn("У события достигнут лимит запросов на участие.");
             throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
         }
@@ -161,7 +162,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     request.setStatus(ParticipationRequestStatus.REJECTED);
                 }
             }
-        } else {
+        } else if (requestDto.getStatus().equals(ParticipationRequestStatus.REJECTED)) {
             for (ParticipationRequest request : requests) {
                 if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
                     log.warn("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
@@ -170,6 +171,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 }
                 request.setStatus(ParticipationRequestStatus.REJECTED);
             }
+        } else {
+            log.warn("Новый статус для заявок на участие в событии текущего пользователя должен быть CONFIRMED or REJECTED");
+            throw new ConditionsNotMetException("New status of participation requests must be CONFIRMED or REJECTED");
         }
 
         List<ParticipationRequest> updatedRequests = requestRepository.saveAll(requests);

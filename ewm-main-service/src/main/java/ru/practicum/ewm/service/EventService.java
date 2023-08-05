@@ -1,9 +1,9 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.dto.Event.EventFullDto;
-import ru.practicum.ewm.dto.Event.NewEventDto;
-import ru.practicum.ewm.dto.Event.UpdateEventAdminRequestDto;
-import ru.practicum.ewm.dto.Event.UpdateEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.NewEventDto;
+import ru.practicum.ewm.dto.event.UpdateEventAdminRequestDto;
+import ru.practicum.ewm.dto.event.UpdateEventInitiatorRequestDto;
 import ru.practicum.ewm.model.EventState;
 
 import java.time.LocalDateTime;

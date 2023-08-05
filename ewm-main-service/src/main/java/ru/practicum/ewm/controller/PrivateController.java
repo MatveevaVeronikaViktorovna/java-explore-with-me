@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.Event.EventFullDto;
-import ru.practicum.ewm.dto.Event.NewEventDto;
-import ru.practicum.ewm.dto.Event.UpdateEventInitiatorRequestDto;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
-import ru.practicum.ewm.dto.UpdateParticipationRequestEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.NewEventDto;
+import ru.practicum.ewm.dto.event.UpdateEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.participationRequest.ParticipationRequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestResponse;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.ParticipationRequestService;
 
@@ -96,9 +97,9 @@ public class PrivateController {
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> updateParticipationRequestsStatusByRequester(@PathVariable Long userId,
-                                                                                      @PathVariable Long eventId,
-                                                                                      @Valid @RequestBody UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+    public UpdateParticipationRequestResponse updateParticipationRequestsStatusByRequester(@PathVariable Long userId,
+                                                                                           @PathVariable Long eventId,
+                                                                                           @Valid @RequestBody UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
         log.info("Поступил запрос на обновление статуса запросов на участие в событии с id={} от инициатора данного " +
                 "события с id={}", eventId, userId);
         return requestService.updateStatusByEventInitiator(userId, eventId, requestDto);

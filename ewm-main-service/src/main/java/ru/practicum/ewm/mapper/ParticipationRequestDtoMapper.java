@@ -1,7 +1,7 @@
 package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.ewm.dto.ParticipationRequestDto;
+import ru.practicum.ewm.dto.participationRequest.ParticipationRequestDto;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.ParticipationRequest;
 import ru.practicum.ewm.model.User;

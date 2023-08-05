@@ -2,8 +2,8 @@ package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.ewm.dto.Event.EventFullDto;
-import ru.practicum.ewm.dto.Event.NewEventDto;
+import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.NewEventDto;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
 

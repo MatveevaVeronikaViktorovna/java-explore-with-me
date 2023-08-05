@@ -1,10 +1,10 @@
-package ru.practicum.ewm.dto.Event;
+package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.ewm.dto.Event.valid.StartTwoHoursAfterNow;
+import ru.practicum.ewm.dto.event.valid.StartTwoHoursAfterNow;
 import ru.practicum.ewm.dto.LocationDto;
 
 import javax.validation.constraints.Size;
