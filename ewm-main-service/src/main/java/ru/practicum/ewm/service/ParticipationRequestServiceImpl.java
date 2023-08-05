@@ -17,6 +17,7 @@ import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -178,10 +179,24 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         List<ParticipationRequest> updatedRequests = requestRepository.saveAll(requests);
         log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId, updatedRequests);
-        return requests
+
+        List<ParticipationRequestDto> requestsDto = requests
                 .stream()
                 .map(requestDtoMapper::participationRequestToDto)
                 .collect(Collectors.toList());
+        List<ParticipationRequestDto> confirmedRequestsDto = new ArrayList<>();
+        List<ParticipationRequestDto> rejectedRequestsDto = new ArrayList<>();
+        for (ParticipationRequestDto dto : requestsDto) {
+            if (dto.getStatus().equals(ParticipationRequestStatus.CONFIRMED)) {
+                confirmedRequestsDto.add(dto);
+            } else {
+                rejectedRequestsDto.add(dto);
+            }
+        }
+        UpdateParticipationRequestResponse response = new UpdateParticipationRequestResponse();
+        response.setConfirmedRequests(confirmedRequestsDto);
+        response.setRejectedRequests(rejectedRequestsDto);
+        return response;
     }
 
 }
