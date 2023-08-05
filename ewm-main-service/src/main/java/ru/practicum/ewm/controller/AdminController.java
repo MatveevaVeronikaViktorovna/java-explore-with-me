@@ -76,7 +76,7 @@ public class AdminController {
         return categoryService.update(catId, categoryDto);
     }
 
-    @GetMapping("/admin/events")
+    @GetMapping("/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByAdmin(@RequestParam(required = false) List<Long> users,
                                                   @RequestParam(required = false) List<EventState> states,
