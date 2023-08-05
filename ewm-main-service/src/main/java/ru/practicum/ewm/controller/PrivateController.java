@@ -84,6 +84,15 @@ public class PrivateController {
         return requestService.updateStatusByRequester(userId, requestId);
     }
 
-    
+    @GetMapping("/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getAllParticipationRequestsByEventInitiator(@PathVariable Long userId,
+                                                                                @PathVariable Long eventId) {
+        log.info("Поступил запрос от инициатора с id {} на получение всех запросов на участие в его событии с id {}",
+                userId, eventId);
+        return requestService.getAllByEventInitiator(userId, eventId);
+    }
+
+
 
 }

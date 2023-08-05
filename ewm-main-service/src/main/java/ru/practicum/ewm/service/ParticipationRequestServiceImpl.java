@@ -104,4 +104,23 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         return requestDtoMapper.participationRequestToDto(updatedRequest);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<ParticipationRequestDto> getAllByEventInitiator(Long userId, Long eventId) {
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.warn("Пользователь с id {} не найден", userId);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
+        });
+
+        eventRepository.findById(eventId).orElseThrow(() -> {
+            log.warn("Событие с id {} не найдено", eventId);
+            throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
+        });
+
+        List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorId(eventId, userId);
+        return requests
+                .stream()
+                .map(requestDtoMapper::participationRequestToDto)
+                .collect(Collectors.toList());
+    }
 }
