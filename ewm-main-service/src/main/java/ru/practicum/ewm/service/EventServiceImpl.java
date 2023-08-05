@@ -219,8 +219,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
-    //    List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd);
-        List<Event> events = eventRepository.findAll();
+        List<Event> events = eventRepository.findAllByAdmin(states);
+    //    List<Event> events = eventRepository.findAll();
         return events
                 .stream()
                 .map(eventDtoMapper::eventToDto)
