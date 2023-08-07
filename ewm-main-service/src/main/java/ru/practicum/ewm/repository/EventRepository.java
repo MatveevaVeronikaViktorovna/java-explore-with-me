@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 
@@ -31,5 +32,21 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                @Param("rangeStart") LocalDateTime rangeStart,
                                @Param("rangeEnd") LocalDateTime rangeEnd,
                                Pageable pageable);
+
+    @Query("SELECT e FROM Event e " +
+            "WHERE (COALESCE(:users, NULL) IS NULL OR e.initiator.id IN :users) " +
+            "AND (COALESCE(:states, NULL) IS NULL OR e.state IN :states) " +
+            "AND (COALESCE(:categories, NULL) IS NULL OR e.category.id IN :categories) " +
+            "AND (COALESCE(:rangeStart, NULL) IS NULL OR e.eventDate >= :rangeStart) " +
+            "AND (COALESCE(:rangeEnd, NULL) IS NULL OR e.eventDate <= :rangeEnd) ")
+    List<Event> findAllByUser(@Param("text") String text,
+                              @Param("categories") List<Long> categories,
+                              @Param("paid") Boolean paid,
+                              @Param("rangeStart") LocalDateTime rangeStart,
+                              @Param("rangeEnd") LocalDateTime rangeEnd,
+                              @Param("onlyAvailable") Boolean onlyAvailable,
+                              @Param("sort") EventSort sort,
+                              Pageable pageable);
+    
 
 }

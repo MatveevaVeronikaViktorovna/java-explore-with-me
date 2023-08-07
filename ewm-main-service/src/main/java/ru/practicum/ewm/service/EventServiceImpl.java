@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
@@ -225,5 +226,17 @@ public class EventServiceImpl implements EventService {
                 .map(eventDtoMapper::eventToDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventFullDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
+        Pageable page = CustomPageRequest.of(from, size);
+        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, page);
+        return events
+                .stream()
+                .map(eventDtoMapper::eventToDto)
+                .collect(Collectors.toList());
+    }
+
 
 }
