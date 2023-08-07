@@ -14,6 +14,8 @@ import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.mapper.LocationDtoMapper;
 import ru.practicum.ewm.model.*;
+import ru.practicum.ewm.model.enums.EventState;
+import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.*;
 

@@ -12,6 +12,8 @@ import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.ParticipationRequestDtoMapper;
 import ru.practicum.ewm.model.*;
+import ru.practicum.ewm.model.enums.EventState;
+import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.ParticipationRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;

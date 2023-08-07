@@ -3,6 +3,7 @@ package ru.practicum.ewm.model;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

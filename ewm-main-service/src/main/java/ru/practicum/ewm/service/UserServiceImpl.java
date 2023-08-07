@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.UserDto;
+import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.User;

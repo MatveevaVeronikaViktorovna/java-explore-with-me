@@ -1,9 +1,8 @@
 package ru.practicum.ewm.service;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.dto.event.*;
-import ru.practicum.ewm.model.EventState;
+import ru.practicum.ewm.model.enums.EventState;
 
 import java.time.LocalDateTime;
 import java.util.List;

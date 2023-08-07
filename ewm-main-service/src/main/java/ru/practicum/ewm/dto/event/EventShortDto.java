@@ -5,9 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.CategoryDto;
-import ru.practicum.ewm.dto.LocationDto;
-import ru.practicum.ewm.dto.UserShortDto;
-import ru.practicum.ewm.model.EventState;
+import ru.practicum.ewm.dto.user.UserShortDto;
 
 import java.time.LocalDateTime;
 

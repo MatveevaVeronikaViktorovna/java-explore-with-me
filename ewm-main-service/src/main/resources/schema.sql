@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users, categories, locations, events, participation_requests;
+DROP TABLE IF EXISTS users, categories, locations, events, participation_requests, compilations, compilations_events;
 
 CREATE TABLE IF NOT EXISTS users ( 
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
@@ -41,6 +41,18 @@ CREATE TABLE IF NOT EXISTS participation_requests (
 	requester_id BIGINT NOT NULL REFERENCES users (id),
 	status varchar(9) NOT NULL,
 	CONSTRAINT uq_request UNIQUE(event_id, requester_id)
+);
+
+CREATE TABLE IF NOT EXISTS compilations (
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+	pinned Boolean NOT NULL,
+    title varchar(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS compilations_events (
+	compilation_id REFERENCES compilations (id),
+	event_id REFERENCES events (id),
+	PRIMARY KEY (compilation_id, event_id)
 )
 
 
