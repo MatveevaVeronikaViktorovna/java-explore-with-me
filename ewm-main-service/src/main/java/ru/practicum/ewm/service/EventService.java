@@ -1,5 +1,6 @@
 package ru.practicum.ewm.service;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.model.EventState;
@@ -23,4 +24,5 @@ public interface EventService {
 
     List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size);
 
+    EventFullDto getByIdByUser(Long eventId);
 }

@@ -259,9 +259,20 @@ public class EventServiceImpl implements EventService {
             eventsDto.sort(Comparator.comparing(EventShortDto::getEventDate));
         }
         // TODO надо присвоить views и сортировку сделать
-
         return eventsDto;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public EventFullDto getByIdByUser(Long eventId) {
+        Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED).orElseThrow(() -> {
+            log.warn("Событие с id {} в статусе {} не найдено", eventId, EventState.PUBLISHED);
+            throw new EntityNotFoundException(String.format("Event with id=%d with state PUBLISHED was not found", eventId));
+        });
+        EventFullDto eventDto = eventDtoMapper.eventToDto(event);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        eventDto.setConfirmedRequests(confirmedRequests);
+        return eventDto;
+    }
 
 }

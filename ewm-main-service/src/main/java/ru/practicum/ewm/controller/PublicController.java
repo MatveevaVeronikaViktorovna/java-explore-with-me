@@ -28,14 +28,14 @@ public class PublicController {
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getAllCategories(@RequestParam(defaultValue = "0") Integer from,
                                               @RequestParam(defaultValue = "10") Integer size) {
-        log.info("Поступил запрос на получение всех категорий. Параметры: from={}, size={}", from, size);
+        log.info("Поступил публичный запрос на получение всех категорий. Параметры: from={}, size={}", from, size);
         return categoryService.getAll(from, size);
     }
 
     @GetMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategoryById(@PathVariable Long catId) {
-        log.info("Поступил запрос на получение категории с id={}", catId);
+        log.info("Поступил публичный запрос на получение категории с id={}", catId);
         return categoryService.getById(catId);
     }
 
@@ -50,10 +50,17 @@ public class PublicController {
                                                   @RequestParam(required = false) EventSort sort,
                                                   @RequestParam(defaultValue = "0") Integer from,
                                                   @RequestParam(defaultValue = "10") Integer size) {
-        log.info("Поступил запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
+        log.info("Поступил публичный запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
                         "rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}", text, categories,
                 paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         return eventService.getAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+    }
+
+    @GetMapping("/events/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDto getEventByIdByUser(@PathVariable Long eventId) {
+        log.info("Поступил публичный запрос на получение события с id={} ", eventId);
+        return eventService.getByIdByUser(eventId);
     }
 
 }

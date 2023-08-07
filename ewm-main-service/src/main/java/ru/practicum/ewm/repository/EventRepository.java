@@ -16,7 +16,9 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
+
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
+
     List<Event> findAllByCategoryId(Long catId);
 
     @Query("SELECT e FROM Event e " +
@@ -25,7 +27,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND (COALESCE(:categories, NULL) IS NULL OR e.category.id IN :categories) " +
             "AND (COALESCE(:rangeStart, NULL) IS NULL OR e.eventDate >= :rangeStart) " +
             "AND (COALESCE(:rangeEnd, NULL) IS NULL OR e.eventDate <= :rangeEnd) ")
-    List<Event> findAllByAdmin(@Param("users")List<Long> users,
+    List<Event> findAllByAdmin(@Param("users") List<Long> users,
                                @Param("states") List<EventState> states,
                                @Param("categories") List<Long> categories,
                                @Param("rangeStart") LocalDateTime rangeStart,
@@ -53,5 +55,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                               @Param("rangeEnd") LocalDateTime rangeEnd,
                               @Param("onlyAvailable") Boolean onlyAvailable,
                               Pageable pageable);
+
+    Optional<Event> findByIdAndState(Long eventId, EventState state);
 
 }
