@@ -10,6 +10,7 @@ import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
+import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.mapper.LocationDtoMapper;
 import ru.practicum.ewm.model.*;
@@ -239,10 +240,14 @@ public class EventServiceImpl implements EventService {
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
+        if (rangeEnd != null && rangeEnd.isBefore(rangeStart)) {
+            log.warn("RangeStart не может быть позже чем rangeEnd");
+            throw new IncorrectlyMadeRequestException("RangeStart must be earlier than rangeEnd.");
+        }
 
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, page);
-        List<EventShortDto> eventsDto =  events
+        List<EventShortDto> eventsDto = events
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)
                 .collect(Collectors.toList());
@@ -250,7 +255,7 @@ public class EventServiceImpl implements EventService {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
         }
-        if (sort.equals(EventSort.EVENT_DATE)) {
+        if (sort != null && sort.equals(EventSort.EVENT_DATE)) {
             eventsDto.sort(Comparator.comparing(EventShortDto::getEventDate));
         }
         // TODO надо присвоить views и сортировку сделать

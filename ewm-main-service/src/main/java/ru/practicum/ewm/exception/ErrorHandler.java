@@ -70,4 +70,11 @@ public class ErrorHandler {
                 LocalDateTime.now().format(formatter));
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIncorrectlyMadeRequestException(final IncorrectlyMadeRequestException e) {
+        return new ApiError("BAD_REQUEST", "Incorrectly made request.", e.getMessage(),
+                LocalDateTime.now().format(formatter));
+    }
+
 }
