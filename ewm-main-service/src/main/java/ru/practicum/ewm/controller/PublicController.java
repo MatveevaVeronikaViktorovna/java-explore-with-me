@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
+import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.service.CategoryService;
 import ru.practicum.ewm.service.EventService;
 
@@ -40,15 +41,15 @@ public class PublicController {
 
     @GetMapping("/events")
     @ResponseStatus(HttpStatus.OK)
-    public List<EventFullDto> getAllEventsByUser(@RequestParam(required = false) String text,
-                                                 @RequestParam(required = false) List<Long> categories,
-                                                 @RequestParam(required = false) Boolean paid,
-                                                 @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeStart,
-                                                 @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeEnd,
-                                                 @RequestParam(required = false) Boolean onlyAvailable,
-                                                 @RequestParam(required = false) EventSort sort,
-                                                 @RequestParam(defaultValue = "0") Integer from,
-                                                 @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventShortDto> getAllEventsByUser(@RequestParam(required = false) String text,
+                                                  @RequestParam(required = false) List<Long> categories,
+                                                  @RequestParam(required = false) Boolean paid,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeStart,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeEnd,
+                                                  @RequestParam(required = false) Boolean onlyAvailable,
+                                                  @RequestParam(required = false) EventSort sort,
+                                                  @RequestParam(defaultValue = "0") Integer from,
+                                                  @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
                         "rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}", text, categories,
                 paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);

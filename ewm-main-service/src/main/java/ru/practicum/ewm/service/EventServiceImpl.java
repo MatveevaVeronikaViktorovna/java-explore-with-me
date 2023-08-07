@@ -229,12 +229,12 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventFullDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
+    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
-        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, page);
+        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd);
         return events
                 .stream()
-                .map(eventDtoMapper::eventToDto)
+                .map(eventDtoMapper::eventToShortDto)
                 .collect(Collectors.toList());
     }
 
