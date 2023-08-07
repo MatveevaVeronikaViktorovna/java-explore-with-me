@@ -221,17 +221,22 @@ public class EventServiceImpl implements EventService {
     public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, page);
-        return events
+        List<EventFullDto> eventsDto = events
                 .stream()
                 .map(eventDtoMapper::eventToDto)
                 .collect(Collectors.toList());
+        for (EventFullDto dto : eventsDto) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+            eventDto.setConfirmedRequests(confirmedRequests);
+            return eventDto;
+        }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
-        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd);
+        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
         return events
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)

@@ -38,12 +38,19 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND (COALESCE(:categories, NULL) IS NULL OR e.category.id IN :categories) " +
             "AND (COALESCE(:paid, NULL) IS NULL OR e.paid = :paid) " +
             "AND (COALESCE(:rangeStart, NULL) IS NULL OR e.eventDate >= :rangeStart) " +
-            "AND (COALESCE(:rangeEnd, NULL) IS NULL OR e.eventDate <= :rangeEnd) ")
+            "AND (COALESCE(:rangeEnd, NULL) IS NULL OR e.eventDate <= :rangeEnd) " +
+            "AND (:onlyAvailable = false OR e.id IN " +
+            "(SELECT pr.event.id " +
+            "FROM ParticipationRequest pr " +
+            "WHERE pr.status = 'CONFIRMED' " +
+            "GROUP BY pr.event.id " +
+            "HAVING e.participantLimit - count(id) > 0" +
+            "ORDER BY COUNT(pr.id)))")
     List<Event> findAllByUser(@Param("text") String text,
                               @Param("categories") List<Long> categories,
                               @Param("paid") Boolean paid,
                               @Param("rangeStart") LocalDateTime rangeStart,
-                              @Param("rangeEnd") LocalDateTime rangeEnd);
-
+                              @Param("rangeEnd") LocalDateTime rangeEnd,
+                              @Param("onlyAvailable") Boolean onlyAvailable);
 
 }
