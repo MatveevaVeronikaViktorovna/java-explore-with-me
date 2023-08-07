@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.EventState;
 
@@ -46,15 +45,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "WHERE pr.status = 'CONFIRMED' " +
             "GROUP BY pr.event.id " +
             "HAVING e.participantLimit - count(id) > 0" +
-            "ORDER BY COUNT(pr.id))) " +
-            "GROUP BY e.id " +
-            "ORDER BY e.eventDate")
+            "ORDER BY COUNT(pr.id))) ")
     List<Event> findAllByUser(@Param("text") String text,
                               @Param("categories") List<Long> categories,
                               @Param("paid") Boolean paid,
                               @Param("rangeStart") LocalDateTime rangeStart,
                               @Param("rangeEnd") LocalDateTime rangeEnd,
                               @Param("onlyAvailable") Boolean onlyAvailable,
-                              @Param("sort") EventSort sort);
+                              Pageable pageable);
 
 }

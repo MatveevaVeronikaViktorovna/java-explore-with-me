@@ -17,6 +17,7 @@ import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -240,7 +241,7 @@ public class EventServiceImpl implements EventService {
         }
 
         Pageable page = CustomPageRequest.of(from, size);
-        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort);
+        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, page);
         List<EventShortDto> eventsDto =  events
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)
@@ -249,6 +250,11 @@ public class EventServiceImpl implements EventService {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
         }
+        if (sort.equals(EventSort.EVENT_DATE)) {
+            eventsDto.sort(Comparator.comparing(EventShortDto::getEventDate));
+        }
+        // TODO надо присвоить views и сортировку сделать
+
         return eventsDto;
     }
 
