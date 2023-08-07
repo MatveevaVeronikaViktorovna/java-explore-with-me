@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.LocationDto;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -24,6 +25,7 @@ public class UpdateEventAdminRequestDto {
     String description;
 
     @JsonFormat(pattern = DATE_TIME_FORMAT)
+    @Future
     LocalDateTime eventDate;
 
     LocationDto location;

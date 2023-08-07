@@ -65,7 +65,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
         }
 
-        if (event.getRequestModeration().equals(Boolean.FALSE)) {
+        if (event.getRequestModeration().equals(Boolean.FALSE) || event.getParticipantLimit() == 0) {
             request.setStatus(ParticipationRequestStatus.CONFIRMED);
         } else {
             request.setStatus(ParticipationRequestStatus.PENDING);
