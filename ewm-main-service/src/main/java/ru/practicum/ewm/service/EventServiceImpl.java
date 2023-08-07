@@ -226,10 +226,10 @@ public class EventServiceImpl implements EventService {
                 .map(eventDtoMapper::eventToDto)
                 .collect(Collectors.toList());
         for (EventFullDto dto : eventsDto) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
-            eventDto.setConfirmedRequests(confirmedRequests);
-            return eventDto;
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            dto.setConfirmedRequests(confirmedRequests);
         }
+        return eventsDto;
     }
 
     @Transactional(readOnly = true)
@@ -237,10 +237,15 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
-        return events
+        List<EventShortDto> eventsDto =  events
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)
                 .collect(Collectors.toList());
+        for (EventShortDto dto : eventsDto) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            dto.setConfirmedRequests(confirmedRequests);
+        }
+        return eventsDto;
     }
 
 
