@@ -17,7 +17,7 @@ public class Compilation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @ManyToMany
     @JoinTable(name = "compilations_events",

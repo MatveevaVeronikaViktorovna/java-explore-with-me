@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class CompilationDto {
     List<EventShortDto> events;
-    Integer id;
+    Long id;
     Boolean pinned;
     String title;
 }

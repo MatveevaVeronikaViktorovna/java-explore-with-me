@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
+import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.mapper.CompilationDtoMapper;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.repository.CompilationRepository;
 import ru.practicum.ewm.repository.EventRepository;
+import ru.practicum.ewm.repository.ParticipationRequestRepository;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,6 +26,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
+    private final ParticipationRequestRepository requestRepository;
     private final CompilationDtoMapper compilationDtoMapper = Mappers.getMapper(CompilationDtoMapper.class);
 
     @Transactional
@@ -35,7 +40,13 @@ public class CompilationServiceImpl implements CompilationService {
 
         Compilation newCompilation = compilationRepository.save(compilation);
         log.info("Добавлена подборка событий: {}", newCompilation);
-        return compilationDtoMapper.compilationToDto(newCompilation);
+        CompilationDto dto = compilationDtoMapper.compilationToDto(newCompilation);
+        List<EventShortDto>compilationEvents = dto.getEvents();
+        for (EventShortDto event : compilationEvents) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+            event.setConfirmedRequests(confirmedRequests);
+        }
+        return dto;
     }
 
 }
