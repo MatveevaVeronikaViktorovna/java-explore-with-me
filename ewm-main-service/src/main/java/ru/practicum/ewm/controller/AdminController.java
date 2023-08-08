@@ -6,11 +6,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
+import ru.practicum.ewm.dto.compilation.CompilationDto;
+import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.UpdateEventAdminRequestDto;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.model.enums.EventState;
 import ru.practicum.ewm.service.CategoryService;
+import ru.practicum.ewm.service.CompilationService;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.UserService;
 
@@ -29,6 +32,7 @@ public class AdminController {
     private final UserService userService;
     private final CategoryService categoryService;
     private final EventService eventService;
+    private final CompilationService compilationService;
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -97,6 +101,13 @@ public class AdminController {
                                            @Valid @RequestBody UpdateEventAdminRequestDto eventDto) {
         log.info("Поступил запрос от администратора на обновление события с id={} на {}", eventId, eventDto);
         return eventService.updateByAdmin(eventId, eventDto);
+    }
+
+    @PostMapping("/compilations")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompilationDto createCompilation (@Valid @RequestBody NewCompilationDto compilationDto) {
+        log.info("Поступил запрос на создание подборки событий {}", compilationDto);
+        return compilationService.create(compilationDto);
     }
 
 }

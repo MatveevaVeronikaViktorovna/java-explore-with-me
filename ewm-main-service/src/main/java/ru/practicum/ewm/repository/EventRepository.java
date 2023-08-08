@@ -11,6 +11,7 @@ import ru.practicum.ewm.model.enums.EventState;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -57,5 +58,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                               Pageable pageable);
 
     Optional<Event> findByIdAndState(Long eventId, EventState state);
+
+    Set<Event> findAllByIdIn(Set<Long> eventsId);
 
 }
