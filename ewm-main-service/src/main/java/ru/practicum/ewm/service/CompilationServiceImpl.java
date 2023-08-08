@@ -39,8 +39,10 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationDtoMapper.dtoToCompilation(compilationDto);
 
         Set<Long> eventsId = compilationDto.getEvents();
-        Set<Event> events = eventRepository.findAllByIdIn(eventsId);
-        compilation.setEvents(events);
+        if (eventsId != null ) {
+            Set<Event> events = eventRepository.findAllByIdIn(eventsId);
+            compilation.setEvents(events);
+        }
 
         Compilation newCompilation = compilationRepository.save(compilation);
         log.info("Добавлена подборка событий: {}", newCompilation);
@@ -89,9 +91,11 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Обновлена подборка событий с id {} на {}", id, updatedCompilation);
         CompilationDto dto = compilationDtoMapper.compilationToDto(updatedCompilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
-        for (EventShortDto event : compilationEvents) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
-            event.setConfirmedRequests(confirmedRequests);
+        if (compilationEvents != null) {
+            for (EventShortDto event : compilationEvents) {
+                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                event.setConfirmedRequests(confirmedRequests);
+            }
         }
         return dto;
     }
@@ -113,9 +117,11 @@ public class CompilationServiceImpl implements CompilationService {
                 .collect(Collectors.toList());
         for (CompilationDto dto : compilationsDto) {
             List<EventShortDto> compilationEvents = dto.getEvents();
-            for (EventShortDto event : compilationEvents) {
-                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
-                event.setConfirmedRequests(confirmedRequests);
+            if (compilationEvents != null) {
+                for (EventShortDto event : compilationEvents) {
+                    Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                    event.setConfirmedRequests(confirmedRequests);
+                }
             }
         }
         return compilationsDto;
@@ -130,9 +136,11 @@ public class CompilationServiceImpl implements CompilationService {
         });
         CompilationDto dto = compilationDtoMapper.compilationToDto(compilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
-        for (EventShortDto event : compilationEvents) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
-            event.setConfirmedRequests(confirmedRequests);
+        if (compilationEvents != null) {
+            for (EventShortDto event : compilationEvents) {
+                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                event.setConfirmedRequests(confirmedRequests);
+            }
         }
         return dto;
     }
