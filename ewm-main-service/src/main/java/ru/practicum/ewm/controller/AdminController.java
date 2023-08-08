@@ -117,4 +117,12 @@ public class AdminController {
         compilationService.delete(compId);
     }
 
+    @PatchMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CompilationDto updateCompilation(@PathVariable Long compId,
+                                      @Valid @RequestBody NewCompilationDto compilationDto) {
+        log.info("Поступил запрос на обновление подборки событий с id={} на {}", compId, compilationDto);
+        return compilationService.update(compId, compilationDto);
+    }
+
 }
