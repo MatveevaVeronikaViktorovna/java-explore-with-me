@@ -52,10 +52,12 @@ public class PublicController {
                                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam(required = false) EventSort sort,
                                                   @RequestParam(defaultValue = "0") Integer from,
-                                                  @RequestParam(defaultValue = "10") Integer size) {
+                                                  @RequestParam(defaultValue = "10") Integer size,
+                                                  ) {
         log.info("Поступил публичный запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
                         "rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}", text, categories,
                 paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+        // TODO Сохранять статистику необходимо тут
         return eventService.getAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
@@ -63,6 +65,7 @@ public class PublicController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventByIdByUser(@PathVariable Long eventId) {
         log.info("Поступил публичный запрос на получение события с id={} ", eventId);
+        // TODO Сохранять статистику необходимо тут
         return eventService.getByIdByUser(eventId);
     }
 
