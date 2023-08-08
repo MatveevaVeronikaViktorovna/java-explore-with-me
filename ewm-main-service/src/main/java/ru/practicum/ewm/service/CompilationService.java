@@ -6,4 +6,6 @@ import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 public interface CompilationService {
 
     CompilationDto create(NewCompilationDto compilationDto);
+
+    void delete(Long compId);
 }

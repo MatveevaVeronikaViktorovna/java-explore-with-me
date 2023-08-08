@@ -110,4 +110,11 @@ public class AdminController {
         return compilationService.create(compilationDto);
     }
 
+    @DeleteMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompilation(@PathVariable Long compId) {
+        log.info("Поступил запрос на удаление подборки событий с id={}",compId);
+        compilationService.delete(compId);
+    }
+
 }
