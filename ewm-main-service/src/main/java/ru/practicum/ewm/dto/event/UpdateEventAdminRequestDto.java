@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.dto.LocationDto;
+import ru.practicum.ewm.dto.event.enums.AdminStateAction;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.ewm.dto.event.enums.InitiatorStateAction;
 import ru.practicum.ewm.dto.event.valid.StartTwoHoursAfterNow;
 import ru.practicum.ewm.dto.LocationDto;
 

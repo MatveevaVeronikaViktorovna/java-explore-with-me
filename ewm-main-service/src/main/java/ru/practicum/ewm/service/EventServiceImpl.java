@@ -6,18 +6,24 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.client.HitClient;
 import ru.practicum.ewm.controller.EventSort;
 import ru.practicum.ewm.dto.event.*;
+import ru.practicum.ewm.dto.event.enums.AdminStateAction;
+import ru.practicum.ewm.dto.event.enums.InitiatorStateAction;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.EventDtoMapper;
 import ru.practicum.ewm.mapper.LocationDtoMapper;
-import ru.practicum.ewm.model.*;
+import ru.practicum.ewm.model.Category;
+import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.EventState;
 import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.*;
+import ru.practicum.statsDto.HitRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -36,6 +42,8 @@ public class EventServiceImpl implements EventService {
     private final ParticipationRequestRepository requestRepository;
     private final EventDtoMapper eventDtoMapper = Mappers.getMapper(EventDtoMapper.class);
     private final LocationDtoMapper locationDtoMapper = Mappers.getMapper(LocationDtoMapper.class);
+    private final HitClient hitClient;
+    public static final String APP = "ewm-main-service";
 
     @Transactional(readOnly = true)
     @Override
@@ -238,7 +246,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size) {
+    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size, String uri, String ip) {
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
@@ -246,6 +254,14 @@ public class EventServiceImpl implements EventService {
             log.warn("RangeStart не может быть позже чем rangeEnd");
             throw new IncorrectlyMadeRequestException("RangeStart must be earlier than rangeEnd.");
         }
+
+        HitRequestDto hitRequestDto = new HitRequestDto();
+        hitRequestDto.setApp(APP);
+        hitRequestDto.setUri(uri);
+        hitRequestDto.setIp(ip);
+        hitRequestDto.setTimestamp(LocalDateTime.now());
+        hitClient.create(hitRequestDto);
+        log.info("Информация направлена в сервер статистики: {}", hitRequestDto);
 
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, page);
