@@ -6,9 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
+import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.service.CategoryService;
+import ru.practicum.ewm.service.CompilationService;
 import ru.practicum.ewm.service.EventService;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ public class PublicController {
 
     private final CategoryService categoryService;
     private final EventService eventService;
+    private final CompilationService compilationService;
 
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
@@ -61,6 +64,23 @@ public class PublicController {
     public EventFullDto getEventByIdByUser(@PathVariable Long eventId) {
         log.info("Поступил публичный запрос на получение события с id={} ", eventId);
         return eventService.getByIdByUser(eventId);
+    }
+
+    @GetMapping("/compilations")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
+                                                   @RequestParam(defaultValue = "0") Integer from,
+                                                   @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
+                pinned, from, size);
+        return compilationService.getAll(pinned,from, size);
+    }
+
+    @GetMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CompilationDto getCompilationById(@PathVariable Long compId) {
+        log.info("Поступил публичный запрос на получение подборки событий с id={}", compId);
+        return compilationService.getById(compId);
     }
 
 }

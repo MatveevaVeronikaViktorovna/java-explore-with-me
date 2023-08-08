@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
+import ru.practicum.ewm.dto.compilation.Create;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
+import ru.practicum.ewm.dto.compilation.Update;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.UpdateEventAdminRequestDto;
 import ru.practicum.ewm.dto.user.UserDto;
@@ -105,7 +108,7 @@ public class AdminController {
 
     @PostMapping("/compilations")
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilation (@Valid @RequestBody NewCompilationDto compilationDto) {
+    public CompilationDto createCompilation (@Validated(Create.class) @RequestBody NewCompilationDto compilationDto) {
         log.info("Поступил запрос на создание подборки событий {}", compilationDto);
         return compilationService.create(compilationDto);
     }
@@ -120,7 +123,7 @@ public class AdminController {
     @PatchMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto updateCompilation(@PathVariable Long compId,
-                                      @Valid @RequestBody NewCompilationDto compilationDto) {
+                                            @Validated(Update.class) @RequestBody NewCompilationDto compilationDto) {
         log.info("Поступил запрос на обновление подборки событий с id={} на {}", compId, compilationDto);
         return compilationService.update(compId, compilationDto);
     }
