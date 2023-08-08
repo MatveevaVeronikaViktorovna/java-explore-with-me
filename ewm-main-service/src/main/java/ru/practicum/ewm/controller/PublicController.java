@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.client.HitClient;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
@@ -80,7 +79,7 @@ public class PublicController {
                                                    @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
                 pinned, from, size);
-        return compilationService.getAll(pinned,from, size);
+        return compilationService.getAll(pinned, from, size);
     }
 
     @GetMapping("/compilations/{compId}")
