@@ -28,12 +28,10 @@ public class HitServiceImpl implements HitService {
     @Transactional(readOnly = true)
     @Override
     public List<HitResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        log.info("Пришел запрос в метод сервиса с параметрами Start={}, end={},uris={},unique={}", start, end, uris, unique);
         if (uris != null) {
             if (unique) {
                 return hitRepository.findDistinctByTimestampAndUris(start, end, uris);
             } else {
-                System.out.println("Запрос пришел сюда");
                 return hitRepository.findAllByTimestampAndUris(start, end, uris);
             }
         } else {

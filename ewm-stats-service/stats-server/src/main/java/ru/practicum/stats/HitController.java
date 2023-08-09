@@ -42,9 +42,7 @@ public class HitController {
                                          @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Поступил запрос на получение статистики за период с {} по {} для списка uri {} unique={}",
                 start, end, uris, unique);
-        List<HitResponseDto> response = hitService.getStats(start, end, uris, unique);
-        System.out.println("Получена статистика: " + response);
-        return response;
+        return hitService.getStats(start, end, uris, unique);
     }
 
 }
