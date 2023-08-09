@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.controller.enums.EventSort;
 import ru.practicum.ewm.dto.CategoryDto;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.event.EventFullDto;
@@ -43,6 +44,23 @@ public class PublicController {
         return categoryService.getById(catId);
     }
 
+    @GetMapping("/compilations")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
+                                                   @RequestParam(defaultValue = "0") Integer from,
+                                                   @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
+                pinned, from, size);
+        return compilationService.getAll(pinned, from, size);
+    }
+
+    @GetMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CompilationDto getCompilationById(@PathVariable Long compId) {
+        log.info("Поступил публичный запрос на получение подборки событий с id={}", compId);
+        return compilationService.getById(compId);
+    }
+
     @GetMapping("/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllEventsByUser(@RequestParam(required = false) String text,
@@ -71,23 +89,6 @@ public class PublicController {
         String ip = request.getRemoteAddr();
         log.info("Поступил публичный запрос на получение события с id={} ", eventId);
         return eventService.getByIdByUser(eventId, uri, ip);
-    }
-
-    @GetMapping("/compilations")
-    @ResponseStatus(HttpStatus.OK)
-    public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
-                                                   @RequestParam(defaultValue = "0") Integer from,
-                                                   @RequestParam(defaultValue = "10") Integer size) {
-        log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
-                pinned, from, size);
-        return compilationService.getAll(pinned, from, size);
-    }
-
-    @GetMapping("/compilations/{compId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CompilationDto getCompilationById(@PathVariable Long compId) {
-        log.info("Поступил публичный запрос на получение подборки событий с id={}", compId);
-        return compilationService.getById(compId);
     }
 
 }

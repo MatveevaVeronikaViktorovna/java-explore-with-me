@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.HitClient;
-import ru.practicum.ewm.controller.EventSort;
+import ru.practicum.ewm.controller.enums.EventSort;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.event.enums.AdminStateAction;
 import ru.practicum.ewm.dto.event.enums.InitiatorStateAction;

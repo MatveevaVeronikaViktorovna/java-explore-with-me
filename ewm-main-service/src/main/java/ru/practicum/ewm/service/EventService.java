@@ -1,6 +1,6 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.controller.EventSort;
+import ru.practicum.ewm.controller.enums.EventSort;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.model.enums.EventState;
 

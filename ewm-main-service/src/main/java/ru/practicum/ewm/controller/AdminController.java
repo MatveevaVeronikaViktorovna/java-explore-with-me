@@ -37,35 +37,19 @@ public class AdminController {
     private final EventService eventService;
     private final CompilationService compilationService;
 
-    @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@Valid @RequestBody UserDto userDto) {
-        log.info("Поступил запрос на создание пользователя {}", userDto);
-        return userService.create(userDto);
-    }
-
-    @DeleteMapping("/users/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long userId) {
-        log.info("Поступил запрос на удаление пользователя с id={}", userId);
-        userService.delete(userId);
-    }
-
-    @GetMapping("/users")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
-                                     @RequestParam(defaultValue = "0") Integer from,
-                                     @RequestParam(defaultValue = "10") Integer size) {
-        log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
-                ids, from, size);
-        return userService.getAll(ids, from, size);
-    }
-
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         log.info("Поступил запрос на создание категории {}", categoryDto);
         return categoryService.create(categoryDto);
+    }
+
+    @PatchMapping("/categories/{catId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto updateCategory(@PathVariable Long catId,
+                                      @Valid @RequestBody CategoryDto categoryDto) {
+        log.info("Поступил запрос на обновление категории с id={} на {}", catId, categoryDto);
+        return categoryService.update(catId, categoryDto);
     }
 
     @DeleteMapping("/categories/{catId}")
@@ -75,12 +59,26 @@ public class AdminController {
         categoryService.delete(catId);
     }
 
-    @PatchMapping("/categories/{catId}")
+    @PostMapping("/compilations")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompilationDto createCompilation(@Validated(Create.class) @RequestBody NewCompilationDto compilationDto) {
+        log.info("Поступил запрос на создание подборки событий {}", compilationDto);
+        return compilationService.create(compilationDto);
+    }
+
+    @PatchMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto updateCategory(@PathVariable Long catId,
-                                      @Valid @RequestBody CategoryDto categoryDto) {
-        log.info("Поступил запрос на обновление категории с id={} на {}", catId, categoryDto);
-        return categoryService.update(catId, categoryDto);
+    public CompilationDto updateCompilation(@PathVariable Long compId,
+                                            @Validated(Update.class) @RequestBody NewCompilationDto compilationDto) {
+        log.info("Поступил запрос на обновление подборки событий с id={} на {}", compId, compilationDto);
+        return compilationService.update(compId, compilationDto);
+    }
+
+    @DeleteMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompilation(@PathVariable Long compId) {
+        log.info("Поступил запрос на удаление подборки событий с id={}", compId);
+        compilationService.delete(compId);
     }
 
     @GetMapping("/events")
@@ -93,7 +91,7 @@ public class AdminController {
                                                   @RequestParam(defaultValue = "0") Integer from,
                                                   @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил запрос от администратора на получение всех событий. Параметры: users={}, states={}, " +
-                "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories, rangeStart,
+                        "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories, rangeStart,
                 rangeEnd, from, size);
         return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
@@ -106,26 +104,28 @@ public class AdminController {
         return eventService.updateByAdmin(eventId, eventDto);
     }
 
-    @PostMapping("/compilations")
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilation (@Validated(Create.class) @RequestBody NewCompilationDto compilationDto) {
-        log.info("Поступил запрос на создание подборки событий {}", compilationDto);
-        return compilationService.create(compilationDto);
+    public UserDto createUser(@Valid @RequestBody UserDto userDto) {
+        log.info("Поступил запрос на создание пользователя {}", userDto);
+        return userService.create(userDto);
     }
 
-    @DeleteMapping("/compilations/{compId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable Long compId) {
-        log.info("Поступил запрос на удаление подборки событий с id={}",compId);
-        compilationService.delete(compId);
-    }
-
-    @PatchMapping("/compilations/{compId}")
+    @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto updateCompilation(@PathVariable Long compId,
-                                            @Validated(Update.class) @RequestBody NewCompilationDto compilationDto) {
-        log.info("Поступил запрос на обновление подборки событий с id={} на {}", compId, compilationDto);
-        return compilationService.update(compId, compilationDto);
+    public List<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
+                                     @RequestParam(defaultValue = "0") Integer from,
+                                     @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
+                ids, from, size);
+        return userService.getAll(ids, from, size);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long userId) {
+        log.info("Поступил запрос на удаление пользователя с id={}", userId);
+        userService.delete(userId);
     }
 
 }

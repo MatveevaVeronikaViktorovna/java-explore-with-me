@@ -25,6 +25,14 @@ public class PrivateController {
     private final EventService eventService;
     private final ParticipationRequestService requestService;
 
+    @PostMapping("/{userId}/events")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventFullDto createEvent(@PathVariable Long userId,
+                                    @Valid @RequestBody NewEventDto newEventDto) {
+        log.info("Поступил запрос от пользователя с id {} на создание события {} ", userId, newEventDto);
+        return eventService.create(userId, newEventDto);
+    }
+
     @GetMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByInitiator(@PathVariable Long userId,
@@ -33,14 +41,6 @@ public class PrivateController {
         log.info("Поступил запрос на получение всех событий, добавленных пользователем с id={}. " +
                 "Параметры: from={}, size={}", userId, from, size);
         return eventService.getAllByInitiator(userId, from, size);
-    }
-
-    @PostMapping("/{userId}/events")
-    @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto createEvent(@PathVariable Long userId,
-                                    @Valid @RequestBody NewEventDto newEventDto) {
-        log.info("Поступил запрос от пользователя с id {} на создание события {} ", userId, newEventDto);
-        return eventService.create(userId, newEventDto);
     }
 
     @GetMapping("/{userId}/events/{eventId}")
@@ -70,6 +70,15 @@ public class PrivateController {
         return requestService.create(userId, eventId);
     }
 
+    @GetMapping("/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getAllParticipationRequestsByEventInitiator(@PathVariable Long userId,
+                                                                                     @PathVariable Long eventId) {
+        log.info("Поступил запрос от инициатора с id {} на получение всех запросов на участие в его событии с id {}",
+                userId, eventId);
+        return requestService.getAllByEventInitiator(userId, eventId);
+    }
+
     @GetMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAllParticipationRequestsByRequester(@PathVariable Long userId) {
@@ -86,20 +95,11 @@ public class PrivateController {
         return requestService.updateStatusByRequester(userId, requestId);
     }
 
-    @GetMapping("/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getAllParticipationRequestsByEventInitiator(@PathVariable Long userId,
-                                                                                     @PathVariable Long eventId) {
-        log.info("Поступил запрос от инициатора с id {} на получение всех запросов на участие в его событии с id {}",
-                userId, eventId);
-        return requestService.getAllByEventInitiator(userId, eventId);
-    }
-
     @PatchMapping("/{userId}/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public UpdateParticipationRequestResponse updateParticipationRequestsStatusByRequester(@PathVariable Long userId,
-                                                                                           @PathVariable Long eventId,
-                                                                                           @Valid @RequestBody UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+    public UpdateParticipationRequestResponse updateParticipationRequestsStatusByEventInitiator(@PathVariable Long userId,
+                                                                                                @PathVariable Long eventId,
+                                                                                                @Valid @RequestBody UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
         log.info("Поступил запрос на обновление статуса запросов на участие в событии с id={} от инициатора данного " +
                 "события с id={}", eventId, userId);
         return requestService.updateStatusByEventInitiator(userId, eventId, requestDto);
