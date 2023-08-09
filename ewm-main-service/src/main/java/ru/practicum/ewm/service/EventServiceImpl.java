@@ -345,7 +345,7 @@ public class EventServiceImpl implements EventService {
             String uri = "/events/" + eventId;
             uris.add(uri);
         }
-        ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now(), uris, false);
+        ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now(), uris, true);
         log.info("В сервер статистики направлен запрос на получение статистики за период с {} по {} для списка uri {}, unique = {}", START, LocalDateTime.now(), uris, true);
         Object responseBody = response.getBody();
         System.out.println(responseBody);
