@@ -1,9 +1,12 @@
 package ru.practicum.ewm.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.HitClient;
@@ -24,10 +27,10 @@ import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.*;
 import ru.practicum.statsDto.HitRequestDto;
+import ru.practicum.statsDto.HitResponseDto;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,8 @@ public class EventServiceImpl implements EventService {
     private final LocationDtoMapper locationDtoMapper = Mappers.getMapper(LocationDtoMapper.class);
     private final HitClient hitClient;
     public static final String APP = "ewm-main-service";
+    public static final LocalDateTime START = LocalDateTime.of(2000, 1, 1, 0, 0);
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
     @Override
@@ -140,6 +145,8 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
+        getStats(List.of(eventDto.getId()));
+        eventDto.setViews(getViews(eventDto.getId()));
         return eventDto;
     }
 
@@ -156,6 +163,7 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
+        eventDto.setViews(getViews(eventDto.getId()));
         return eventDto;
     }
 
@@ -226,6 +234,7 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
+        eventDto.setViews(getViews(eventDto.getId()));
         return eventDto;
     }
 
@@ -288,6 +297,7 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
+        eventDto.setViews(getViews(eventDto.getId()));
         return eventDto;
     }
 
@@ -299,6 +309,29 @@ public class EventServiceImpl implements EventService {
         hitRequestDto.setTimestamp(LocalDateTime.now());
         hitClient.create(hitRequestDto);
         log.info("Информация направлена в сервер статистики: {}", hitRequestDto);
+    }
+
+    private Map<Long, Long> getViews(List<Long> eventsId) {
+        List<String> uris = new ArrayList<>();
+        for (Long eventId : eventsId) {
+            String uri = "/events/" + eventId;
+            uris.add(uri);
+        }
+        ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now(), uris, true);
+        Object responseBody = response.getBody();
+        List<HitResponseDto> result = objectMapper.convertValue(responseBody, new TypeReference<>() {
+        });
+
+        Map<Long, Long> views = new HashMap<>();
+        for (HitResponseDto dto : result) {
+            String uri = dto.getUri();
+            String[] split = uri.split("/");
+            String id = split[2];
+            Long eventId = Long.parseLong(id);
+            views.put(eventId, dto.getHits());
+        }
+
+        return views;
     }
 
 }
