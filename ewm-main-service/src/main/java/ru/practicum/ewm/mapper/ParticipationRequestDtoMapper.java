@@ -9,8 +9,6 @@ import ru.practicum.ewm.model.User;
 @Mapper(componentModel = "spring")
 public interface ParticipationRequestDtoMapper {
 
-  //  ParticipationRequest dtoToParticipationRequest(ParticipationRequestDto dto);
-
     ParticipationRequestDto participationRequestToDto(ParticipationRequest request);
 
     default Long mapEventToLong(Event event) {
