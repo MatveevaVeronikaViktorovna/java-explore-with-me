@@ -86,9 +86,15 @@ public class EventServiceImpl implements EventService {
                 .stream()
                 .map(eventDtoMapper::eventToDto)
                 .collect(Collectors.toList());
+        List<Long> eventsId = new ArrayList<>();
+        for (EventFullDto dto : eventsDto) {
+            eventsId.add(dto.getId());
+        }
+        Map<Long, Long> views = getViews(eventsId);
         for (EventFullDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
+            dto.setViews(views.get(dto.getId()));
         }
         return eventsDto;
     }
@@ -98,10 +104,21 @@ public class EventServiceImpl implements EventService {
     public List<EventFullDto> getAllByInitiator(Long userId, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, page);
-        return events
+        List<EventFullDto> eventsDto = events
                 .stream()
                 .map(eventDtoMapper::eventToDto)
                 .collect(Collectors.toList());
+        List<Long> eventsId = new ArrayList<>();
+        for (EventFullDto dto : eventsDto) {
+            eventsId.add(dto.getId());
+        }
+        Map<Long, Long> views = getViews(eventsId);
+        for (EventFullDto dto : eventsDto) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            dto.setConfirmedRequests(confirmedRequests);
+            dto.setViews(views.get(dto.getId()));
+        }
+        return eventsDto;
     }
 
 
@@ -124,14 +141,22 @@ public class EventServiceImpl implements EventService {
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)
                 .collect(Collectors.toList());
+        List<Long> eventsId = new ArrayList<>();
+        for (EventShortDto dto : eventsDto) {
+            eventsId.add(dto.getId());
+        }
+        Map<Long, Long> views = getViews(eventsId);
         for (EventShortDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
+            dto.setViews(views.get(dto.getId()));
         }
         if (sort != null && sort.equals(EventSort.EVENT_DATE)) {
             eventsDto.sort(Comparator.comparing(EventShortDto::getEventDate));
         }
-        // TODO надо присвоить views и сортировку сделать
+        if (sort != null && sort.equals(EventSort.VIEWS)) {
+            eventsDto.sort(Comparator.comparing(EventShortDto::getViews));
+        }
         return eventsDto;
     }
 
@@ -145,8 +170,8 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
-        getStats(List.of(eventDto.getId()));
-        eventDto.setViews(getViews(eventDto.getId()));
+        Map<Long, Long> views = getViews(List.of(eventDto.getId()));
+        eventDto.setViews(views.get(eventDto.getId()));
         return eventDto;
     }
 
@@ -163,7 +188,8 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
-        eventDto.setViews(getViews(eventDto.getId()));
+        Map<Long, Long> views = getViews(List.of(eventDto.getId()));
+        eventDto.setViews(views.get(eventDto.getId()));
         return eventDto;
     }
 
@@ -234,7 +260,8 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
-        eventDto.setViews(getViews(eventDto.getId()));
+        Map<Long, Long> views = getViews(List.of(eventDto.getId()));
+        eventDto.setViews(views.get(eventDto.getId()));
         return eventDto;
     }
 
@@ -297,7 +324,8 @@ public class EventServiceImpl implements EventService {
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
-        eventDto.setViews(getViews(eventDto.getId()));
+        Map<Long, Long> views = getViews(List.of(eventDto.getId()));
+        eventDto.setViews(views.get(eventDto.getId()));
         return eventDto;
     }
 
@@ -330,7 +358,6 @@ public class EventServiceImpl implements EventService {
             Long eventId = Long.parseLong(id);
             views.put(eventId, dto.getHits());
         }
-
         return views;
     }
 
