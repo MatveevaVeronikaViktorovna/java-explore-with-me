@@ -23,5 +23,5 @@ public interface EventService {
 
     List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size, String uri, String api);
 
-    EventFullDto getByIdByUser(Long eventId);
+    EventFullDto getByIdByUser(Long eventId, String uri, String ip);
 }

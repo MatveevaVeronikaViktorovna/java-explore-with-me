@@ -38,8 +38,7 @@ public class PublicController {
 
     @GetMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto getCategoryById(@PathVariable Long catId,
-                                       HttpServletRequest request) {
+    public CategoryDto getCategoryById(@PathVariable Long catId) {
         log.info("Поступил публичный запрос на получение категории с id={}", catId);
         return categoryService.getById(catId);
     }
@@ -66,10 +65,12 @@ public class PublicController {
 
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventByIdByUser(@PathVariable Long eventId) {
+    public EventFullDto getEventByIdByUser(@PathVariable Long eventId,
+                                           HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String ip = request.getRemoteAddr();
         log.info("Поступил публичный запрос на получение события с id={} ", eventId);
-        // TODO Сохранять статистику необходимо тут
-        return eventService.getByIdByUser(eventId);
+        return eventService.getByIdByUser(eventId, uri, ip);
     }
 
     @GetMapping("/compilations")

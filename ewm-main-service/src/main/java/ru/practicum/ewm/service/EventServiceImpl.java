@@ -255,13 +255,7 @@ public class EventServiceImpl implements EventService {
             throw new IncorrectlyMadeRequestException("RangeStart must be earlier than rangeEnd.");
         }
 
-        HitRequestDto hitRequestDto = new HitRequestDto();
-        hitRequestDto.setApp(APP);
-        hitRequestDto.setUri(uri);
-        hitRequestDto.setIp(ip);
-        hitRequestDto.setTimestamp(LocalDateTime.now());
-        hitClient.create(hitRequestDto);
-        log.info("Информация направлена в сервер статистики: {}", hitRequestDto);
+        sentHitToStats(uri, ip);
 
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, page);
@@ -282,15 +276,29 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public EventFullDto getByIdByUser(Long eventId) {
+    public EventFullDto getByIdByUser(Long eventId, String uri, String ip) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED).orElseThrow(() -> {
             log.warn("Событие с id {} в статусе {} не найдено", eventId, EventState.PUBLISHED);
             throw new EntityNotFoundException(String.format("Event with id=%d with state PUBLISHED was not found", eventId));
         });
+
+        sentHitToStats(uri, ip);
+
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         return eventDto;
+    }
+
+    private void sentHitToStats (String uri, String ip) {
+        HitRequestDto hitRequestDto = new HitRequestDto();
+        hitRequestDto.setApp(APP);
+        hitRequestDto.setUri(uri);
+        hitRequestDto.setIp(ip);
+        hitRequestDto.setTimestamp(LocalDateTime.now());
+        hitClient.create(hitRequestDto);
+        log.info("Информация направлена в сервер статистики: {}", hitRequestDto);
+
     }
 
 }
