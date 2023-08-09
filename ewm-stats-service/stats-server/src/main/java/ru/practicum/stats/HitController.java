@@ -45,7 +45,7 @@ public class HitController {
             log.warn("Start не может быть позже чем End");
             throw new IncorrectlyMadeRequestException("Start must be earlier than End.");
         }
-        
+
         log.info("Поступил запрос на получение статистики за период с {} по {} для списка uri {} unique={}",
                 start, end, uris, unique);
         return hitService.getStats(start, end, uris, unique);
