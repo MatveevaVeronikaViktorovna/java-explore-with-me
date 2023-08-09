@@ -78,7 +78,8 @@ public class PublicController {
         log.info("Поступил публичный запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
                         "rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}", text, categories,
                 paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        return eventService.getAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, uri, ip);
+        return eventService.getAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
+                uri, ip);
     }
 
     @GetMapping("/events/{eventId}")

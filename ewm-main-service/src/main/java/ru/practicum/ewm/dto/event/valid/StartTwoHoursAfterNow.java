@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = EventDateValidator.class)

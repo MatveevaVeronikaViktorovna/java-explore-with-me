@@ -15,6 +15,7 @@ public interface EventDtoMapper {
     Event dtoToEvent(NewEventDto newEventDto);
 
     EventFullDto eventToDto(Event event);
+
     EventShortDto eventToShortDto(Event event);
 
     default Long mapCategoryToCategoryId(Category category) {

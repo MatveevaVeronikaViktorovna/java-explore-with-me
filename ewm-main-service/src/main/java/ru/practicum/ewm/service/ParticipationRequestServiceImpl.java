@@ -55,7 +55,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         if (event.getInitiator().getId().equals(userId)) {
             log.warn("Инициатор события не может добавить запрос на участие в своём событии");
-            throw new ConditionsNotMetException("The initiator of the event cannot add a request to participate in his event");
+            throw new ConditionsNotMetException("The initiator of the event cannot add a request to participate in " +
+                    "his event");
         }
 
         if (!event.getState().equals(EventState.PUBLISHED)) {
@@ -63,10 +64,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConditionsNotMetException("It is not possible to participate in an unpublished event");
         }
 
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         if (event.getParticipantLimit() <= confirmedRequests && event.getParticipantLimit() != 0) {
             log.warn("У события достигнут лимит запросов на участие.");
-            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
+            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d",
+                    event.getParticipantLimit()));
         }
 
         if (event.getRequestModeration().equals(Boolean.FALSE) || event.getParticipantLimit() == 0) {
@@ -127,13 +130,15 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         request.setStatus(ParticipationRequestStatus.CANCELED);
         ParticipationRequest updatedRequest = requestRepository.save(request);
-        log.info("Пользователем обновлен статус заявки на участие в событии c id {} на {}", requestId, ParticipationRequestStatus.CANCELED);
+        log.info("Пользователем обновлен статус заявки на участие в событии c id {} на {}", requestId,
+                ParticipationRequestStatus.CANCELED);
         return requestDtoMapper.participationRequestToDto(updatedRequest);
     }
 
     @Transactional
     @Override
-    public UpdateParticipationRequestResponse updateStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+    public UpdateParticipationRequestResponse updateStatusByEventInitiator(Long userId, Long eventId,
+                                                                           UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -144,21 +149,24 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
 
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         int limitForConfirmation = event.getParticipantLimit() - confirmedRequests;
         if (requestDto.getStatus().equals(ParticipationRequestStatus.CONFIRMED) && limitForConfirmation <= 0) {
             log.warn("У события достигнут лимит запросов на участие.");
-            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d", event.getParticipantLimit()));
+            throw new ConditionsNotMetException(String.format("The event has reached participant limit %d",
+                    event.getParticipantLimit()));
         }
 
-        List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorIdAndIdIn(eventId, userId, requestDto.getRequestIds());
+        List<ParticipationRequest> requests = requestRepository.findAllByEventIdAndEventInitiatorIdAndIdIn(eventId,
+                userId, requestDto.getRequestIds());
 
         if (requestDto.getStatus().equals(ParticipationRequestStatus.CONFIRMED)) {
             for (ParticipationRequest request : requests) {
                 if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
                     log.warn("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
-                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right status: "
-                            + request.getStatus());
+                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right " +
+                            "status: " + request.getStatus());
                 }
                 if (limitForConfirmation > 0) {
                     request.setStatus(ParticipationRequestStatus.CONFIRMED);
@@ -171,18 +179,20 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             for (ParticipationRequest request : requests) {
                 if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
                     log.warn("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
-                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right status: "
-                            + request.getStatus());
+                    throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right " +
+                            "status: " + request.getStatus());
                 }
                 request.setStatus(ParticipationRequestStatus.REJECTED);
             }
         } else {
-            log.warn("Новый статус для заявок на участие в событии текущего пользователя должен быть CONFIRMED or REJECTED");
+            log.warn("Новый статус для заявок на участие в событии текущего пользователя должен быть CONFIRMED" +
+                    " or REJECTED");
             throw new ConditionsNotMetException("New status of participation requests must be CONFIRMED or REJECTED");
         }
 
         List<ParticipationRequest> updatedRequests = requestRepository.saveAll(requests);
-        log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId, updatedRequests);
+        log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId,
+                updatedRequests);
 
         List<ParticipationRequestDto> requestsDto = requests
                 .stream()

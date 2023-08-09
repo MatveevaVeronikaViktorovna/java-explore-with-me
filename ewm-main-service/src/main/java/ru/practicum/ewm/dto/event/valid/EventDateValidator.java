@@ -13,7 +13,7 @@ public class EventDateValidator implements ConstraintValidator<StartTwoHoursAfte
     @Override
     public boolean isValid(LocalDateTime eventDate, ConstraintValidatorContext constraintValidatorContext) {
         LocalDateTime now = LocalDateTime.now();
-        if(eventDate != null) {
+        if (eventDate != null) {
             return eventDate.isAfter(now.plusHours(2L));
         } else return true;
     }

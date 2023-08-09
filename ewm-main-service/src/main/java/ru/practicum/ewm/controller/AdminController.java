@@ -91,8 +91,8 @@ public class AdminController {
                                                   @RequestParam(defaultValue = "0") Integer from,
                                                   @RequestParam(defaultValue = "10") Integer size) {
         log.info("Поступил запрос от администратора на получение всех событий. Параметры: users={}, states={}, " +
-                        "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories, rangeStart,
-                rangeEnd, from, size);
+                        "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories,
+                rangeStart, rangeEnd, from, size);
         return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

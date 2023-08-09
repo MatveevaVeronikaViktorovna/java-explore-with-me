@@ -82,7 +82,8 @@ public class PrivateController {
     @GetMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAllParticipationRequestsByRequester(@PathVariable Long userId) {
-        log.info("Поступил запрос от пользователя с id {} на получение всех его запросов на участие в событиях", userId);
+        log.info("Поступил запрос от пользователя с id {} на получение всех его запросов на участие в событиях",
+                userId);
         return requestService.getAllByRequester(userId);
     }
 

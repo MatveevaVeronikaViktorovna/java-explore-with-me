@@ -7,5 +7,6 @@ import ru.practicum.ewm.model.User;
 @Mapper
 public interface UserDtoMapper {
     User dtoToUser(UserDto userDto);
+
     UserDto userToDto(User user);
 }

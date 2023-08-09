@@ -79,7 +79,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+    public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
+                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from,
+                                            Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, page);
         List<EventFullDto> eventsDto = events
@@ -92,7 +94,8 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Long> views = getViews(eventsId);
         for (EventFullDto dto : eventsDto) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
+                    ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -114,7 +117,8 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Long> views = getViews(eventsId);
         for (EventFullDto dto : eventsDto) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
+                    ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -124,7 +128,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from, Integer size, String uri, String ip) {
+    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+                                            LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from,
+                                            Integer size, String uri, String ip) {
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
@@ -136,7 +142,8 @@ public class EventServiceImpl implements EventService {
         sentHitToStats(uri, ip);
 
         Pageable page = CustomPageRequest.of(from, size);
-        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, page);
+        List<Event> events = eventRepository.findAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+                page);
         List<EventShortDto> eventsDto = events
                 .stream()
                 .map(eventDtoMapper::eventToShortDto)
@@ -147,7 +154,8 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Long> views = getViews(eventsId);
         for (EventShortDto dto : eventsDto) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
+                    ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -168,7 +176,8 @@ public class EventServiceImpl implements EventService {
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -180,13 +189,15 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getByIdByUser(Long eventId, String uri, String ip) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED).orElseThrow(() -> {
             log.warn("Событие с id {} в статусе {} не найдено", eventId, EventState.PUBLISHED);
-            throw new EntityNotFoundException(String.format("Event with id=%d with state PUBLISHED was not found", eventId));
+            throw new EntityNotFoundException(String.format("Event with id=%d with state PUBLISHED was not found",
+                    eventId));
         });
 
         sentHitToStats(uri, ip);
 
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -238,27 +249,31 @@ public class EventServiceImpl implements EventService {
             if (updateEventAdminRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT)) {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно публиковать, только если оно в состоянии ожидания публикации.");
-                    throw new ConditionsNotMetException("Cannot publish the event because it's not in the right state: " + event.getState());
+                    throw new ConditionsNotMetException("Cannot publish the event because it's not in the right state: "
+                            + event.getState());
                 }
                 event.setState(EventState.PUBLISHED);
                 event.setPublishedOn(LocalDateTime.now());
             } else {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно отклонить, только если оно еще не опубликовано.");
-                    throw new ConditionsNotMetException("Cannot reject the event because it's not in the right state: " + event.getState());
+                    throw new ConditionsNotMetException("Cannot reject the event because it's not in the right state: "
+                            + event.getState());
                 }
                 event.setState(EventState.CANCELED);
             }
         }
         if (event.getPublishedOn() != null && event.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
             log.warn("Дата начала изменяемого события должна быть не ранее чем за час от даты публикации.");
-            throw new ConditionsNotMetException("The event date must be no earlier than an hour from the date of publication.");
+            throw new ConditionsNotMetException("The event date must be no earlier than an hour from the date " +
+                    "of publication.");
         }
         locationRepository.save(event.getLocation());
         Event updatedEvent = eventRepository.save(event);
         log.info("Администратором обновлено событие c id {} на {}", eventId, updatedEvent);
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -267,7 +282,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
+    public EventFullDto updateByInitiator(Long userId, Long eventId,
+                                          UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
@@ -322,7 +338,8 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = eventRepository.save(event);
         log.info("Инициатором обновлено событие c id {} на {}", eventId, updatedEvent);
         EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
-        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
+                ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -346,12 +363,12 @@ public class EventServiceImpl implements EventService {
             uris.add(uri);
         }
         ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now(), uris, true);
-        log.info("В сервер статистики направлен запрос на получение статистики за период с {} по {} для списка uri {}, unique = {}", START, LocalDateTime.now(), uris, true);
+        log.info("В сервер статистики направлен запрос на получение статистики за период с {} по {} для списка " +
+                "uri {}, unique = {}", START, LocalDateTime.now(), uris, true);
         Object responseBody = response.getBody();
         System.out.println(responseBody);
         List<HitResponseDto> result = objectMapper.convertValue(responseBody, new TypeReference<List<HitResponseDto>>() {
         });
-        log.info("Получена запрошенная статистика: {}", result);
 
         Map<Long, Long> views = new HashMap<>();
         for (HitResponseDto dto : result) {

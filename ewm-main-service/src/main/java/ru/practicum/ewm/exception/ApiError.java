@@ -28,4 +28,5 @@ public class ApiError {
     public String getTimestamp() {
         return timestamp;
     }
+
 }

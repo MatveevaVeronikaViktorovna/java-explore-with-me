@@ -49,7 +49,8 @@ public class CompilationServiceImpl implements CompilationService {
         CompilationDto dto = compilationDtoMapper.compilationToDto(newCompilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
         for (EventShortDto event : compilationEvents) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
+                    ParticipationRequestStatus.CONFIRMED);
             event.setConfirmedRequests(confirmedRequests);
         }
         return dto;
@@ -74,7 +75,8 @@ public class CompilationServiceImpl implements CompilationService {
             List<EventShortDto> compilationEvents = dto.getEvents();
             if (compilationEvents != null) {
                 for (EventShortDto event : compilationEvents) {
-                    Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                    Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
+                            ParticipationRequestStatus.CONFIRMED);
                     event.setConfirmedRequests(confirmedRequests);
                 }
             }
@@ -93,7 +95,8 @@ public class CompilationServiceImpl implements CompilationService {
         List<EventShortDto> compilationEvents = dto.getEvents();
         if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {
-                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
+                        ParticipationRequestStatus.CONFIRMED);
                 event.setConfirmedRequests(confirmedRequests);
             }
         }
@@ -126,7 +129,8 @@ public class CompilationServiceImpl implements CompilationService {
         List<EventShortDto> compilationEvents = dto.getEvents();
         if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {
-                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
+                        ParticipationRequestStatus.CONFIRMED);
                 event.setConfirmedRequests(confirmedRequests);
             }
         }

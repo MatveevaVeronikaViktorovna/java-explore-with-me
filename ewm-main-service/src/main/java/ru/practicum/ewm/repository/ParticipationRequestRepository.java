@@ -12,8 +12,12 @@ import java.util.Optional;
 public interface ParticipationRequestRepository extends JpaRepository<ParticipationRequest, Long> {
 
     Integer countAllByEventIdAndStatus(Long eventId, ParticipationRequestStatus status);
+
     List<ParticipationRequest> findAllByRequesterId(Long userId);
+
     Optional<ParticipationRequest> findAllByIdAndRequesterId(Long requestId, Long userId);
+
     List<ParticipationRequest> findAllByEventIdAndEventInitiatorId(Long eventId, Long userId);
-    List<ParticipationRequest> findAllByEventIdAndEventInitiatorIdAndIdIn(Long eventId, Long userId, List<Long>requestsId);
+
+    List<ParticipationRequest> findAllByEventIdAndEventInitiatorIdAndIdIn(Long eventId, Long userId, List<Long> requestsId);
 }
