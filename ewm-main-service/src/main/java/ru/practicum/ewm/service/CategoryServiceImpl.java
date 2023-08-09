@@ -37,37 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
         return mapper.categoryToDto(newCategory);
     }
 
-    @Transactional
-    @Override
-    public void delete(Long id) {
-        if (!categoryRepository.existsById(id)) {
-            log.warn("Категория с id {} не найдена", id);
-            throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
-        }
-
-        List<Event>categoryEvents = eventRepository.findAllByCategoryId(id);
-        if (!categoryEvents.isEmpty()) {
-            log.warn("Существуют события, связанные с категорией");
-            throw new ConditionsNotMetException("The category is not empty");
-        }
-
-        categoryRepository.deleteById(id);
-        log.info("Удалена категория с id {}", id);
-    }
-
-    @Transactional
-    @Override
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> {
-            log.warn("Категория с id {} не найдена", id);
-            throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
-        });
-        category.setName(categoryDto.getName());
-        Category updatedCategory = categoryRepository.save(category);
-        log.info("Обновлена категория c id {} на {}", id, updatedCategory);
-        return mapper.categoryToDto(updatedCategory);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<CategoryDto> getAll(Integer from, Integer size) {
@@ -87,6 +56,37 @@ public class CategoryServiceImpl implements CategoryService {
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
         });
         return mapper.categoryToDto(category);
+    }
+
+    @Transactional
+    @Override
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> {
+            log.warn("Категория с id {} не найдена", id);
+            throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
+        });
+        category.setName(categoryDto.getName());
+        Category updatedCategory = categoryRepository.save(category);
+        log.info("Обновлена категория c id {} на {}", id, updatedCategory);
+        return mapper.categoryToDto(updatedCategory);
+    }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            log.warn("Категория с id {} не найдена", id);
+            throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
+        }
+
+        List<Event> categoryEvents = eventRepository.findAllByCategoryId(id);
+        if (!categoryEvents.isEmpty()) {
+            log.warn("Существуют события, связанные с категорией");
+            throw new ConditionsNotMetException("The category is not empty");
+        }
+
+        categoryRepository.deleteById(id);
+        log.info("Удалена категория с id {}", id);
     }
 
 }

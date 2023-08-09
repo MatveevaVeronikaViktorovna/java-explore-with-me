@@ -33,17 +33,6 @@ public class UserServiceImpl implements UserService {
         return mapper.userToDto(newUser);
     }
 
-    @Transactional
-    @Override
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            log.warn("Пользователь с id {} не найден", id);
-            throw new EntityNotFoundException(String.format("User with id=%d was not found", id));
-        }
-        userRepository.deleteById(id);
-        log.info("Удален пользователь с id {}", id);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
@@ -58,6 +47,17 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(mapper::userToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            log.warn("Пользователь с id {} не найден", id);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", id));
+        }
+        userRepository.deleteById(id);
+        log.info("Удален пользователь с id {}", id);
     }
 
 }

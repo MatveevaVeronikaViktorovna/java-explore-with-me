@@ -11,7 +11,9 @@ import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestRespo
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.ParticipationRequestDtoMapper;
-import ru.practicum.ewm.model.*;
+import ru.practicum.ewm.model.Event;
+import ru.practicum.ewm.model.ParticipationRequest;
+import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.EventState;
 import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 import ru.practicum.ewm.repository.EventRepository;
@@ -95,20 +97,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    @Override
-    public ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId) {
-        ParticipationRequest request = requestRepository.findAllByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
-            log.warn("Запрос на участие в событии с id {} не найден у пользователя с id {}", requestId, userId);
-            throw new EntityNotFoundException(String.format("Request with id=%d was not found", requestId));
-        });
-
-        request.setStatus(ParticipationRequestStatus.CANCELED);
-        ParticipationRequest updatedRequest = requestRepository.save(request);
-        log.info("Пользователем обновлен статус заявки на участие в событии c id {} на {}", requestId, ParticipationRequestStatus.CANCELED);
-        return requestDtoMapper.participationRequestToDto(updatedRequest);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<ParticipationRequestDto> getAllByEventInitiator(Long userId, Long eventId) {
@@ -127,6 +115,20 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .stream()
                 .map(requestDtoMapper::participationRequestToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId) {
+        ParticipationRequest request = requestRepository.findAllByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
+            log.warn("Запрос на участие в событии с id {} не найден у пользователя с id {}", requestId, userId);
+            throw new EntityNotFoundException(String.format("Request with id=%d was not found", requestId));
+        });
+
+        request.setStatus(ParticipationRequestStatus.CANCELED);
+        ParticipationRequest updatedRequest = requestRepository.save(request);
+        log.info("Пользователем обновлен статус заявки на участие в событии c id {} на {}", requestId, ParticipationRequestStatus.CANCELED);
+        return requestDtoMapper.participationRequestToDto(updatedRequest);
     }
 
     @Transactional

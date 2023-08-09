@@ -39,7 +39,7 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationDtoMapper.dtoToCompilation(compilationDto);
 
         Set<Long> eventsId = compilationDto.getEvents();
-        if (eventsId != null ) {
+        if (eventsId != null) {
             Set<Event> events = eventRepository.findAllByIdIn(eventsId);
             compilation.setEvents(events);
         }
@@ -51,51 +51,6 @@ public class CompilationServiceImpl implements CompilationService {
         for (EventShortDto event : compilationEvents) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
             event.setConfirmedRequests(confirmedRequests);
-        }
-        return dto;
-    }
-
-    @Transactional
-    @Override
-    public void delete(Long id) {
-        if (!compilationRepository.existsById(id)) {
-            log.warn("Подборка событий с id {} не найдена", id);
-            throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
-        }
-
-        compilationRepository.deleteById(id);
-        log.info("Удалена подборка событий с id {}", id);
-    }
-
-    @Transactional
-    @Override
-    public CompilationDto update(Long id, NewCompilationDto compilationDto) {
-        Compilation compilation = compilationRepository.findById(id).orElseThrow(() -> {
-            log.warn("Подборка событий с id {} не найдена", id);
-            throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
-        });
-
-        if (compilationDto.getTitle() != null) {
-            compilation.setTitle(compilationDto.getTitle());
-        }
-        if (compilationDto.getPinned() != null) {
-            compilation.setPinned(compilationDto.getPinned());
-        }
-        if (compilationDto.getEvents() != null) {
-            Set<Long> eventsId = compilationDto.getEvents();
-            Set<Event> events = eventRepository.findAllByIdIn(eventsId);
-            compilation.setEvents(events);
-        }
-
-        Compilation updatedCompilation = compilationRepository.save(compilation);
-        log.info("Обновлена подборка событий с id {} на {}", id, updatedCompilation);
-        CompilationDto dto = compilationDtoMapper.compilationToDto(updatedCompilation);
-        List<EventShortDto> compilationEvents = dto.getEvents();
-        if (compilationEvents != null) {
-            for (EventShortDto event : compilationEvents) {
-                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
-                event.setConfirmedRequests(confirmedRequests);
-            }
         }
         return dto;
     }
@@ -143,6 +98,51 @@ public class CompilationServiceImpl implements CompilationService {
             }
         }
         return dto;
+    }
+
+    @Transactional
+    @Override
+    public CompilationDto update(Long id, NewCompilationDto compilationDto) {
+        Compilation compilation = compilationRepository.findById(id).orElseThrow(() -> {
+            log.warn("Подборка событий с id {} не найдена", id);
+            throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
+        });
+
+        if (compilationDto.getTitle() != null) {
+            compilation.setTitle(compilationDto.getTitle());
+        }
+        if (compilationDto.getPinned() != null) {
+            compilation.setPinned(compilationDto.getPinned());
+        }
+        if (compilationDto.getEvents() != null) {
+            Set<Long> eventsId = compilationDto.getEvents();
+            Set<Event> events = eventRepository.findAllByIdIn(eventsId);
+            compilation.setEvents(events);
+        }
+
+        Compilation updatedCompilation = compilationRepository.save(compilation);
+        log.info("Обновлена подборка событий с id {} на {}", id, updatedCompilation);
+        CompilationDto dto = compilationDtoMapper.compilationToDto(updatedCompilation);
+        List<EventShortDto> compilationEvents = dto.getEvents();
+        if (compilationEvents != null) {
+            for (EventShortDto event : compilationEvents) {
+                Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(), ParticipationRequestStatus.CONFIRMED);
+                event.setConfirmedRequests(confirmedRequests);
+            }
+        }
+        return dto;
+    }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        if (!compilationRepository.existsById(id)) {
+            log.warn("Подборка событий с id {} не найдена", id);
+            throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
+        }
+
+        compilationRepository.deleteById(id);
+        log.info("Удалена подборка событий с id {}", id);
     }
 
 }
