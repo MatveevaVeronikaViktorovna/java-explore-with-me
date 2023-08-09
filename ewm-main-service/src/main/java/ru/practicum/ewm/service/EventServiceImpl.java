@@ -345,10 +345,11 @@ public class EventServiceImpl implements EventService {
             String uri = "/events/" + eventId;
             uris.add(uri);
         }
-        ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now().plusSeconds(1), uris, false);
+        ResponseEntity<Object> response = hitClient.getStats(START, LocalDateTime.now(), uris, false);
         log.info("В сервер статистики направлен запрос на получение статистики за период с {} по {} для списка uri {}, unique = {}", START, LocalDateTime.now(), uris, true);
         Object responseBody = response.getBody();
-        List<HitResponseDto> result = objectMapper.convertValue(responseBody, new TypeReference<>() {
+        System.out.println(responseBody);
+        List<HitResponseDto> result = objectMapper.convertValue(responseBody, new TypeReference<List<HitResponseDto>>() {
         });
         log.info("Получена запрошенная статистика: {}", result);
 

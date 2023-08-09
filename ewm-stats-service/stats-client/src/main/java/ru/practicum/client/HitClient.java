@@ -36,10 +36,17 @@ public class HitClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        StringBuilder builder = new StringBuilder();
+        for (String uri : uris) {
+            builder.append(uri);
+            builder.append(",");
+        }
+        String urisAsString = builder.toString();
+
         Map<String, Object> parameters = Map.of(
                 "start", start.format(formatter),
                 "end", end.format(formatter),
-                "uris", uris,
+                "uris", urisAsString,
                 "unique", unique
         );
         return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
