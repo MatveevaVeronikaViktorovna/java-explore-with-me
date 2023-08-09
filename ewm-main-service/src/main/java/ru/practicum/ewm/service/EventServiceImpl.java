@@ -94,7 +94,7 @@ public class EventServiceImpl implements EventService {
         for (EventFullDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
-            dto.setViews(views.get(dto.getId()));
+            dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
         return eventsDto;
     }
@@ -116,7 +116,7 @@ public class EventServiceImpl implements EventService {
         for (EventFullDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
-            dto.setViews(views.get(dto.getId()));
+            dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
         return eventsDto;
     }
@@ -149,7 +149,7 @@ public class EventServiceImpl implements EventService {
         for (EventShortDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(), ParticipationRequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
-            dto.setViews(views.get(dto.getId()));
+            dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
         if (sort != null && sort.equals(EventSort.EVENT_DATE)) {
             eventsDto.sort(Comparator.comparing(EventShortDto::getEventDate));
@@ -171,7 +171,7 @@ public class EventServiceImpl implements EventService {
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
-        eventDto.setViews(views.get(eventDto.getId()));
+        eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
         return eventDto;
     }
 
@@ -189,7 +189,7 @@ public class EventServiceImpl implements EventService {
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
-        eventDto.setViews(views.get(eventDto.getId()));
+        eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
         return eventDto;
     }
 
@@ -261,7 +261,7 @@ public class EventServiceImpl implements EventService {
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
-        eventDto.setViews(views.get(eventDto.getId()));
+        eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
         return eventDto;
     }
 
@@ -325,7 +325,7 @@ public class EventServiceImpl implements EventService {
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
-        eventDto.setViews(views.get(eventDto.getId()));
+        eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
         return eventDto;
     }
 
@@ -350,6 +350,7 @@ public class EventServiceImpl implements EventService {
         Object responseBody = response.getBody();
         List<HitResponseDto> result = objectMapper.convertValue(responseBody, new TypeReference<>() {
         });
+        log.info("Получена запрошенная статистика: {}", result);
 
         Map<Long, Long> views = new HashMap<>();
         for (HitResponseDto dto : result) {
