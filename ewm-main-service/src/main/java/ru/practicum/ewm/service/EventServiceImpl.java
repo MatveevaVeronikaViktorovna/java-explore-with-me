@@ -218,47 +218,47 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto) {
+    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequestDto updateEventDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
         });
 
-        if (updateEventAdminRequestDto.getAnnotation() != null) {
-            event.setAnnotation(updateEventAdminRequestDto.getAnnotation());
+        if (updateEventDto.getAnnotation() != null && !updateEventDto.getAnnotation().isBlank()) {
+            event.setAnnotation(updateEventDto.getAnnotation());
         }
-        if (updateEventAdminRequestDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventAdminRequestDto.getCategory()).orElseThrow(() -> {
-                log.warn("Категория с id {} не найдена", updateEventAdminRequestDto.getCategory());
+        if (updateEventDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventDto.getCategory());
                 throw new EntityNotFoundException(String.format("Category with id=%d was not found",
-                        updateEventAdminRequestDto.getCategory()));
+                        updateEventDto.getCategory()));
             });
             event.setCategory(category);
         }
-        if (updateEventAdminRequestDto.getDescription() != null) {
-            event.setDescription(updateEventAdminRequestDto.getDescription());
+        if (updateEventDto.getDescription() != null && !updateEventDto.getDescription().isBlank()) {
+            event.setDescription(updateEventDto.getDescription());
         }
-        if (updateEventAdminRequestDto.getEventDate() != null) {
-            event.setEventDate(updateEventAdminRequestDto.getEventDate());
+        if (updateEventDto.getEventDate() != null) {
+            event.setEventDate(updateEventDto.getEventDate());
         }
-        if (updateEventAdminRequestDto.getLocation() != null) {
-            event.setLocation(locationDtoMapper.dtoToLocation(updateEventAdminRequestDto.getLocation()));
+        if (updateEventDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
         }
-        if (updateEventAdminRequestDto.getPaid() != null) {
-            event.setPaid(updateEventAdminRequestDto.getPaid());
+        if (updateEventDto.getPaid() != null) {
+            event.setPaid(updateEventDto.getPaid());
         }
-        if (updateEventAdminRequestDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventAdminRequestDto.getParticipantLimit());
+        if (updateEventDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventDto.getParticipantLimit());
         }
-        if (updateEventAdminRequestDto.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventAdminRequestDto.getRequestModeration());
+        if (updateEventDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventDto.getRequestModeration());
         }
-        if (updateEventAdminRequestDto.getTitle() != null) {
-            event.setTitle(updateEventAdminRequestDto.getTitle());
+        if (updateEventDto.getTitle() != null && !updateEventDto.getTitle().isBlank()) {
+            event.setTitle(updateEventDto.getTitle());
         }
 
-        if (updateEventAdminRequestDto.getStateAction() != null) {
-            if (updateEventAdminRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT)) {
+        if (updateEventDto.getStateAction() != null) {
+            if (updateEventDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT)) {
                 if (!event.getState().equals(EventState.PENDING)) {
                     log.warn("Событие можно публиковать, только если оно в состоянии ожидания публикации.");
                     throw new ConditionsNotMetException("Cannot publish the event because it's not in the right state: "
@@ -294,8 +294,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateEventByInitiator(Long userId, Long eventId,
-                                               UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
+    public EventFullDto updateEventByInitiator(Long userId,
+                                               Long eventId,
+                                               UpdateEventInitiatorRequestDto updateEventDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
@@ -305,41 +306,41 @@ public class EventServiceImpl implements EventService {
             throw new ConditionsNotMetException("Only pending or canceled events can be changed");
         }
 
-        if (updateEventInitiatorRequestDto.getAnnotation() != null) {
-            event.setAnnotation(updateEventInitiatorRequestDto.getAnnotation());
+        if (updateEventDto.getAnnotation() != null && !updateEventDto.getAnnotation().isBlank()) {
+            event.setAnnotation(updateEventDto.getAnnotation());
         }
-        if (updateEventInitiatorRequestDto.getCategory() != null) {
-            Category category = categoryRepository.findById(updateEventInitiatorRequestDto.getCategory()).orElseThrow(() -> {
-                log.warn("Категория с id {} не найдена", updateEventInitiatorRequestDto.getCategory());
+        if (updateEventDto.getCategory() != null) {
+            Category category = categoryRepository.findById(updateEventDto.getCategory()).orElseThrow(() -> {
+                log.warn("Категория с id {} не найдена", updateEventDto.getCategory());
                 throw new EntityNotFoundException(String.format("Category with id=%d was not found",
-                        updateEventInitiatorRequestDto.getCategory()));
+                        updateEventDto.getCategory()));
             });
             event.setCategory(category);
         }
-        if (updateEventInitiatorRequestDto.getDescription() != null) {
-            event.setDescription(updateEventInitiatorRequestDto.getDescription());
+        if (updateEventDto.getDescription() != null && !updateEventDto.getDescription().isBlank()) {
+            event.setDescription(updateEventDto.getDescription());
         }
-        if (updateEventInitiatorRequestDto.getEventDate() != null) {
-            event.setEventDate(updateEventInitiatorRequestDto.getEventDate());
+        if (updateEventDto.getEventDate() != null) {
+            event.setEventDate(updateEventDto.getEventDate());
         }
-        if (updateEventInitiatorRequestDto.getLocation() != null) {
-            event.setLocation(locationDtoMapper.dtoToLocation(updateEventInitiatorRequestDto.getLocation()));
+        if (updateEventDto.getLocation() != null) {
+            event.setLocation(locationDtoMapper.dtoToLocation(updateEventDto.getLocation()));
         }
-        if (updateEventInitiatorRequestDto.getPaid() != null) {
-            event.setPaid(updateEventInitiatorRequestDto.getPaid());
+        if (updateEventDto.getPaid() != null) {
+            event.setPaid(updateEventDto.getPaid());
         }
-        if (updateEventInitiatorRequestDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventInitiatorRequestDto.getParticipantLimit());
+        if (updateEventDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventDto.getParticipantLimit());
         }
-        if (updateEventInitiatorRequestDto.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventInitiatorRequestDto.getRequestModeration());
+        if (updateEventDto.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventDto.getRequestModeration());
         }
-        if (updateEventInitiatorRequestDto.getTitle() != null) {
-            event.setTitle(updateEventInitiatorRequestDto.getTitle());
+        if (updateEventDto.getTitle() != null && !updateEventDto.getTitle().isBlank()) {
+            event.setTitle(updateEventDto.getTitle());
         }
 
-        if (updateEventInitiatorRequestDto.getStateAction() != null) {
-            if (updateEventInitiatorRequestDto.getStateAction().equals(InitiatorStateAction.SEND_TO_REVIEW)) {
+        if (updateEventDto.getStateAction() != null) {
+            if (updateEventDto.getStateAction().equals(InitiatorStateAction.SEND_TO_REVIEW)) {
                 event.setState(EventState.PENDING);
             } else {
                 event.setState(EventState.CANCELED);
