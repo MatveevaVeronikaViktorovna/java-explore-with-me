@@ -5,15 +5,16 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-public class UpdateParticipationRequestEventInitiatorRequestDto {
-    @NotNull(message = "must not be null")
-    List<Long> requestIds;
+public class RequestDto {
 
-    @NotNull(message = "must not be null")
+    LocalDateTime created;
+    Long event;
+    Long id;
+    Long requester;
     ParticipationRequestStatus status;
+
 }

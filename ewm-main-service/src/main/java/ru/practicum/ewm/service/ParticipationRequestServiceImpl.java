@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.participationRequest.ParticipationRequestDto;
-import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestEventInitiatorRequestDto;
-import ru.practicum.ewm.dto.participationRequest.UpdateParticipationRequestResponse;
+import ru.practicum.ewm.dto.participationRequest.RequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateRequestEventInitiatorRequestDto;
+import ru.practicum.ewm.dto.participationRequest.UpdateRequestResponse;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.ParticipationRequestDtoMapper;
@@ -37,7 +37,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public ParticipationRequestDto createRequest(Long userId, Long eventId) {
+    public RequestDto createRequest(Long userId, Long eventId) {
 
         ParticipationRequest request = new ParticipationRequest();
 
@@ -87,7 +87,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional(readOnly = true)
     @Override
-    public List<ParticipationRequestDto> getAllRequestsByRequester(Long userId) {
+    public List<RequestDto> getAllRequestsByRequester(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -102,7 +102,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional(readOnly = true)
     @Override
-    public List<ParticipationRequestDto> getAllRequestsByEventInitiator(Long userId, Long eventId) {
+    public List<RequestDto> getAllRequestsByEventInitiator(Long userId, Long eventId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -122,7 +122,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public ParticipationRequestDto updateRequestStatusByRequester(Long userId, Long requestId) {
+    public RequestDto updateRequestStatusByRequester(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findAllByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
             log.warn("Запрос на участие в событии с id {} не найден у пользователя с id {}", requestId, userId);
             throw new EntityNotFoundException(String.format("Request with id=%d was not found", requestId));
@@ -136,8 +136,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public UpdateParticipationRequestResponse updateRequestStatusByEventInitiator(Long userId, Long eventId,
-                                                                           UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
+    public UpdateRequestResponse updateRequestStatusByEventInitiator(Long userId,
+                                                                     Long eventId,
+                                                                     UpdateRequestEventInitiatorRequestDto requestDto) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -191,20 +192,20 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId,
                 requests);
-        List<ParticipationRequestDto> requestsDto = requests
+        List<RequestDto> requestsDto = requests
                 .stream()
                 .map(requestDtoMapper::participationRequestToDto)
                 .collect(Collectors.toList());
-        List<ParticipationRequestDto> confirmedRequestsDto = new ArrayList<>();
-        List<ParticipationRequestDto> rejectedRequestsDto = new ArrayList<>();
-        for (ParticipationRequestDto dto : requestsDto) {
+        List<RequestDto> confirmedRequestsDto = new ArrayList<>();
+        List<RequestDto> rejectedRequestsDto = new ArrayList<>();
+        for (RequestDto dto : requestsDto) {
             if (dto.getStatus().equals(ParticipationRequestStatus.CONFIRMED)) {
                 confirmedRequestsDto.add(dto);
             } else {
                 rejectedRequestsDto.add(dto);
             }
         }
-        UpdateParticipationRequestResponse response = new UpdateParticipationRequestResponse();
+        UpdateRequestResponse response = new UpdateRequestResponse();
         response.setConfirmedRequests(confirmedRequestsDto);
         response.setRejectedRequests(rejectedRequestsDto);
         return response;

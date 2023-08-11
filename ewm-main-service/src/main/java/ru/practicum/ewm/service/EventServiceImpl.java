@@ -79,9 +79,13 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventFullDto> getAllEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
-                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from,
-                                            Integer size) {
+    public List<EventFullDto> getAllEventsByAdmin(List<Long> users,
+                                                  List<EventState> states,
+                                                  List<Long> categories,
+                                                  LocalDateTime rangeStart,
+                                                  LocalDateTime rangeEnd,
+                                                  Integer from,
+                                                  Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, page);
         List<EventFullDto> eventsDto = events
@@ -128,9 +132,17 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventShortDto> getAllEventsByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                            LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from,
-                                            Integer size, String uri, String ip) {
+    public List<EventShortDto> getAllEventsByUser(String text,
+                                                  List<Long> categories,
+                                                  Boolean paid,
+                                                  LocalDateTime rangeStart,
+                                                  LocalDateTime rangeEnd,
+                                                  Boolean onlyAvailable,
+                                                  EventSort sort,
+                                                  Integer from,
+                                                  Integer size,
+                                                  String uri,
+                                                  String ip) {
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
@@ -283,7 +295,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public EventFullDto updateEventByInitiator(Long userId, Long eventId,
-                                          UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
+                                               UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
