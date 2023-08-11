@@ -126,7 +126,7 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Обновлена подборка событий с id {} на {}", id, compilation);
         CompilationDto dto = compilationDtoMapper.compilationToDto(compilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
-        if (compilationEvents != null) {
+        if (compilationEvents != null && !compilationEvents.isEmpty()) {
             for (EventShortDto event : compilationEvents) {
                 Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
                         ParticipationRequestStatus.CONFIRMED);
