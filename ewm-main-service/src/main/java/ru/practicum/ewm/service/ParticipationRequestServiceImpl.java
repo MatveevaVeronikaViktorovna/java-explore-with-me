@@ -37,7 +37,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public ParticipationRequestDto create(Long userId, Long eventId) {
+    public ParticipationRequestDto createRequest(Long userId, Long eventId) {
 
         ParticipationRequest request = new ParticipationRequest();
 
@@ -87,7 +87,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional(readOnly = true)
     @Override
-    public List<ParticipationRequestDto> getAllByRequester(Long userId) {
+    public List<ParticipationRequestDto> getAllRequestsByRequester(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -102,7 +102,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional(readOnly = true)
     @Override
-    public List<ParticipationRequestDto> getAllByEventInitiator(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getAllRequestsByEventInitiator(Long userId, Long eventId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
@@ -122,7 +122,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId) {
+    public ParticipationRequestDto updateRequestStatusByRequester(Long userId, Long requestId) {
         ParticipationRequest request = requestRepository.findAllByIdAndRequesterId(requestId, userId).orElseThrow(() -> {
             log.warn("Запрос на участие в событии с id {} не найден у пользователя с id {}", requestId, userId);
             throw new EntityNotFoundException(String.format("Request with id=%d was not found", requestId));
@@ -137,7 +137,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     @Override
-    public UpdateParticipationRequestResponse updateStatusByEventInitiator(Long userId, Long eventId,
+    public UpdateParticipationRequestResponse updateRequestStatusByEventInitiator(Long userId, Long eventId,
                                                                            UpdateParticipationRequestEventInitiatorRequestDto requestDto) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);

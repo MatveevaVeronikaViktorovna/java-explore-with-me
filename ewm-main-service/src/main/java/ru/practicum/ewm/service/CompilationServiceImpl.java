@@ -35,7 +35,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional
     @Override
-    public CompilationDto create(NewCompilationDto compilationDto) {
+    public CompilationDto createCompilation(NewCompilationDto compilationDto) {
         Compilation compilation = compilationDtoMapper.dtoToCompilation(compilationDto);
 
         Set<Long> eventsId = compilationDto.getEvents();
@@ -58,7 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
+    public List<CompilationDto> getAllCompilations(Boolean pinned, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
 
         List<Compilation> compilations;
@@ -86,7 +86,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional(readOnly = true)
     @Override
-    public CompilationDto getById(Long id) {
+    public CompilationDto getCompilationById(Long id) {
         Compilation compilation = compilationRepository.findById(id).orElseThrow(() -> {
             log.warn("Подборка событий с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
@@ -105,7 +105,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional
     @Override
-    public CompilationDto update(Long id, NewCompilationDto compilationDto) {
+    public CompilationDto updateCompilation(Long id, NewCompilationDto compilationDto) {
         Compilation compilation = compilationRepository.findById(id).orElseThrow(() -> {
             log.warn("Подборка событий с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
@@ -139,7 +139,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void deleteCompilation(Long id) {
         if (!compilationRepository.existsById(id)) {
             log.warn("Подборка событий с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));

@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryDto create(CategoryDto categoryDto) {
+    public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = mapper.dtoToCategory(categoryDto);
         Category newCategory = categoryRepository.save(category);
         log.info("Добавлена категория: {}", newCategory);
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CategoryDto> getAll(Integer from, Integer size) {
+    public List<CategoryDto> getAllCategories(Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Category> categories = categoryRepository.findAll(page).getContent();
         return categories
@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public CategoryDto getById(Long id) {
+    public CategoryDto getCategoryById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> {
             log.warn("Категория с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> {
             log.warn("Категория с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             log.warn("Категория с id {} не найдена", id);
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));

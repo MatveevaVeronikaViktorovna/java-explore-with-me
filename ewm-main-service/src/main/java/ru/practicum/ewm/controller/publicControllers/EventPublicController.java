@@ -44,7 +44,7 @@ public class EventPublicController {
         log.info("Поступил публичный запрос на получение всех событий. Параметры: text={}, categories={}, paid={}, " +
                         "rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={}, from={}, size={}", text, categories,
                 paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        return eventService.getAllByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
+        return eventService.getAllEventsByUser(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size,
                 uri, ip);
     }
 
@@ -55,7 +55,7 @@ public class EventPublicController {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();
         log.info("Поступил публичный запрос на получение события с id={} ", eventId);
-        return eventService.getByIdByUser(eventId, uri, ip);
+        return eventService.getEventByIdByUser(eventId, uri, ip);
     }
 
 }

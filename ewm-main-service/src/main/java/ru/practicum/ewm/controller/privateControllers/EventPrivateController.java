@@ -29,7 +29,7 @@ public class EventPrivateController {
     public EventFullDto createEvent(@PathVariable Long userId,
                                     @Valid @RequestBody NewEventDto newEventDto) {
         log.info("Поступил запрос от пользователя с id {} на создание события {} ", userId, newEventDto);
-        return eventService.create(userId, newEventDto);
+        return eventService.createEvent(userId, newEventDto);
     }
 
     @GetMapping("/{userId}/events")
@@ -39,7 +39,7 @@ public class EventPrivateController {
                                                       @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил запрос на получение всех событий, добавленных пользователем с id={}. " +
                 "Параметры: from={}, size={}", userId, from, size);
-        return eventService.getAllByInitiator(userId, from, size);
+        return eventService.getAllEventsByInitiator(userId, from, size);
     }
 
     @GetMapping("/{userId}/events/{eventId}")
@@ -47,7 +47,7 @@ public class EventPrivateController {
     public EventFullDto getEventByIdByInitiator(@PathVariable Long userId,
                                                 @PathVariable Long eventId) {
         log.info("Поступил запрос от инициатора с id={} на получение события с id={} ", userId, eventId);
-        return eventService.getByIdByInitiator(userId, eventId);
+        return eventService.getEventByIdByInitiator(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
@@ -57,7 +57,7 @@ public class EventPrivateController {
                                                @Valid @RequestBody UpdateEventInitiatorRequestDto eventDto) {
         log.info("Поступил запрос на обновление события с id={} от инициатора с id={} на {}",
                 eventId, userId, eventDto);
-        return eventService.updateByInitiator(userId, eventId, eventDto);
+        return eventService.updateEventByInitiator(userId, eventId, eventDto);
     }
 
 }

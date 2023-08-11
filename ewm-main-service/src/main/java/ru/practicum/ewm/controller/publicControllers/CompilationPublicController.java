@@ -27,14 +27,14 @@ public class CompilationPublicController {
                                                    @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
                 pinned, from, size);
-        return compilationService.getAll(pinned, from, size);
+        return compilationService.getAllCompilations(pinned, from, size);
     }
 
     @GetMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@PathVariable Long compId) {
         log.info("Поступил публичный запрос на получение подборки событий с id={}", compId);
-        return compilationService.getById(compId);
+        return compilationService.getCompilationById(compId);
     }
 
 }

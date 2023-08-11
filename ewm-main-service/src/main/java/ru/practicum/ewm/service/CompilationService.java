@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface CompilationService {
 
-    CompilationDto create(NewCompilationDto compilationDto);
+    CompilationDto createCompilation(NewCompilationDto compilationDto);
 
-    void delete(Long compId);
+    void deleteCompilation(Long compId);
 
-    CompilationDto update(Long compId, NewCompilationDto compilationDto);
+    CompilationDto updateCompilation(Long compId, NewCompilationDto compilationDto);
 
-    List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size);
+    List<CompilationDto> getAllCompilations(Boolean pinned, Integer from, Integer size);
 
-    CompilationDto getById(Long compId);
+    CompilationDto getCompilationById(Long compId);
 
 }

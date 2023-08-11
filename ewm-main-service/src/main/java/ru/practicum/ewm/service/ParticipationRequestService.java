@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface ParticipationRequestService {
 
-    ParticipationRequestDto create(Long userId, Long eventId);
+    ParticipationRequestDto createRequest(Long userId, Long eventId);
 
-    List<ParticipationRequestDto> getAllByRequester(Long userId);
+    List<ParticipationRequestDto> getAllRequestsByRequester(Long userId);
 
-    ParticipationRequestDto updateStatusByRequester(Long userId, Long requestId);
+    ParticipationRequestDto updateRequestStatusByRequester(Long userId, Long requestId);
 
-    List<ParticipationRequestDto> getAllByEventInitiator(Long userId, Long eventId);
+    List<ParticipationRequestDto> getAllRequestsByEventInitiator(Long userId, Long eventId);
 
-    UpdateParticipationRequestResponse updateStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto);
+    UpdateParticipationRequestResponse updateRequestStatusByEventInitiator(Long userId, Long eventId, UpdateParticipationRequestEventInitiatorRequestDto requestDto);
 
 }

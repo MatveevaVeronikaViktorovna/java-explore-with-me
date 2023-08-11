@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto create(Long userId, NewEventDto newEventDto) {
+    public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
         Event event = eventDtoMapper.dtoToEvent(newEventDto);
         locationRepository.save(event.getLocation());
 
@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
+    public List<EventFullDto> getAllEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                             LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from,
                                             Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
@@ -104,7 +104,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventFullDto> getAllByInitiator(Long userId, Integer from, Integer size) {
+    public List<EventFullDto> getAllEventsByInitiator(Long userId, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, page);
         List<EventFullDto> eventsDto = events
@@ -128,7 +128,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventShortDto> getAllByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+    public List<EventShortDto> getAllEventsByUser(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                             LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from,
                                             Integer size, String uri, String ip) {
         if (rangeStart == null) {
@@ -170,7 +170,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public EventFullDto getByIdByInitiator(Long userId, Long eventId) {
+    public EventFullDto getEventByIdByInitiator(Long userId, Long eventId) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public EventFullDto getByIdByUser(Long eventId, String uri, String ip) {
+    public EventFullDto getEventByIdByUser(Long eventId, String uri, String ip) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED).orElseThrow(() -> {
             log.warn("Событие с id {} в статусе {} не найдено", eventId, EventState.PUBLISHED);
             throw new EntityNotFoundException(String.format("Event with id=%d with state PUBLISHED was not found",
@@ -206,7 +206,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto) {
+    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequestDto updateEventAdminRequestDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено", eventId);
             throw new EntityNotFoundException(String.format("Event with id=%d was not found", eventId));
@@ -282,7 +282,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventFullDto updateByInitiator(Long userId, Long eventId,
+    public EventFullDto updateEventByInitiator(Long userId, Long eventId,
                                           UpdateEventInitiatorRequestDto updateEventInitiatorRequestDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено у инициатора с id {}", eventId, userId);

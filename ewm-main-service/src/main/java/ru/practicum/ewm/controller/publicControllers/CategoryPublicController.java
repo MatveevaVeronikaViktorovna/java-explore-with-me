@@ -25,14 +25,14 @@ public class CategoryPublicController {
     public List<CategoryDto> getAllCategories(@RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                                               @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил публичный запрос на получение всех категорий. Параметры: from={}, size={}", from, size);
-        return categoryService.getAll(from, size);
+        return categoryService.getAllCategories(from, size);
     }
 
     @GetMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategoryById(@PathVariable Long catId) {
         log.info("Поступил публичный запрос на получение категории с id={}", catId);
-        return categoryService.getById(catId);
+        return categoryService.getCategoryById(catId);
     }
 
 }

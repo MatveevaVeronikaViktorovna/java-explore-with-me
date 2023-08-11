@@ -24,7 +24,7 @@ public class CompilationAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(@Validated(Create.class) @RequestBody NewCompilationDto compilationDto) {
         log.info("Поступил запрос на создание подборки событий {}", compilationDto);
-        return compilationService.create(compilationDto);
+        return compilationService.createCompilation(compilationDto);
     }
 
     @PatchMapping("/compilations/{compId}")
@@ -32,14 +32,14 @@ public class CompilationAdminController {
     public CompilationDto updateCompilation(@PathVariable Long compId,
                                             @Validated(Update.class) @RequestBody NewCompilationDto compilationDto) {
         log.info("Поступил запрос на обновление подборки событий с id={} на {}", compId, compilationDto);
-        return compilationService.update(compId, compilationDto);
+        return compilationService.updateCompilation(compId, compilationDto);
     }
 
     @DeleteMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable Long compId) {
         log.info("Поступил запрос на удаление подборки событий с id={}", compId);
-        compilationService.delete(compId);
+        compilationService.deleteCompilation(compId);
     }
 
 }

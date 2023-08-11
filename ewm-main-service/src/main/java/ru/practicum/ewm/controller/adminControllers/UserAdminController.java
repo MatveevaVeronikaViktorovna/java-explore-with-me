@@ -26,7 +26,7 @@ public class UserAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@Valid @RequestBody UserDto userDto) {
         log.info("Поступил запрос на создание пользователя {}", userDto);
-        return userService.create(userDto);
+        return userService.createUser(userDto);
     }
 
     @GetMapping("/users")
@@ -36,14 +36,14 @@ public class UserAdminController {
                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
                 ids, from, size);
-        return userService.getAll(ids, from, size);
+        return userService.getAllUsers(ids, from, size);
     }
 
     @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         log.info("Поступил запрос на удаление пользователя с id={}", userId);
-        userService.delete(userId);
+        userService.deleteUser(userId);
     }
 
 }

@@ -40,7 +40,7 @@ public class EventAdminController {
         log.info("Поступил запрос от администратора на получение всех событий. Параметры: users={}, states={}, " +
                         "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories,
                 rangeStart, rangeEnd, from, size);
-        return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
+        return eventService.getAllEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/events/{eventId}")
@@ -48,7 +48,7 @@ public class EventAdminController {
     public EventFullDto updateEventByAdmin(@PathVariable Long eventId,
                                            @Valid @RequestBody UpdateEventAdminRequestDto eventDto) {
         log.info("Поступил запрос от администратора на обновление события с id={} на {}", eventId, eventDto);
-        return eventService.updateByAdmin(eventId, eventDto);
+        return eventService.updateEventByAdmin(eventId, eventDto);
     }
 
 }

@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         User user = mapper.dtoToUser(userDto);
         User newUser = userRepository.save(user);
         log.info("Добавлен пользователь: {}", newUser);
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
+    public List<UserDto> getAllUsers(List<Long> ids, Integer from, Integer size) {
         Pageable page = CustomPageRequest.of(from, size);
         List<User> users;
         if (ids != null) {
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             log.warn("Пользователь с id {} не найден", id);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", id));
