@@ -40,5 +40,5 @@ public interface EventService {
                                            String api);
 
     EventFullDto getEventByIdByUser(Long eventId, String uri, String ip);
-    
+
 }

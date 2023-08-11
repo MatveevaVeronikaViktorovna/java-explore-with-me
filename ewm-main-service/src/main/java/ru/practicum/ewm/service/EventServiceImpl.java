@@ -48,7 +48,7 @@ public class EventServiceImpl implements EventService {
     private final HitClient hitClient;
     public static final String APP = "ewm-main-service";
     public static final LocalDateTime START = LocalDateTime.of(2000, 1, 1, 0, 0);
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
     @Override
