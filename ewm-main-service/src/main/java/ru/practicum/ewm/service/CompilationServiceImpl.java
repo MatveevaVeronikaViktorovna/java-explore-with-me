@@ -111,7 +111,7 @@ public class CompilationServiceImpl implements CompilationService {
             throw new EntityNotFoundException(String.format("Compilation with id=%d was not found", id));
         });
 
-        if (compilationDto.getTitle() != null) {
+        if (compilationDto.getTitle() != null && !compilationDto.getTitle().isBlank()) {
             compilation.setTitle(compilationDto.getTitle());
         }
         if (compilationDto.getPinned() != null) {
@@ -126,7 +126,7 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Обновлена подборка событий с id {} на {}", id, compilation);
         CompilationDto dto = compilationDtoMapper.compilationToDto(compilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
-        if (compilationEvents != null && !compilationEvents.isEmpty()) {
+        if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {
                 Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
                         ParticipationRequestStatus.CONFIRMED);
