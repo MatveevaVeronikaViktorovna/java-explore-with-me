@@ -15,6 +15,8 @@ import ru.practicum.ewm.service.CompilationService;
 import ru.practicum.ewm.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,8 +33,8 @@ public class PublicController {
 
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDto> getAllCategories(@RequestParam(defaultValue = "0") Integer from,
-                                              @RequestParam(defaultValue = "10") Integer size) {
+    public List<CategoryDto> getAllCategories(@RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                              @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил публичный запрос на получение всех категорий. Параметры: from={}, size={}", from, size);
         return categoryService.getAll(from, size);
     }
@@ -47,8 +49,8 @@ public class PublicController {
     @GetMapping("/compilations")
     @ResponseStatus(HttpStatus.OK)
     public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
-                                                   @RequestParam(defaultValue = "0") Integer from,
-                                                   @RequestParam(defaultValue = "10") Integer size) {
+                                                   @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                   @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил публичный запрос на получение всех подборок событий. Параметры: pinned={}, from={}, size={}",
                 pinned, from, size);
         return compilationService.getAll(pinned, from, size);
@@ -70,8 +72,8 @@ public class PublicController {
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeEnd,
                                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam(required = false) EventSort sort,
-                                                  @RequestParam(defaultValue = "0") Integer from,
-                                                  @RequestParam(defaultValue = "10") Integer size,
+                                                  @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                  @RequestParam(defaultValue = "10") @Positive Integer size,
                                                   HttpServletRequest request) {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();

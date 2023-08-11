@@ -21,6 +21,8 @@ import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -88,8 +90,8 @@ public class AdminController {
                                                   @RequestParam(required = false) List<Long> categories,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeStart,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime rangeEnd,
-                                                  @RequestParam(defaultValue = "0") Integer from,
-                                                  @RequestParam(defaultValue = "10") Integer size) {
+                                                  @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                  @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил запрос от администратора на получение всех событий. Параметры: users={}, states={}, " +
                         "categories={}, rangeStart={}, rangeEnd={}, from={}, size={}", users, states, categories,
                 rangeStart, rangeEnd, from, size);
@@ -114,8 +116,8 @@ public class AdminController {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
-                                     @RequestParam(defaultValue = "0") Integer from,
-                                     @RequestParam(defaultValue = "10") Integer size) {
+                                     @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                     @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил запрос на получение всех пользователей. Параметры: ids={}, from={}, size={}",
                 ids, from, size);
         return userService.getAll(ids, from, size);

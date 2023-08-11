@@ -14,6 +14,8 @@ import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.ParticipationRequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -36,8 +38,8 @@ public class PrivateController {
     @GetMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByInitiator(@PathVariable Long userId,
-                                                      @RequestParam(defaultValue = "0") Integer from,
-                                                      @RequestParam(defaultValue = "10") Integer size) {
+                                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поступил запрос на получение всех событий, добавленных пользователем с id={}. " +
                 "Параметры: from={}, size={}", userId, from, size);
         return eventService.getAllByInitiator(userId, from, size);
