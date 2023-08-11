@@ -17,14 +17,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/users")
+@RequestMapping(path = "/users/{userId}/events")
 @Validated
 @Slf4j
 public class EventPrivateController {
 
     private final EventService eventService;
 
-    @PostMapping("/{userId}/events")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@PathVariable Long userId,
                                     @Valid @RequestBody NewEventDto newEventDto) {
@@ -32,7 +32,7 @@ public class EventPrivateController {
         return eventService.createEvent(userId, newEventDto);
     }
 
-    @GetMapping("/{userId}/events")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByInitiator(@PathVariable Long userId,
                                                       @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
@@ -42,7 +42,7 @@ public class EventPrivateController {
         return eventService.getAllEventsByInitiator(userId, from, size);
     }
 
-    @GetMapping("/{userId}/events/{eventId}")
+    @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventByIdByInitiator(@PathVariable Long userId,
                                                 @PathVariable Long eventId) {
@@ -50,7 +50,7 @@ public class EventPrivateController {
         return eventService.getEventByIdByInitiator(userId, eventId);
     }
 
-    @PatchMapping("/{userId}/events/{eventId}")
+    @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByInitiator(@PathVariable Long userId,
                                                @PathVariable Long eventId,

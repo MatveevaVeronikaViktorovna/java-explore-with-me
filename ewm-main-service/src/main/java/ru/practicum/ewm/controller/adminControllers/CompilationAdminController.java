@@ -13,21 +13,21 @@ import ru.practicum.ewm.service.CompilationService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/admin/compilations")
 @Validated
 @Slf4j
 public class CompilationAdminController {
 
     private final CompilationService compilationService;
 
-    @PostMapping("/compilations")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(@Validated(Create.class) @RequestBody NewCompilationDto compilationDto) {
         log.info("Поступил запрос на создание подборки событий {}", compilationDto);
         return compilationService.createCompilation(compilationDto);
     }
 
-    @PatchMapping("/compilations/{compId}")
+    @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto updateCompilation(@PathVariable Long compId,
                                             @Validated(Update.class) @RequestBody NewCompilationDto compilationDto) {
@@ -35,7 +35,7 @@ public class CompilationAdminController {
         return compilationService.updateCompilation(compId, compilationDto);
     }
 
-    @DeleteMapping("/compilations/{compId}")
+    @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable Long compId) {
         log.info("Поступил запрос на удаление подборки событий с id={}", compId);

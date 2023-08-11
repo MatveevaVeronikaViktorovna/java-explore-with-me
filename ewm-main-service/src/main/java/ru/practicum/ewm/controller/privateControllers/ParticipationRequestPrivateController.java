@@ -15,14 +15,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/users")
+@RequestMapping(path = "/users/{userId}")
 @Validated
 @Slf4j
 public class ParticipationRequestPrivateController {
 
     private final ParticipationRequestService requestService;
 
-    @PostMapping("/{userId}/requests")
+    @PostMapping("/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public RequestDto createRequest(@PathVariable Long userId,
                                     @RequestParam Long eventId) {
@@ -31,7 +31,7 @@ public class ParticipationRequestPrivateController {
         return requestService.createRequest(userId, eventId);
     }
 
-    @GetMapping("/{userId}/events/{eventId}/requests")
+    @GetMapping("/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<RequestDto> getAllRequestsByEventInitiator(@PathVariable Long userId,
                                                            @PathVariable Long eventId) {
@@ -40,7 +40,7 @@ public class ParticipationRequestPrivateController {
         return requestService.getAllRequestsByEventInitiator(userId, eventId);
     }
 
-    @GetMapping("/{userId}/requests")
+    @GetMapping("/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<RequestDto> getAllRequestsByRequester(@PathVariable Long userId) {
         log.info("Поступил запрос от пользователя с id {} на получение всех его запросов на участие в событиях",
@@ -48,7 +48,7 @@ public class ParticipationRequestPrivateController {
         return requestService.getAllRequestsByRequester(userId);
     }
 
-    @PatchMapping("/{userId}/requests/{requestId}/cancel")
+    @PatchMapping("/requests/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public RequestDto updateRequestStatusByRequester(@PathVariable Long userId,
                                                      @PathVariable Long requestId) {
@@ -57,7 +57,7 @@ public class ParticipationRequestPrivateController {
         return requestService.updateRequestStatusByRequester(userId, requestId);
     }
 
-    @PatchMapping("/{userId}/events/{eventId}/requests")
+    @PatchMapping("/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public UpdateRequestResponse updateRequestsStatusByEventInitiator(@PathVariable Long userId,
                                                                       @PathVariable Long eventId,

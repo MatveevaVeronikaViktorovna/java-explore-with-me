@@ -21,14 +21,14 @@ import static ru.practicum.statsDto.ConstantsForDto.DATE_TIME_FORMAT;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/admin/events")
 @Validated
 @Slf4j
 public class EventAdminController {
 
     private final EventService eventService;
 
-    @GetMapping("/events")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllEventsByAdmin(@RequestParam(required = false) List<Long> users,
                                                   @RequestParam(required = false) List<EventState> states,
@@ -43,7 +43,7 @@ public class EventAdminController {
         return eventService.getAllEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
-    @PatchMapping("/events/{eventId}")
+    @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByAdmin(@PathVariable Long eventId,
                                            @Valid @RequestBody UpdateEventAdminRequestDto eventDto) {

@@ -15,21 +15,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/admin/users")
 @Validated
 @Slf4j
 public class UserAdminController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@Valid @RequestBody UserDto userDto) {
         log.info("Поступил запрос на создание пользователя {}", userDto);
         return userService.createUser(userDto);
     }
 
-    @GetMapping("/users")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
@@ -39,7 +39,7 @@ public class UserAdminController {
         return userService.getAllUsers(ids, from, size);
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         log.info("Поступил запрос на удаление пользователя с id={}", userId);

@@ -12,21 +12,21 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/admin/categories")
 @Validated
 @Slf4j
 public class CategoryAdminController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/categories")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         log.info("Поступил запрос на создание категории {}", categoryDto);
         return categoryService.createCategory(categoryDto);
     }
 
-    @PatchMapping("/categories/{catId}")
+    @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateCategory(@PathVariable Long catId,
                                       @Valid @RequestBody CategoryDto categoryDto) {
@@ -34,7 +34,7 @@ public class CategoryAdminController {
         return categoryService.updateCategory(catId, categoryDto);
     }
 
-    @DeleteMapping("/categories/{catId}")
+    @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long catId) {
         log.info("Поступил запрос на удаление категории с id={}", catId);
