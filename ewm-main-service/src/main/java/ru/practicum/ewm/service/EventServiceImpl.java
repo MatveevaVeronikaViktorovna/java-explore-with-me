@@ -268,10 +268,10 @@ public class EventServiceImpl implements EventService {
             throw new ConditionsNotMetException("The event date must be no earlier than an hour from the date " +
                     "of publication.");
         }
+
         locationRepository.save(event.getLocation());
-        Event updatedEvent = eventRepository.save(event);
-        log.info("Администратором обновлено событие c id {} на {}", eventId, updatedEvent);
-        EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
+        log.info("Администратором обновлено событие c id {} на {}", eventId, event);
+        EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
                 ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
@@ -335,9 +335,8 @@ public class EventServiceImpl implements EventService {
         }
 
         locationRepository.save(event.getLocation());
-        Event updatedEvent = eventRepository.save(event);
-        log.info("Инициатором обновлено событие c id {} на {}", eventId, updatedEvent);
-        EventFullDto eventDto = eventDtoMapper.eventToDto(updatedEvent);
+        log.info("Инициатором обновлено событие c id {} на {}", eventId, event);
+        EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
                 ParticipationRequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);

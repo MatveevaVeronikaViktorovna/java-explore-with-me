@@ -66,9 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
             throw new EntityNotFoundException(String.format("Category with id=%d was not found", id));
         });
         category.setName(categoryDto.getName());
-        Category updatedCategory = categoryRepository.save(category);
-        log.info("Обновлена категория c id {} на {}", id, updatedCategory);
-        return mapper.categoryToDto(updatedCategory);
+        log.info("Обновлена категория c id {} на {}", id, category);
+        return mapper.categoryToDto(category);
     }
 
     @Transactional

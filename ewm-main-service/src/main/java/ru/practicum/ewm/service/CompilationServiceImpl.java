@@ -123,9 +123,8 @@ public class CompilationServiceImpl implements CompilationService {
             compilation.setEvents(events);
         }
 
-        Compilation updatedCompilation = compilationRepository.save(compilation);
-        log.info("Обновлена подборка событий с id {} на {}", id, updatedCompilation);
-        CompilationDto dto = compilationDtoMapper.compilationToDto(updatedCompilation);
+        log.info("Обновлена подборка событий с id {} на {}", id, compilation);
+        CompilationDto dto = compilationDtoMapper.compilationToDto(compilation);
         List<EventShortDto> compilationEvents = dto.getEvents();
         if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {

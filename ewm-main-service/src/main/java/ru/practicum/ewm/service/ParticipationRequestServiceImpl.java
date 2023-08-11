@@ -129,10 +129,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         });
 
         request.setStatus(ParticipationRequestStatus.CANCELED);
-        ParticipationRequest updatedRequest = requestRepository.save(request);
         log.info("Пользователем обновлен статус заявки на участие в событии c id {} на {}", requestId,
                 ParticipationRequestStatus.CANCELED);
-        return requestDtoMapper.participationRequestToDto(updatedRequest);
+        return requestDtoMapper.participationRequestToDto(request);
     }
 
     @Transactional
@@ -190,10 +189,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConditionsNotMetException("New status of participation requests must be CONFIRMED or REJECTED");
         }
 
-        List<ParticipationRequest> updatedRequests = requestRepository.saveAll(requests);
         log.info("Инициатором с id {} обновлен статус заявок на участие в событии c id {} на {}", userId, eventId,
-                updatedRequests);
-
+                requests);
         List<ParticipationRequestDto> requestsDto = requests
                 .stream()
                 .map(requestDtoMapper::participationRequestToDto)
