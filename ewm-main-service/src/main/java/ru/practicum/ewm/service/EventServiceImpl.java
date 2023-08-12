@@ -23,7 +23,7 @@ import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.EventState;
-import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
+import ru.practicum.ewm.model.enums.RequestStatus;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.*;
 import ru.practicum.statsDto.HitRequestDto;
@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> views = getViews(eventsId);
         for (EventFullDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
-                    ParticipationRequestStatus.CONFIRMED);
+                    RequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -122,7 +122,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> views = getViews(eventsId);
         for (EventFullDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
-                    ParticipationRequestStatus.CONFIRMED);
+                    RequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -167,7 +167,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> views = getViews(eventsId);
         for (EventShortDto dto : eventsDto) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
-                    ParticipationRequestStatus.CONFIRMED);
+                    RequestStatus.CONFIRMED);
             dto.setConfirmedRequests(confirmedRequests);
             dto.setViews(views.getOrDefault(dto.getId(), 0L));
         }
@@ -189,7 +189,7 @@ public class EventServiceImpl implements EventService {
         });
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
-                ParticipationRequestStatus.CONFIRMED);
+                RequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -209,7 +209,7 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
-                ParticipationRequestStatus.CONFIRMED);
+                RequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -285,7 +285,7 @@ public class EventServiceImpl implements EventService {
         log.info("Администратором обновлено событие c id {} на {}", eventId, event);
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
-                ParticipationRequestStatus.CONFIRMED);
+                RequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));
@@ -351,7 +351,7 @@ public class EventServiceImpl implements EventService {
         log.info("Инициатором обновлено событие c id {} на {}", eventId, event);
         EventFullDto eventDto = eventDtoMapper.eventToDto(event);
         Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId,
-                ParticipationRequestStatus.CONFIRMED);
+                RequestStatus.CONFIRMED);
         eventDto.setConfirmedRequests(confirmedRequests);
         Map<Long, Long> views = getViews(List.of(eventDto.getId()));
         eventDto.setViews(views.getOrDefault(eventDto.getId(), 0L));

@@ -1,4 +1,4 @@
-package ru.practicum.ewm.dto.participationRequest;
+package ru.practicum.ewm.dto;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-public class RequestDto {
+public class FriendRequestDto {
 
-    LocalDateTime created;
-    Long event;
     Long id;
+    Long friend;
     Long requester;
     RequestStatus status;
+    LocalDateTime created;
 
 }

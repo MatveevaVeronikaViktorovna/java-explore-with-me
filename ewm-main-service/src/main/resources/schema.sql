@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users, categories, locations, events, participation_requests, compilations, compilations_events;
+DROP TABLE IF EXISTS users, categories, locations, events, participation_requests, compilations, compilations_events, friend_requests;
 
 CREATE TABLE IF NOT EXISTS users ( 
 	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
@@ -53,6 +53,15 @@ CREATE TABLE IF NOT EXISTS compilations_events (
 	compilation_id BIGINT REFERENCES compilations (id),
 	event_id BIGINT REFERENCES events (id),
 	PRIMARY KEY (compilation_id, event_id)
+);
+
+CREATE TABLE IF NOT EXISTS friend_requests (
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	requester_id BIGINT NOT NULL REFERENCES users (id),
+    friend_id BIGINT NOT NULL REFERENCES users (id),
+    status varchar(9) NOT NULL,
+    created TIMESTAMP NOT NULL,
+    CONSTRAINT uq_friendship UNIQUE(requester_id, friend_id)
 )
 
 

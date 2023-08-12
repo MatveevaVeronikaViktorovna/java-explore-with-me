@@ -12,17 +12,8 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Entity
-@Table(name = "participation_requests")
-public class ParticipationRequest {
-
-    @Column(name = "created")
-    @NotNull
-    LocalDateTime created;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    @NotNull
-    Event event;
+@Table(name = "friend_requests")
+public class FriendRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +24,18 @@ public class ParticipationRequest {
     @NotNull
     User requester;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id")
+    @NotNull
+    User friend;
+
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     @NotNull
     RequestStatus status;
+
+    @Column(name = "created")
+    @NotNull
+    LocalDateTime created;
 
 }
