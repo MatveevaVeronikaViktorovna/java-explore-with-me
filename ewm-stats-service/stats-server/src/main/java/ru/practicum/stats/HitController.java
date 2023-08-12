@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.stats.exception.IncorrectlyMadeRequestException;
 import ru.practicum.stats.service.HitService;
 import ru.practicum.statsDto.HitRequestDto;
 import ru.practicum.statsDto.HitResponseDto;
@@ -40,6 +41,11 @@ public class HitController {
                                          @RequestParam @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime end,
                                          @RequestParam(required = false) List<String> uris,
                                          @RequestParam(defaultValue = "false") Boolean unique) {
+        if (end.isBefore(start)) {
+            log.warn("Start не может быть позже чем End");
+            throw new IncorrectlyMadeRequestException("Start must be earlier than End.");
+        }
+
         log.info("Поступил запрос на получение статистики за период с {} по {} для списка uri {} unique={}",
                 start, end, uris, unique);
         return hitService.getStats(start, end, uris, unique);

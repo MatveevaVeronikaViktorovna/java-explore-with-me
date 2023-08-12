@@ -28,7 +28,6 @@ public class HitServiceImpl implements HitService {
     @Transactional(readOnly = true)
     @Override
     public List<HitResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-
         if (uris != null) {
             if (unique) {
                 return hitRepository.findDistinctByTimestampAndUris(start, end, uris);
