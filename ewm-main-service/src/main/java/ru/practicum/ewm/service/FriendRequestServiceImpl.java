@@ -133,8 +133,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
         });
 
-        List<FriendRequest> requests = requestRepository.findAllByFriendIdAndStatusInAndIdIn(userId,
-                List.of(RequestStatus.PENDING, RequestStatus.REJECTED), requestDto.getRequestIds());
+        List<FriendRequest> requests = requestRepository.findAllByFriendIdAndIdIn(userId, requestDto.getRequestIds());
 
         if (requestDto.getStatus().equals(RequestStatus.CONFIRMED)) {
             for (FriendRequest request : requests) {
@@ -174,8 +173,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
         });
 
-        List<FriendRequest> requests = requestRepository.findAllByRequesterIdAndStatusNotAndIdIn(userId,
-                RequestStatus.CONFIRMED, requestDto.getRequestIds());
+        List<FriendRequest> requests = requestRepository.findAllByRequesterIdAndIdIn(userId, requestDto.getRequestIds());
 
         if (requestDto.getStatus().equals(RequestStatus.PENDING)) {
             for (FriendRequest request : requests) {
