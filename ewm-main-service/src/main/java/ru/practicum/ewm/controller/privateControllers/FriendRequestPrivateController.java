@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.dto.FriendRequestDto;
+import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
+import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
 import ru.practicum.ewm.service.FriendRequestService;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +19,7 @@ import ru.practicum.ewm.service.FriendRequestService;
 @Slf4j
 public class FriendRequestPrivateController {
 
-    private final FriendRequestService friendrequestService;
+    private final FriendRequestService friendRequestService;
 
     @PostMapping("/{friendId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -23,7 +27,36 @@ public class FriendRequestPrivateController {
                                                 @PathVariable Long friendId) {
         log.info("Поступила заявка от пользователя с id {} на добавление в друзья пользователя с id {} ",
                 userId, friendId);
-        return friendrequestService.createFriendRequest(userId, friendId);
+        return friendRequestService.createFriendRequest(userId, friendId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<FriendRequestDto> getAllFriends(@PathVariable Long userId) {
+        log.info("Поступил запрос от пользователя с id {} на получение списка его друзей", userId);
+        return friendRequestService.getAllFriends(userId);
+    }
+
+    @GetMapping("/requests/incoming")
+    @ResponseStatus(HttpStatus.OK)
+    public List<FriendRequestDto> getAllIncomingFriendRequests(@PathVariable Long userId) {
+        log.info("Поступил запрос от пользователя с id {} на получение его входящих заявок в друзья", userId);
+        return friendRequestService.getAllIncomingFriendRequests(userId);
+    }
+
+    @GetMapping("/requests/outgoing")
+    @ResponseStatus(HttpStatus.OK)
+    public List<FriendRequestDto> getAllOutgoingFriendRequests(@PathVariable Long userId) {
+        log.info("Поступил запрос от пользователя с id {} на получение его исходящих заявок в друзья", userId);
+        return friendRequestService.getAllOutgoingFriendRequests(userId);
+    }
+
+    @PatchMapping("/requests/incoming")
+    @ResponseStatus(HttpStatus.OK)
+    public List<FriendRequestDto> updateIncomingFriendRequestsStatus(@PathVariable Long userId,
+                                                                     @Valid @RequestBody UpdateFriendRequestDto requestDto) {
+        log.info("Поступил запрос на обновление статуса входящих заявок в друзья от пользователя с id={}", userId);
+        return friendRequestService.updateIncomingFriendRequestsStatus(userId, requestDto);
     }
 
 }

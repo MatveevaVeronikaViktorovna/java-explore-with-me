@@ -1,4 +1,4 @@
-package ru.practicum.ewm.dto;
+package ru.practicum.ewm.dto.friendRequest;
 
 import lombok.AccessLevel;
 import lombok.Data;
