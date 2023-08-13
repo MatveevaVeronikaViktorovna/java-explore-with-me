@@ -191,7 +191,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
                     throw new ConditionsNotMetException("Request cannot be cancelled because it's not in the right " +
                             "status: " + request.getStatus());
                 }
-                request.setStatus(RequestStatus.REJECTED);
+                request.setStatus(RequestStatus.CANCELED);
             }
         } else {
             log.warn("Новый статус для заявок в друзья должен быть PENDING or CANCELED");

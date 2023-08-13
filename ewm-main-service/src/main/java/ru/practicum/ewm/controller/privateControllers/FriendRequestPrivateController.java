@@ -59,7 +59,7 @@ public class FriendRequestPrivateController {
         return friendRequestService.updateIncomingFriendRequestsStatus(userId, requestDto);
     }
 
-    @PatchMapping("/requests/incoming")
+    @PatchMapping("/requests/outgoing")
     @ResponseStatus(HttpStatus.OK)
     public List<FriendRequestDto> updateOutgoingFriendRequestsStatus(@PathVariable Long userId,
                                                                      @Valid @RequestBody UpdateFriendRequestDto requestDto) {
