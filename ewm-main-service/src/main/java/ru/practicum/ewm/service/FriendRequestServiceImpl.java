@@ -205,4 +205,41 @@ public class FriendRequestServiceImpl implements FriendRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public List<FriendRequestDto> updateFriendshipStatus(Long userId, UpdateFriendRequestDto requestDto) {
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.warn("Пользователь с id {} не найден", userId);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
+        });
+
+        List<FriendRequest> requests = requestRepository.findAllFriendsByIdIn(userId, requestDto.getRequestIds());
+
+        if (requestDto.getStatus().equals(RequestStatus.REJECTED)) {
+            if(requests.isEmpty()) {
+                log.warn("Заявки с id {} не являются подтвержденными заявками в друзья", requestDto.getRequestIds());
+                throw new ConditionsNotMetException("These requests are not confirmed friend requests"
+                        + requestDto.getRequestIds());
+            }
+            for (FriendRequest request : requests) {
+                User requester = request.getRequester();
+                User friend = request.getFriend();
+                if (userId.equals(requester.getId())) {
+                    request.setRequester(friend);
+                    request.setFriend(requester);
+                }
+                request.setStatus(RequestStatus.REJECTED);
+            }
+        } else {
+            log.warn("Новый статус для подтвержденных заявок в друзья должен быть REJECTED");
+            throw new ConditionsNotMetException("New status of friend requests must be REJECTED");
+        }
+
+        log.info("Пользователем с id {} обновлен статус подтвержденных заявок в друзья: {}", userId, requests);
+        return requests
+                .stream()
+                .map(requestDtoMapper::friendRequestToDto)
+                .collect(Collectors.toList());
+    }
+
 }

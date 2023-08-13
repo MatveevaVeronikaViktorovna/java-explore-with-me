@@ -53,6 +53,14 @@ public class FriendRequestPrivateController {
 
     @PatchMapping("/requests/incoming")
     @ResponseStatus(HttpStatus.OK)
+    public List<FriendRequestDto> updateFriendshipStatus(@PathVariable Long userId,
+                                                         @Valid @RequestBody UpdateFriendRequestDto requestDto) {
+        log.info("Поступил запрос на обновление статуса подтвержденных заявок в друзья от пользователя с id={}", userId);
+        return friendRequestService.updateFriendshipStatus(userId, requestDto);
+    }
+
+    @PatchMapping("/requests/incoming")
+    @ResponseStatus(HttpStatus.OK)
     public List<FriendRequestDto> updateIncomingFriendRequestsStatus(@PathVariable Long userId,
                                                                      @Valid @RequestBody UpdateFriendRequestDto requestDto) {
         log.info("Поступил запрос на обновление статуса входящих заявок в друзья от пользователя с id={}", userId);

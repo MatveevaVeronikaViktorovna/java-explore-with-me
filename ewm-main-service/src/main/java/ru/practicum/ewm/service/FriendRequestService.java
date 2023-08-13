@@ -16,5 +16,6 @@ public interface FriendRequestService {
     List<FriendRequestDto> getAllIncomingFriendRequests(Long userId);
     List<FriendRequestDto> updateIncomingFriendRequestsStatus(Long userId, UpdateFriendRequestDto requestDto);
     List<FriendRequestDto> updateOutgoingFriendRequestsStatus(Long userId, UpdateFriendRequestDto requestDto);
+    List<FriendRequestDto> updateFriendshipStatus(Long userId, UpdateFriendRequestDto requestDto);
 
     }
