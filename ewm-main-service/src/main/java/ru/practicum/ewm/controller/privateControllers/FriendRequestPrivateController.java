@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
+import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.FriendRequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -20,6 +24,7 @@ import java.util.List;
 public class FriendRequestPrivateController {
 
     private final FriendRequestService friendRequestService;
+    private final EventService eventService;
 
     @PostMapping("/{friendId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,7 +56,7 @@ public class FriendRequestPrivateController {
         return friendRequestService.getAllOutgoingFriendRequests(userId);
     }
 
-    @PatchMapping("/requests/incoming")
+    @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public List<FriendRequestDto> updateFriendshipStatus(@PathVariable Long userId,
                                                          @Valid @RequestBody UpdateFriendRequestDto requestDto) {
@@ -73,6 +78,16 @@ public class FriendRequestPrivateController {
                                                                      @Valid @RequestBody UpdateFriendRequestDto requestDto) {
         log.info("Поступил запрос на обновление статуса исходящих заявок в друзья от пользователя с id={}", userId);
         return friendRequestService.updateOutgoingFriendRequestsStatus(userId, requestDto);
+    }
+
+    @GetMapping("/events")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventShortDto> getEventsWithUserFriendsInParticipants(@PathVariable Long userId,
+                                                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
+        log.info("Поступил запрос от пользователя с id {} на получение списка актуальных событий, в которых его" +
+                " друзья принимают участие. Параметры: from={}, size={}", userId, from, size);
+        return eventService.getEventsWithUserFriendsInParticipants(userId, from, size);
     }
 
 }

@@ -393,4 +393,29 @@ public class EventServiceImpl implements EventService {
         return views;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventShortDto> getEventsWithUserFriendsInParticipants(Long userId, Integer from, Integer size) {
+        Pageable page = CustomPageRequest.of(from, size);
+      //  List<Event> events = eventRepository.findAllWithUserFriendsInParticipants(userId, page);
+        List<Event> events = eventRepository.findAllWithUserFriendsInParticipants(userId);
+
+        List<EventShortDto> eventsDto = events
+                .stream()
+                .map(eventDtoMapper::eventToShortDto)
+                .collect(Collectors.toList());
+        List<Long> eventsId = new ArrayList<>();
+        for (EventShortDto dto : eventsDto) {
+            eventsId.add(dto.getId());
+        }
+        Map<Long, Long> views = getViews(eventsId);
+        for (EventShortDto dto : eventsDto) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
+                    RequestStatus.CONFIRMED);
+            dto.setConfirmedRequests(confirmedRequests);
+            dto.setViews(views.getOrDefault(dto.getId(), 0L));
+        }
+        return eventsDto;
+    }
+
 }
