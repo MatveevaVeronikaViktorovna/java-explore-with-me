@@ -61,7 +61,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Set<Event> findAllByIdIn(Set<Long> eventsId);
 
-    @Query("SELECT pr.event From ParticipationRequest pr " +
+    @Query("SELECT DISTINCT pr.event From ParticipationRequest pr " +
             "WHERE pr.status = 'CONFIRMED' " +
             "AND pr.requester.id IN " +
             "(SELECT fr.friend.id FROM FriendRequest fr " +
