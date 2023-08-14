@@ -69,6 +69,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "OR pr.requester.id IN " +
             "(SELECT fr.requester.id FROM FriendRequest fr " +
             "WHERE fr.friend.id = :userId AND fr.status = 'CONFIRMED')")
-    List<Event> findAllWithUserFriendsInParticipants(Long userId);
+    List<Event> findAllWithUserFriendsInParticipants(@Param("userId") Long userId,
+                                                     Pageable pageable);
 
 }

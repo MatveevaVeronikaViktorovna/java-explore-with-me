@@ -182,6 +182,29 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<EventShortDto> getEventsWithUserFriendsInParticipants(Long userId, Integer from, Integer size) {
+        Pageable page = CustomPageRequest.of(from, size);
+        List<Event> events = eventRepository.findAllWithUserFriendsInParticipants(userId, page);
+        List<EventShortDto> eventsDto = events
+                .stream()
+                .map(eventDtoMapper::eventToShortDto)
+                .collect(Collectors.toList());
+        List<Long> eventsId = new ArrayList<>();
+        for (EventShortDto dto : eventsDto) {
+            eventsId.add(dto.getId());
+        }
+        Map<Long, Long> views = getViews(eventsId);
+        for (EventShortDto dto : eventsDto) {
+            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
+                    RequestStatus.CONFIRMED);
+            dto.setConfirmedRequests(confirmedRequests);
+            dto.setViews(views.getOrDefault(dto.getId(), 0L));
+        }
+        return eventsDto;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public EventFullDto getEventByIdByInitiator(Long userId, Long eventId) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.warn("Событие с id {} не найдено", eventId);
@@ -391,31 +414,6 @@ public class EventServiceImpl implements EventService {
             views.put(eventId, dto.getHits());
         }
         return views;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<EventShortDto> getEventsWithUserFriendsInParticipants(Long userId, Integer from, Integer size) {
-        Pageable page = CustomPageRequest.of(from, size);
-      //  List<Event> events = eventRepository.findAllWithUserFriendsInParticipants(userId, page);
-        List<Event> events = eventRepository.findAllWithUserFriendsInParticipants(userId);
-
-        List<EventShortDto> eventsDto = events
-                .stream()
-                .map(eventDtoMapper::eventToShortDto)
-                .collect(Collectors.toList());
-        List<Long> eventsId = new ArrayList<>();
-        for (EventShortDto dto : eventsDto) {
-            eventsId.add(dto.getId());
-        }
-        Map<Long, Long> views = getViews(eventsId);
-        for (EventShortDto dto : eventsDto) {
-            Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(dto.getId(),
-                    RequestStatus.CONFIRMED);
-            dto.setConfirmedRequests(confirmedRequests);
-            dto.setViews(views.getOrDefault(dto.getId(), 0L));
-        }
-        return eventsDto;
     }
 
 }
