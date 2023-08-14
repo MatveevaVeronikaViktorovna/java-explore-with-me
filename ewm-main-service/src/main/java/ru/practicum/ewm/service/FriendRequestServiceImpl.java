@@ -3,31 +3,24 @@ package ru.practicum.ewm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.dto.event.EventFullDto;
-import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
-import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.FriendRequestDtoMapper;
 import ru.practicum.ewm.mapper.UserDtoMapper;
-import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.FriendRequest;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.RequestStatus;
-import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.FriendRequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -91,16 +84,16 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDto> getAllFriends(Long userId) {
+    public List<UserShortDto> getAllFriends(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
         });
 
-        List<User> requests = requestRepository.findAllFriends(userId);
-        return requests
+        List<User> users = requestRepository.findAllFriends(userId);
+        return users
                 .stream()
-                .map(userDtoMapper::userToDto)
+                .map(userDtoMapper::userToShortDto)
                 .collect(Collectors.toList());
     }
 
@@ -147,7 +140,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
         if (requestDto.getStatus().equals(RequestStatus.CONFIRMED)) {
             for (FriendRequest request : requests) {
-                if(!(request.getStatus().equals(RequestStatus.PENDING) || request.getStatus().equals(RequestStatus.REJECTED))) {
+                if (!(request.getStatus().equals(RequestStatus.PENDING) || request.getStatus().equals(RequestStatus.REJECTED))) {
                     log.warn("Невозможно подтвердить заявку, которая находится в неподходящем статусе: {}", request.getStatus());
                     throw new ConditionsNotMetException("Request cannot be confirmed because it's not in the right " +
                             "status: " + request.getStatus());
@@ -156,7 +149,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             }
         } else if (requestDto.getStatus().equals(RequestStatus.REJECTED)) {
             for (FriendRequest request : requests) {
-                if(!request.getStatus().equals(RequestStatus.PENDING)) {
+                if (!request.getStatus().equals(RequestStatus.PENDING)) {
                     log.warn("Невозможно отклонить заявку, которая находится в неподходящем статусе: {}", request.getStatus());
                     throw new ConditionsNotMetException("Request cannot be rejected because it's not in the right " +
                             "status: " + request.getStatus());
@@ -187,7 +180,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
         if (requestDto.getStatus().equals(RequestStatus.PENDING)) {
             for (FriendRequest request : requests) {
-                if(!request.getStatus().equals(RequestStatus.CANCELED)) {
+                if (!request.getStatus().equals(RequestStatus.CANCELED)) {
                     log.warn("Невозможно перевести в рассмотрение заявку, которая находится в неподходящем статусе: {}", request.getStatus());
                     throw new ConditionsNotMetException("Request cannot be pending because it's not in the right " +
                             "status: " + request.getStatus());
@@ -196,7 +189,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             }
         } else if (requestDto.getStatus().equals(RequestStatus.CANCELED)) {
             for (FriendRequest request : requests) {
-                if(!request.getStatus().equals(RequestStatus.PENDING)) {
+                if (!request.getStatus().equals(RequestStatus.PENDING)) {
                     log.warn("Невозможно отменить заявку, которая находится в неподходящем статусе: {}", request.getStatus());
                     throw new ConditionsNotMetException("Request cannot be cancelled because it's not in the right " +
                             "status: " + request.getStatus());
@@ -226,7 +219,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
         List<FriendRequest> requests = requestRepository.findAllFriendsByIdIn(userId, requestDto.getRequestIds());
 
         if (requestDto.getStatus().equals(RequestStatus.REJECTED)) {
-            if(requests.isEmpty()) {
+            if (requests.isEmpty()) {
                 log.warn("Заявки с id {} не являются подтвержденными заявками в друзья", requestDto.getRequestIds());
                 throw new ConditionsNotMetException("These requests are not confirmed friend requests"
                         + requestDto.getRequestIds());

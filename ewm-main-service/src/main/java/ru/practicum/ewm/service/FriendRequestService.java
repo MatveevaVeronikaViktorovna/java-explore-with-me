@@ -1,9 +1,8 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
-import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.dto.user.UserShortDto;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface FriendRequestService {
 
     FriendRequestDto createFriendRequest(Long requesterId, Long friendId);
 
-    List<UserDto> getAllFriends(Long userId);
+    List<UserShortDto> getAllFriends(Long userId);
 
     List<FriendRequestDto> getAllOutgoingFriendRequests(Long userId);
 
