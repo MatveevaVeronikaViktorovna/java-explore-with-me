@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
-import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.FriendRequestDtoMapper;
-import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.FriendRequest;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.RequestStatus;
@@ -32,7 +30,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     private final FriendRequestRepository requestRepository;
     private final UserRepository userRepository;
     private final FriendRequestDtoMapper requestDtoMapper = Mappers.getMapper(FriendRequestDtoMapper.class);
-    private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
     @Transactional
     @Override
