@@ -38,13 +38,6 @@ public class FriendRequestPrivateController {
         return friendRequestService.createFriendRequest(userId, friendId);
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserShortDto> getUserFriends(@PathVariable Long userId) {
-        log.info("Поступил запрос от пользователя с id {} на получение списка его друзей", userId);
-        return userService.getUserFriends(userId);
-    }
-
     @GetMapping("/requests/incoming")
     @ResponseStatus(HttpStatus.OK)
     public List<FriendRequestDto> getAllIncomingFriendRequests(@PathVariable Long userId) {
@@ -59,13 +52,11 @@ public class FriendRequestPrivateController {
         return friendRequestService.getAllOutgoingFriendRequests(userId);
     }
 
-    @PatchMapping("/{friendId}/reject")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserShortDto> removeFriendFromUserFriends(@PathVariable Long userId,
-                                                          @PathVariable Long friendId) {
-        log.info("Поступил запрос на отклонение подтвержденной заявки в друзья между пользователями с id={} и id={}",
-                userId, friendId);
-        return userService.removeFriendFromUserFriends(userId, friendId);
+    public List<UserShortDto> getUserFriends(@PathVariable Long userId) {
+        log.info("Поступил запрос от пользователя с id {} на получение списка его друзей", userId);
+        return userService.getUserFriends(userId);
     }
 
     @PatchMapping("/requests/incoming")
@@ -82,6 +73,15 @@ public class FriendRequestPrivateController {
                                                                      @Valid @RequestBody UpdateFriendRequestDto requestDto) {
         log.info("Поступил запрос на обновление статуса исходящих заявок в друзья от пользователя с id={}", userId);
         return friendRequestService.updateOutgoingFriendRequestsStatus(userId, requestDto);
+    }
+
+    @PatchMapping("/{friendId}/reject")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserShortDto> removeFriendFromUserFriends(@PathVariable Long userId,
+                                                          @PathVariable Long friendId) {
+        log.info("Поступил запрос на отклонение подтвержденной заявки в друзья между пользователями с id={} и id={}",
+                userId, friendId);
+        return userService.removeFriendFromUserFriends(userId, friendId);
     }
 
     @GetMapping("/events")

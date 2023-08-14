@@ -174,7 +174,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             }
         } else if (requestDto.getStatus().equals(RequestStatus.CANCELED)) {
             for (FriendRequest request : requests) {
-                if (!request.getStatus().equals(RequestStatus.PENDING)) {
+                if (!(request.getStatus().equals(RequestStatus.PENDING) || request.getStatus().equals(RequestStatus.REJECTED))) {
                     log.warn("Невозможно отменить заявку, которая находится в неподходящем статусе: {}", request.getStatus());
                     throw new ConditionsNotMetException("Request cannot be cancelled because it's not in the right " +
                             "status: " + request.getStatus());
