@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class FriendRequestDto {
 
     Long id;
-    Long friend;
     Long requester;
+    Long friend;
     RequestStatus status;
     LocalDateTime created;
 
