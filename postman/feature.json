@@ -10,13 +10,7 @@
 			"name": "Добавление пользователя 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"ivan.petrov@practicummail.ru\",\n  \"name\": \"Иван Петров\"\n}",
@@ -45,13 +39,7 @@
 			"name": "Добавление пользователя 2",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -80,13 +68,7 @@
 			"name": "Добавление пользователя 3",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"anna.ivanova@practicummail.ru\",\n  \"name\": \"Анна Иванова\"\n}",
@@ -115,13 +97,7 @@
 			"name": "Добавление пользователя 4",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"nikolay.fedorov@practicummail.ru\",\n  \"name\": \"Николай Федоров\"\n}",
@@ -150,13 +126,7 @@
 			"name": "Добавление пользователя 5",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"artem.baboyan@practicummail.ru\",\n  \"name\": \"Артем Бабоян\"\n}",
@@ -185,13 +155,7 @@
 			"name": "Добавление категории 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"name\": \"Концерты\"\n}",
@@ -220,13 +184,7 @@
 			"name": "Добавление категории 2",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"name\": \"Сплавы\"\n}",
@@ -255,13 +213,7 @@
 			"name": "Добавление события 1 от пользователя 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"annotation\": \"Сплав на байдарках похож на полет.\",\n  \"category\": 2,\n  \"description\": \"Сплав на байдарках похож на полет. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.\",\n  \"eventDate\": \"2024-12-31 15:10:05\",\n  \"location\": {\n    \"lat\": 55.754167,\n    \"lon\": 37.62\n  },\n  \"paid\": true,\n  \"participantLimit\": 10,\n  \"requestModeration\": false,\n  \"title\": \"Сплав на байдарках\"\n\n}",
@@ -291,13 +243,7 @@
 			"name": "Добавление события 2 от пользователя 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"annotation\": \"Очень похожий сплав на байдарках похож на полет.\",\n  \"category\": 2,\n  \"description\": \"Сплав на байдарках похож на полет. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.\",\n  \"eventDate\": \"2025-01-01 15:10:05\",\n  \"location\": {\n    \"lat\": 55.754167,\n    \"lon\": 37.62\n  },\n  \"paid\": true,\n  \"participantLimit\": 1,\n  \"requestModeration\": false,\n  \"title\": \"Очень похожий плав на байдарках\"\n\n}",
@@ -327,13 +273,7 @@
 			"name": "Добавление события 3 от пользователя 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"annotation\": \"Оркестр на свежем воздухе\",\n  \"category\": 1,\n  \"description\": \"Симфонический орекстр сыграет в парке культуры и отдыхв\",\n  \"eventDate\": \"2024-11-03 10:10:05\",\n  \"location\": {\n    \"lat\": 35.754167,\n    \"lon\": 37.62\n  },\n  \"paid\": false,\n  \"requestModeration\": false,\n  \"title\": \"Оркестр на траве\"\n\n}",
@@ -363,13 +303,7 @@
 			"name": "Публикация события 1",
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}",
@@ -399,13 +333,7 @@
 			"name": "Публикация события 2",
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}",
@@ -435,13 +363,7 @@
 			"name": "Публикация события 3",
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}",
@@ -471,13 +393,7 @@
 			"name": "Добавление подтвержденной заявки на участие пользователя 2 в событии 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -513,13 +429,7 @@
 			"name": "Добавление подтвержденной заявки на участие пользователя 2 в событии 2",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -555,13 +465,7 @@
 			"name": "Добавление подтвержденной заявки на участие пользователя 3 в событии 1",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -597,13 +501,7 @@
 			"name": "Добавление подтвержденной заявки на участие пользователя 4 в событии 3",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -654,13 +552,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/5",
 					"protocol": "http",
@@ -697,13 +589,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/99",
 					"protocol": "http",
@@ -740,13 +626,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/99/friends/1",
 					"protocol": "http",
@@ -778,8 +658,6 @@
 							"});",
 							"",
 							"const target = pm.response.json();",
-							"var query = {};",
-							"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});",
 							"",
 							"pm.test(\"Заявка в друзья должна содержать поля: id, requester, friend, status, created\", function () {",
 							"pm.expect(target).to.have.property('id');",
@@ -799,13 +677,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/1",
 					"protocol": "http",
@@ -842,13 +714,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/1",
 					"protocol": "http",
@@ -885,13 +751,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/1/friends/5",
 					"protocol": "http",
@@ -913,13 +773,7 @@
 			"name": "Добавление заявки в друзья пользователем 5 пользователю 2",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -950,13 +804,7 @@
 			"name": "Добавление заявки в друзья пользователем 5 пользователю 3",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -987,13 +835,7 @@
 			"name": "Добавление заявки в друзья пользователем 5 пользователю 4",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
@@ -1049,13 +891,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/2/friends/requests/incoming",
 					"protocol": "http",
@@ -1101,13 +937,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/requests/incoming",
 					"protocol": "http",
@@ -1155,13 +985,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/requests/outgoing",
 					"protocol": "http",
@@ -1206,13 +1030,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/1/friends/requests/outgoing",
 					"protocol": "http",
@@ -1264,13 +1082,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"CONFIRMED\"\n}",
@@ -1317,13 +1129,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"status\": \"CONFIRMED\"\n}",
@@ -1370,13 +1176,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"status\": \"CONFIRMED\"\n}",
@@ -1437,13 +1237,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    4\n  ],\n  \"status\": \"REJECTED\"\n}",
@@ -1490,13 +1284,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"REJECTED\"\n}",
@@ -1543,13 +1331,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"CONFIRMED\"\n}",
@@ -1596,13 +1378,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    1\n  ],\n  \"status\": \"CANCELED\"\n}",
@@ -1663,13 +1439,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    1\n  ],\n  \"status\": \"CANCELED\"\n}",
@@ -1730,13 +1500,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    4\n  ],\n  \"status\": \"CANCELED\"\n}",
@@ -1779,13 +1543,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    5\n  ],\n  \"status\": \"CANCELED\"\n}",
@@ -1846,13 +1604,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    5\n  ],\n  \"status\": \"PENDING\"\n}",
@@ -1899,13 +1651,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"PENDING\"\n}",
@@ -1952,13 +1698,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"CANCELED\"\n}",
@@ -2014,13 +1754,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends",
 					"protocol": "http",
@@ -2056,13 +1790,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/2/reject",
 					"protocol": "http",
@@ -2107,13 +1835,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends",
 					"protocol": "http",
@@ -2157,13 +1879,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/events",
 					"protocol": "http",
@@ -2214,13 +1930,7 @@
 			],
 			"request": {
 				"method": "PATCH",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"requestIds\": [\n    3\n  ],\n  \"status\": \"CONFIRMED\"\n}",
@@ -2279,13 +1989,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-Sharer-User-Id",
-						"value": "1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/users/5/friends/events",
 					"protocol": "http",
