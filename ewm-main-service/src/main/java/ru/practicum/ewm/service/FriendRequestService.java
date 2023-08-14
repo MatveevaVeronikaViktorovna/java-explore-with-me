@@ -10,8 +10,6 @@ public interface FriendRequestService {
 
     FriendRequestDto createFriendRequest(Long requesterId, Long friendId);
 
-    List<UserShortDto> getAllFriends(Long userId);
-
     List<FriendRequestDto> getAllOutgoingFriendRequests(Long userId);
 
     List<FriendRequestDto> getAllIncomingFriendRequests(Long userId);

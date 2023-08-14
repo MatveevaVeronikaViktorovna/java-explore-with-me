@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.user.UserDto;
+import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.User;
@@ -46,6 +47,21 @@ public class UserServiceImpl implements UserService {
         return users
                 .stream()
                 .map(mapper::userToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserShortDto> getUserFriends(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.warn("Пользователь с id {} не найден", userId);
+            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
+        });
+
+        List<User> users = userRepository.findUserFriends(userId);
+        return users
+                .stream()
+                .map(mapper::userToShortDto)
                 .collect(Collectors.toList());
     }
 

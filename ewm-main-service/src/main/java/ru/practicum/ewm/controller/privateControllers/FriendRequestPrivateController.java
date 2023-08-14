@@ -12,6 +12,7 @@ import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.FriendRequestService;
+import ru.practicum.ewm.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -27,6 +28,7 @@ public class FriendRequestPrivateController {
 
     private final FriendRequestService friendRequestService;
     private final EventService eventService;
+    private final UserService userService;
 
     @PostMapping("/{friendId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,9 +41,9 @@ public class FriendRequestPrivateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserShortDto> getAllFriends(@PathVariable Long userId) {
+    public List<UserShortDto> getUserFriends(@PathVariable Long userId) {
         log.info("Поступил запрос от пользователя с id {} на получение списка его друзей", userId);
-        return friendRequestService.getAllFriends(userId);
+        return userService.getUserFriends(userId);
     }
 
     @GetMapping("/requests/incoming")

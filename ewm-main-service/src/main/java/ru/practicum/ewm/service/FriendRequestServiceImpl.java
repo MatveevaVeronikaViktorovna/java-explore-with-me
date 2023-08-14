@@ -84,21 +84,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserShortDto> getAllFriends(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> {
-            log.warn("Пользователь с id {} не найден", userId);
-            throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
-
-        List<User> users = requestRepository.findAllFriends(userId);
-        return users
-                .stream()
-                .map(userDtoMapper::userToShortDto)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public List<FriendRequestDto> getAllOutgoingFriendRequests(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
