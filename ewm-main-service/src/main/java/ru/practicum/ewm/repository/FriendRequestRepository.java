@@ -23,8 +23,7 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 
     @Query("SELECT fr FROM FriendRequest fr " +
             "WHERE (fr.requester.id = :userId AND fr.friend.id = :friendId AND fr.status = 'CONFIRMED') OR " +
-            "(fr.friend.id = :userId AND fr.user.id = :friendId AND fr.status = 'CONFIRMED') " +
-            "AND fr.id IN :requestsId")
+            "(fr.friend.id = :userId AND fr.requester.id = :friendId AND fr.status = 'CONFIRMED') ")
     Optional<FriendRequest> findConfirmedFriendRequestBetweenUserAndFriend(@Param("userId") Long userId,
                                                                            @Param("friendId") Long friendId);
 

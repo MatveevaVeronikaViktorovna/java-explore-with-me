@@ -59,7 +59,7 @@ public class FriendRequestPrivateController {
         return friendRequestService.getAllOutgoingFriendRequests(userId);
     }
 
-    @PatchMapping("/{friendId}")
+    @PatchMapping("/{friendId}/reject")
     @ResponseStatus(HttpStatus.OK)
     public List<UserShortDto> removeFriendFromUserFriends(@PathVariable Long userId,
                                                           @PathVariable Long friendId) {
