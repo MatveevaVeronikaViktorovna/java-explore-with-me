@@ -40,6 +40,7 @@ public interface EventService {
                                            String api);
 
     EventFullDto getEventByIdByUser(Long eventId, String uri, String ip);
+
     List<EventShortDto> getEventsWithUserFriendsInParticipants(Long userId, Integer from, Integer size);
 
 }
