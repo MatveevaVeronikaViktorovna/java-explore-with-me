@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
+import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.FriendRequestService;
 
@@ -37,7 +38,7 @@ public class FriendRequestPrivateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<FriendRequestDto> getAllFriends(@PathVariable Long userId) {
+    public List<UserDto> getAllFriends(@PathVariable Long userId) {
         log.info("Поступил запрос от пользователя с id {} на получение списка его друзей", userId);
         return friendRequestService.getAllFriends(userId);
     }

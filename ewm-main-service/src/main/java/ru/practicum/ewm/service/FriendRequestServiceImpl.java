@@ -10,10 +10,12 @@ import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
+import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.exception.ConditionsNotMetException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.exception.IncorrectlyMadeRequestException;
 import ru.practicum.ewm.mapper.FriendRequestDtoMapper;
+import ru.practicum.ewm.mapper.UserDtoMapper;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.FriendRequest;
 import ru.practicum.ewm.model.User;
@@ -37,6 +39,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     private final FriendRequestRepository requestRepository;
     private final UserRepository userRepository;
     private final FriendRequestDtoMapper requestDtoMapper = Mappers.getMapper(FriendRequestDtoMapper.class);
+    private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
     @Transactional
     @Override
@@ -88,16 +91,16 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<FriendRequestDto> getAllFriends(Long userId) {
+    public List<UserDto> getAllFriends(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
         });
 
-        List<FriendRequest> requests = requestRepository.findAllFriends(userId);
+        List<User> requests = requestRepository.findAllFriends(userId);
         return requests
                 .stream()
-                .map(requestDtoMapper::friendRequestToDto)
+                .map(userDtoMapper::userToDto)
                 .collect(Collectors.toList());
     }
 
