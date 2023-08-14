@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.model.FriendRequest;
-import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.RequestStatus;
 
 import java.util.List;
@@ -23,10 +22,10 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     List<FriendRequest> findAllByRequesterIdAndIdIn(Long userId, List<Long> requestsId);
 
     @Query("SELECT fr FROM FriendRequest fr " +
-            "WHERE (fr.requester.id = :userId AND fr.status = 'CONFIRMED') OR " +
-            "(fr.friend.id = :userId AND fr.status = 'CONFIRMED') " +
+            "WHERE (fr.requester.id = :userId AND fr.friend.id = :friendId AND fr.status = 'CONFIRMED') OR " +
+            "(fr.friend.id = :userId AND fr.user.id = :friendId AND fr.status = 'CONFIRMED') " +
             "AND fr.id IN :requestsId")
-    List<FriendRequest> findAllFriendsByIdIn(@Param("userId") Long userId,
-                                             @Param("requestsId") List<Long> requestsId);
+    Optional<FriendRequest> findConfirmedFriendRequestBetweenUserAndFriend(@Param("userId") Long userId,
+                                                                           @Param("friendId") Long friendId);
 
 }

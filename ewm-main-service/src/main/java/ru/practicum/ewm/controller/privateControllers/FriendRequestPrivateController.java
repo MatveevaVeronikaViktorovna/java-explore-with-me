@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.friendRequest.FriendRequestDto;
 import ru.practicum.ewm.dto.friendRequest.UpdateFriendRequestDto;
-import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 import ru.practicum.ewm.service.EventService;
 import ru.practicum.ewm.service.FriendRequestService;
@@ -60,12 +59,13 @@ public class FriendRequestPrivateController {
         return friendRequestService.getAllOutgoingFriendRequests(userId);
     }
 
-    @PatchMapping
+    @PatchMapping("/{friendId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<FriendRequestDto> updateFriendshipStatus(@PathVariable Long userId,
-                                                         @Valid @RequestBody UpdateFriendRequestDto requestDto) {
-        log.info("Поступил запрос на обновление статуса подтвержденных заявок в друзья от пользователя с id={}", userId);
-        return friendRequestService.updateFriendshipStatus(userId, requestDto);
+    public List<UserShortDto> removeFriendFromUserFriends(@PathVariable Long userId,
+                                                          @PathVariable Long friendId) {
+        log.info("Поступил запрос на отклонение подтвержденной заявки в друзья между пользователями с id={} и id={}",
+                userId, friendId);
+        return userService.removeFriendFromUserFriends(userId, friendId);
     }
 
     @PatchMapping("/requests/incoming")

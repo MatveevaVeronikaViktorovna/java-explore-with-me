@@ -1,5 +1,6 @@
 package ru.practicum.ewm.service;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.dto.user.UserShortDto;
 
@@ -13,5 +14,6 @@ public interface UserService {
 
     List<UserDto> getAllUsers(List<Long> ids, Integer from, Integer size);
     List<UserShortDto> getUserFriends(Long userId);
+    List<UserShortDto> removeFriendFromUserFriends(Long userId, Long friendId);
 
 }
