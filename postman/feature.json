@@ -556,7 +556,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event2id}}",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event2Id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -568,13 +568,13 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "{{event2id}}"
+							"value": "{{event2Id}}"
 						}
 					],
 					"variable": [
 						{
 							"key": "userId",
-							"value": "{{user2id}}"
+							"value": "{{user2Id}}"
 						}
 					]
 				}
@@ -587,7 +587,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event1id}}",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event1Id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -599,7 +599,7 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "{{event1id}}"
+							"value": "{{event1Id}}"
 						}
 					],
 					"variable": [
