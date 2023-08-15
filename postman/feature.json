@@ -2277,18 +2277,31 @@
 			"response": []
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080"
-		},
-		{
-			"key": "userId1",
-			"value": ""
-		},
-		{
-			"key": "userId",
-			"value": ":userId"
+			"value": "http://localhost:8080",
+			"type": "string"
 		},
 		{
 			"key": "user1Id",
@@ -2311,19 +2324,7 @@
 			"value": "0"
 		},
 		{
-			"key": "user2id",
-			"value": "0"
-		},
-		{
-			"key": "event2id",
-			"value": "0"
-		},
-		{
 			"key": "user3Id",
-			"value": "0"
-		},
-		{
-			"key": "event1id",
 			"value": "0"
 		},
 		{
