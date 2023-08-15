@@ -14,7 +14,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('userId1', target.id);"
+							"pm.collectionVariables.set('user1Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -53,7 +53,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('userId2', target.id);"
+							"pm.collectionVariables.set('user2Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -92,7 +92,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('userId3', target.id);"
+							"pm.collectionVariables.set('user3Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -131,7 +131,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('userId4', target.id);"
+							"pm.collectionVariables.set('user4Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -170,7 +170,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('userId5', target.id);"
+							"pm.collectionVariables.set('user5Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -209,7 +209,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('catId1', target.id);"
+							"pm.collectionVariables.set('cat1Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -248,7 +248,7 @@
 					"script": {
 						"exec": [
 							"const target = pm.response.json();",
-							"pm.collectionVariables.set('catId2', target.id);"
+							"pm.collectionVariables.set('cat2Id', target.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -281,6 +281,18 @@
 		},
 		{
 			"name": "Добавление события 1 от пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('event1Id', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -294,14 +306,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/1/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -309,6 +327,18 @@
 		},
 		{
 			"name": "Добавление события 2 от пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('event2Id', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -334,7 +364,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "{{userId1}}"
+							"value": "{{user1Id}}"
 						}
 					]
 				}
@@ -343,6 +373,18 @@
 		},
 		{
 			"name": "Добавление события 3 от пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('event3Id', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -368,7 +410,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "{{userId1}}"
+							"value": "{{user1Id}}"
 						}
 					]
 				}
@@ -390,14 +432,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/1",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"1"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{event1Id}}"
+						}
 					]
 				}
 			},
@@ -418,14 +466,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/2",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"2"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{event2Id}}"
+						}
 					]
 				}
 			},
@@ -446,14 +500,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/admin/events/3",
+					"raw": "{{baseUrl}}/admin/events/:eventId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"admin",
 						"events",
-						"3"
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{event3Id}}"
+						}
 					]
 				}
 			},
@@ -464,29 +524,26 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/requests?eventId=1",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event1Id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"requests"
 					],
 					"query": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "{{event1Id}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
 						}
 					]
 				}
@@ -498,29 +555,26 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/requests?eventId=2",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event2id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"requests"
 					],
 					"query": [
 						{
 							"key": "eventId",
-							"value": "2"
+							"value": "{{event2id}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2id}}"
 						}
 					]
 				}
@@ -532,29 +586,26 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseUrl}}/users/3/requests?eventId=1",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event1id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"3",
+						":userId",
 						"requests"
 					],
 					"query": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "{{event1id}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user3Id}}"
 						}
 					]
 				}
@@ -566,29 +617,26 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"mariya.sidorova@practicummail.ru\",\n  \"name\": \"Мария Сидорова\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseUrl}}/users/4/requests?eventId=1",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{event3Id}}",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"4",
+						":userId",
 						"requests"
 					],
 					"query": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "{{event3Id}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user4Id}}"
 						}
 					]
 				}
@@ -616,15 +664,21 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/5",
+					"raw": "{{baseUrl}}/users/:userId/friends/:userId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"5"
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -651,15 +705,21 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/99",
+					"raw": "{{baseUrl}}/users/:userId/friends/999",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"99"
+						"999"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -686,15 +746,21 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/99/friends/1",
+					"raw": "{{baseUrl}}/users/999/friends/:userId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"99",
+						"999",
 						"friends",
-						"1"
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -735,15 +801,25 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/1",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"1"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -770,15 +846,25 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/1",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"1"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -805,15 +891,25 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/1/friends/5",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"friends",
-						"5"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user1Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -834,15 +930,25 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/2",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"2"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -863,15 +969,25 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/3",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"3"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user3Id}}"
+						}
 					]
 				}
 			},
@@ -892,15 +1008,25 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/4",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"4"
+						":friendId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user4Id}}"
+						}
 					]
 				}
 			},
@@ -937,16 +1063,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -981,16 +1113,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1027,16 +1165,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1070,16 +1214,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/1/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -1129,16 +1279,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -1174,16 +1330,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -1219,23 +1381,29 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Отклонение входящей заявки на добавление в друзья пользователем 2 Copy",
+			"name": "Отклонение входящей заявки на добавление в друзья пользователем 3",
 			"event": [
 				{
 					"listen": "test",
@@ -1278,16 +1446,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/3/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"3",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user3Id}}"
+						}
 					]
 				}
 			},
@@ -1323,16 +1497,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -1368,16 +1548,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/2/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"2",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -1413,16 +1599,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/1/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user1Id}}"
+						}
 					]
 				}
 			},
@@ -1472,16 +1664,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1531,16 +1729,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1572,16 +1776,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1631,16 +1841,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1676,16 +1892,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1721,16 +1943,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/outgoing",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/outgoing",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"outgoing"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1766,14 +1994,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends",
+					"raw": "{{baseUrl}}/users/:userId/friends",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1800,16 +2034,26 @@
 				"method": "PATCH",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/2/reject",
+					"raw": "{{baseUrl}}/users/:userId/friends/:friendId/reject",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
-						"2",
+						":friendId",
 						"reject"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						},
+						{
+							"key": "friendId",
+							"value": "{{user2Id}}"
+						}
 					]
 				}
 			},
@@ -1843,14 +2087,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends",
+					"raw": "{{baseUrl}}/users/:userId/friends",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1881,19 +2131,28 @@
 					}
 				}
 			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/events",
+					"raw": "{{baseUrl}}/users/:userId/friends/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1943,16 +2202,22 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/requests/incoming",
+					"raw": "{{baseUrl}}/users/:userId/friends/requests/incoming",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"requests",
 						"incoming"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -1991,15 +2256,21 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users/5/friends/events",
+					"raw": "{{baseUrl}}/users/:userId/friends/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"5",
+						":userId",
 						"friends",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{user5Id}}"
+						}
 					]
 				}
 			},
@@ -2018,6 +2289,50 @@
 		{
 			"key": "userId",
 			"value": ":userId"
+		},
+		{
+			"key": "user1Id",
+			"value": "0"
+		},
+		{
+			"key": "event1Id",
+			"value": "0"
+		},
+		{
+			"key": "event2Id",
+			"value": "0"
+		},
+		{
+			"key": "event3Id",
+			"value": "0"
+		},
+		{
+			"key": "user2Id",
+			"value": "0"
+		},
+		{
+			"key": "user2id",
+			"value": "0"
+		},
+		{
+			"key": "event2id",
+			"value": "0"
+		},
+		{
+			"key": "user3Id",
+			"value": "0"
+		},
+		{
+			"key": "event1id",
+			"value": "0"
+		},
+		{
+			"key": "user4Id",
+			"value": "0"
+		},
+		{
+			"key": "user5Id",
+			"value": "0"
 		}
 	]
 }
