@@ -8,6 +8,18 @@
 	"item": [
 		{
 			"name": "Добавление пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('userId1', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -35,6 +47,18 @@
 		},
 		{
 			"name": "Добавление пользователя 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('userId2', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -62,6 +86,18 @@
 		},
 		{
 			"name": "Добавление пользователя 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('userId3', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -89,6 +125,18 @@
 		},
 		{
 			"name": "Добавление пользователя 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('userId4', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -116,6 +164,18 @@
 		},
 		{
 			"name": "Добавление пользователя 5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('userId5', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -143,6 +203,18 @@
 		},
 		{
 			"name": "Добавление категории 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('catId1', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -170,6 +242,18 @@
 		},
 		{
 			"name": "Добавление категории 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const target = pm.response.json();",
+							"pm.collectionVariables.set('catId2', target.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -238,14 +322,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/1/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{userId1}}"
+						}
 					]
 				}
 			},
@@ -266,14 +356,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/1/events",
+					"raw": "{{baseUrl}}/users/:userId/events",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"users",
-						"1",
+						":userId",
 						"events"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{userId1}}"
+						}
 					]
 				}
 			},
@@ -1918,6 +2014,10 @@
 		{
 			"key": "userId1",
 			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ":userId"
 		}
 	]
 }
