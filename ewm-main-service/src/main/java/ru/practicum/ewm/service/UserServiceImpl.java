@@ -59,10 +59,10 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public List<UserShortDto> getUserFriends(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> {
+        if (!userRepository.existsById(userId)) {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
+        }
 
         List<User> users = userRepository.findUserFriends(userId);
         return users

@@ -82,10 +82,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional(readOnly = true)
     @Override
     public List<FriendRequestDto> getAllOutgoingFriendRequests(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> {
+        if (!userRepository.existsById(userId)) {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
+        }
 
         List<FriendRequest> requests = requestRepository.findAllByRequesterIdAndStatusNot(userId, RequestStatus.CONFIRMED);
         return requests
@@ -97,10 +97,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional(readOnly = true)
     @Override
     public List<FriendRequestDto> getAllIncomingFriendRequests(Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> {
+        if (!userRepository.existsById(userId)) {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
+        }
 
         List<FriendRequest> requests = requestRepository.findAllByFriendIdAndStatusIn(userId,
                 List.of(RequestStatus.PENDING, RequestStatus.REJECTED));
@@ -113,10 +113,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional
     @Override
     public List<FriendRequestDto> updateIncomingFriendRequestsStatus(Long userId, UpdateFriendRequestDto requestDto) {
-        userRepository.findById(userId).orElseThrow(() -> {
+        if (!userRepository.existsById(userId)) {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
+        }
 
         List<FriendRequest> requests = requestRepository.findAllByFriendIdAndIdIn(userId, requestDto.getRequestIds());
 
@@ -153,10 +153,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional
     @Override
     public List<FriendRequestDto> updateOutgoingFriendRequestsStatus(Long userId, UpdateFriendRequestDto requestDto) {
-        userRepository.findById(userId).orElseThrow(() -> {
+        if (!userRepository.existsById(userId)) {
             log.warn("Пользователь с id {} не найден", userId);
             throw new EntityNotFoundException(String.format("User with id=%d was not found", userId));
-        });
+        }
 
         List<FriendRequest> requests = requestRepository.findAllByRequesterIdAndIdIn(userId, requestDto.getRequestIds());
 
