@@ -1,4 +1,4 @@
-package ru.practicum.ewm.dto.participationRequest;
+package ru.practicum.ewm.dto.friendRequest;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,10 +10,12 @@ import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-public class UpdateRequestEventInitiatorRequestDto {
+public class UpdateFriendRequestDto {
+
     @NotNull(message = "must not be null")
     List<Long> requestIds;
 
     @NotNull(message = "must not be null")
     RequestStatus status;
+
 }

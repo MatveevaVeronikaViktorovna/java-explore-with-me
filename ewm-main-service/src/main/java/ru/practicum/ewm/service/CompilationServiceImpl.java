@@ -13,7 +13,7 @@ import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.mapper.CompilationDtoMapper;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.enums.ParticipationRequestStatus;
+import ru.practicum.ewm.model.enums.RequestStatus;
 import ru.practicum.ewm.pagination.CustomPageRequest;
 import ru.practicum.ewm.repository.CompilationRepository;
 import ru.practicum.ewm.repository.EventRepository;
@@ -50,7 +50,7 @@ public class CompilationServiceImpl implements CompilationService {
         List<EventShortDto> compilationEvents = dto.getEvents();
         for (EventShortDto event : compilationEvents) {
             Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
-                    ParticipationRequestStatus.CONFIRMED);
+                    RequestStatus.CONFIRMED);
             event.setConfirmedRequests(confirmedRequests);
         }
         return dto;
@@ -76,7 +76,7 @@ public class CompilationServiceImpl implements CompilationService {
             if (compilationEvents != null) {
                 for (EventShortDto event : compilationEvents) {
                     Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
-                            ParticipationRequestStatus.CONFIRMED);
+                            RequestStatus.CONFIRMED);
                     event.setConfirmedRequests(confirmedRequests);
                 }
             }
@@ -96,7 +96,7 @@ public class CompilationServiceImpl implements CompilationService {
         if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {
                 Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
-                        ParticipationRequestStatus.CONFIRMED);
+                        RequestStatus.CONFIRMED);
                 event.setConfirmedRequests(confirmedRequests);
             }
         }
@@ -129,7 +129,7 @@ public class CompilationServiceImpl implements CompilationService {
         if (compilationEvents != null) {
             for (EventShortDto event : compilationEvents) {
                 Integer confirmedRequests = requestRepository.countAllByEventIdAndStatus(event.getId(),
-                        ParticipationRequestStatus.CONFIRMED);
+                        RequestStatus.CONFIRMED);
                 event.setConfirmedRequests(confirmedRequests);
             }
         }

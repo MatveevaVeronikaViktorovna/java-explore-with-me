@@ -61,4 +61,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Set<Event> findAllByIdIn(Set<Long> eventsId);
 
+    @Query("SELECT DISTINCT pr.event From ParticipationRequest pr " +
+            "WHERE pr.status = 'CONFIRMED' " +
+            "AND pr.requester.id IN " +
+            "(SELECT fr.friend.id FROM FriendRequest fr " +
+            "WHERE fr.requester.id = :userId AND fr.status = 'CONFIRMED') " +
+            "OR pr.requester.id IN " +
+            "(SELECT fr.requester.id FROM FriendRequest fr " +
+            "WHERE fr.friend.id = :userId AND fr.status = 'CONFIRMED')")
+    List<Event> findAllWithUserFriendsInParticipants(@Param("userId") Long userId,
+                                                     Pageable pageable);
+
 }
